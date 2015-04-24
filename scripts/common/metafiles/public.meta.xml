@@ -1,0 +1,16 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Default schema for all PostgreSQL databases. Contains functions supporting the PostGIS and UUID-OSSP extensions as well as some common SOLA functions. For information on PostGIS functions see http://postgis.net/docs/reference.html. For information on UUID-OSSP functions see http://www.postgresql.org/docs/9.3/static/uuid-ossp.html</comments>
+	<tables>
+		<table name="Function: fn_triggerall" comments="This function can be used to disable all triggers in the database. To disable all triggers in all schemas in the db - select fn_triggerall(false);   To enable all triggers in all schemas in the db - select fn_triggerall(true); "/>
+		<table name="Function: clean_db" comments="This function will delete any table or function from the database that does not belong to the standard postgis template."/>
+		<table name="Function: compare_strings" comments="Performs a case insensitive comparison between 2 strings. Used by SOLA search functions."/>
+		<table name="Function: get_geometry_with_srid" comments="Determines the SRID for a geometry by comparing the longitude value of its centriod to values in the system.crs table. If the geometry is in a different SRID, it is transformed into the appropriate SRID and returned, otherwise it is retuned unchanged."/>
+		<table name="Function: get_translation" comments="Splits a SOLA formatted multi-lingual string to obtain the appropriate translation based on the users selected display language."/>
+		<table name="Function: clean_db_foreign_constraints" comments="Drops all foreign key constraints from the database."/>
+		<table name="Function: clean_db_triggers" comments="Removes all triggers and their related functions from the database."/>
+		<table name="Trigger Function: f_for_trg_track_changes" comments="Function triggered on insert or update of any SOLA table that is subject to history recording. The function ensures the change user details are recorded along with the date and time of the change. It also checks the rowversion to ensure the record has not been inadvertently updated by 2 or more people at the same time (i.e. implements optimistic locking) and increments the rowversion as required."/>
+		<table name="Trigger Function: f_for_trg_track_history" comments="Function triggered on insert or update of any SOLA table that is subject to history recording. The function copies the original content of a record (i.e. before it is modified) to the appropriate _historic table. This ensures a full history of all changes to a record are maintained for audit purposes."/>
+		<table name="spatial_ref_sys" comments="PostGIS table."/>
+		<table name="geometry_columns" comments="PostGIS view."/>
+	</tables>
+</schemaMeta>

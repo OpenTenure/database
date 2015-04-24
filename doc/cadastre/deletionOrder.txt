@@ -1,0 +1,34 @@
+Trigger Function: f_for_tbl_cadastre_object_trg_remove
+Trigger Function: f_for_tbl_cadastre_object_trg_new
+Trigger Function: f_for_tbl_cadastre_object_trg_geommodify
+hierarchy_level
+Function: snap_geometry_to_geometry
+Function: get_new_cadastre_object_identifier_last_part
+Function: get_new_cadastre_object_identifier_first_part
+Function: get_map_center_label
+Function: generate_spatial_unit_group_name
+Function: cadastre_object_name_is_valid
+Function: add_topo_points
+legal_space_utility_network
+spatial_value_area
+spatial_unit_in_group
+spatial_unit_address
+level_config_map_layer
+cadastre_object_target
+survey_point
+cadastre_object_node_target
+spatial_unit_group
+cadastre_object
+spatial_unit
+level
+utility_network_type
+utility_network_status_type
+surface_relation_type
+structure_type
+register_type
+level_content_type
+dimension_type
+building_unit_type
+cadastre_object_type
+area_type
+land_use_type

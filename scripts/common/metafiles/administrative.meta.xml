@@ -1,0 +1,19 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>The SOLA implementation of the LADM Administrative package. Models land use rights and restrictions how those rights and restrictions relate to property and people. </comments>
+	<tables>
+		<table name="Function: ba_unit_name_is_valid" comments="Checks if the first and last name for a BA Unit match the naming convention used by this SOLA implementation."/>
+		<table name="Function: get_ba_unit_pending_action" comments="Determines the action (New, Vary or Cancel) that applies to the BA Unit based on the service it is associated with."/>
+		<table name="Function: get_calculated_area_size_action" comments="Returns the sum of any official parcel areas (i.e. cadastre.spatial_value_area) associated to the BA Unit."/>
+		<table name="Function: get_concatenated_name" comments="Returns a concatenated list of all cadastre objects associated to the BA Unit"/>
+		<table name="Function: get_objections" comments="Returns a list of dates indicating when objections were lodged against the BA Unit. Used by Systematic Registration."/>
+		<table name="Function: get_parcel_ownernames" comments="Returns a list of names of people associated to the BA Unit as an owner."/>
+		<table name="Function: getsysregmanagement" comments="Used for systematic registration"/>
+		<table name="Function: getsysregprogress" comments="Indicates the number of applications at various stages of the systematic registration process."/>
+		<table name="Function: getsysregstatus" comments="Indicates the number of applications at various states of the systematic registration process"/> 
+		<table name="Sequence: ba_unit_first_name_part_seq" comments="Sequence number used as the basis for the BA Unit first name part. This sequence is used by the generate-baunit-nr business rule."/> 
+		<table name="Sequence: ba_unit_last_name_part_seq" comments="Sequence number used as the basis for the BA Unit last name part. This sequence is used by the generate-baunit-nr business rule."/> 
+		<table name="Sequence: notation_reference_nr_seq" comments="Sequence number used as the basis for the Notation Nr field. This sequence is used by the generate-notation-reference-nr business rule."/>
+		<table name="Sequence: rrr_nr_seq" comments="Sequence number used as the basis for the RRR Nr field. This sequence is used by the generate-rrr-nr business rule."/>
+		<table name="Trigger Function: f_for_tbl_rrr_trg_change_from_pending" comments="Function triggered on an update to the RRR table that sets the status of any Current RRR matching the Nr of the RRR record being updated to Previous. Used to implement versioning of RRR records."/>
+	</tables>
+</schemaMeta>

@@ -1,0 +1,5 @@
+Function: move_spatial_units
+Function: move_other_objects
+Function: move_cadastre_objects
+Function: clean_after_rollback
+spatial_unit_temporary

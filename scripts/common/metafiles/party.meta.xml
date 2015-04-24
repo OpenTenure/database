@@ -1,0 +1,6 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>The SOLA implementation of the LADM Party package. Represents people and organisations that are associated to land rights and/or land transactions.</comments>
+	<tables>
+		<table name="Function: is_rightholder" comments="Indicates if the party is associated to one or more land rights as a rightholder."/>
+	</tables>
+</schemaMeta>

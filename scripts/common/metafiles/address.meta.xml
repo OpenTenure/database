@@ -1,0 +1,5 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Extension to the LADM for capturing postal and physical addresses. Allows SOLA to support integration with external address validation services if required.</comments>
+	<tables>
+	</tables>
+</schemaMeta>

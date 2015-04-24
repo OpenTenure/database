@@ -1,0 +1,5 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Extension to the LADM used by SOLA to track all changes made to data as a result of an application service.</comments>
+	<tables>
+	</tables>
+</schemaMeta>

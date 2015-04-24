@@ -1,0 +1,35 @@
+Trigger Function: f_for_tbl_rrr_trg_change_from_pending
+Sequence: rrr_nr_seq
+Sequence: notation_reference_nr_seq
+Sequence: ba_unit_last_name_part_seq
+Sequence: ba_unit_first_name_part_seq
+notifiable_party_for_baunit
+Function: getsysregstatus
+Function: getsysregprogress
+Function: getsysregmanagement
+Function: get_parcel_ownernames
+Function: get_objections
+Function: get_concatenated_name
+Function: get_calculated_area_size_action
+Function: get_ba_unit_pending_action
+Function: ba_unit_name_is_valid
+party_for_rrr
+notation
+required_relationship_baunit
+ba_unit_contains_spatial_unit
+source_describes_rrr
+source_describes_ba_unit
+mortgage_isbased_in_rrr
+condition_for_rrr
+ba_unit_target
+ba_unit_as_party
+ba_unit_area
+rrr_share
+rrr
+ba_unit
+rrr_type
+rrr_group_type
+mortgage_type
+condition_type
+ba_unit_type
+ba_unit_rel_type

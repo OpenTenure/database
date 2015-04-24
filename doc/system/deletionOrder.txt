@@ -1,0 +1,33 @@
+version
+setting
+language
+Function: setpassword
+Function: script_to_schema
+Function: get_text_from_schema
+Function: get_setting
+Function: consolidation_extract
+Function: consolidation_consolidate
+extracted_rows
+email
+crs
+consolidation_config
+br_validation
+appuser_appgroup
+approle_appgroup
+query_field
+map_search_option
+config_map_layer_metadata
+br_definition
+appuser_setting
+br
+config_map_layer
+config_panel_launcher
+panel_launcher_group
+config_map_layer_type
+br_validation_target_type
+br_technical_type
+br_severity_type
+approle
+appgroup
+appuser
+query

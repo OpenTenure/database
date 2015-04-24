@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_original" schema="bulk_operation" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="Function: clean_after_rollback" remarks="Runs clean up tasks after the transaction of bulk operation is rolled back." schema="bulk_operation" type="TABLE"/>
+      <table name="Function: move_cadastre_objects" remarks="Moves cadastre objects from the Bulk Operation schema to the Cadastre schema." schema="bulk_operation" type="TABLE"/>
+      <table name="Function: move_other_objects" remarks="Moves general spatial objects other than cadastre objects from the Bulk Operation schema to the Cadastre schema. If an appropriate level and/or structure type do not exist in the Cadastre schema, this function will add them." schema="bulk_operation" type="TABLE"/>
+      <table name="Function: move_spatial_units" remarks="Moves all spatial data from teh Bulk Operation schema to the Cadastre schema using the move_cadastre_objects and move_other_objects functions. This function is called after the bulk opearation transaction is created by the Bulk Operation application." schema="bulk_operation" type="TABLE"/>
+      <table name="spatial_unit_temporary" remarks="Used as a staging area when loading spatial objects with the bulk operations functionality. Data in this table is validated and any field values generated (e.g. name_firstpart) prior to transferring the data into the cadastre object table.  &#13;&#10;Tags: FLOSS SOLA Extension" schema="bulk_operation" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the record." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="transaction_id" nullable="false" remarks="The identifier of the transation associated to the bulk operation." size="40" type="varchar">
+            <parent column="id" foreignKey="spatial_unit_temporary_transaction_id_fk132" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="type_code" nullable="false" remarks="The type of object that will be uploaded." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="cadastre_object_type_code" nullable="true" remarks="The type of the cadastre object. Only applicable if the type_code is cadastre_object." size="20" type="varchar">
+            <parent column="code" foreignKey="spatial_unit_temporary_cadastre_object_type_code_fk133" implied="false" onDeleteCascade="false" table="cadastre_object_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="name_firstpart" nullable="true" remarks="The first part of the name for the cadastre object. Only applicable if the type_code is cadastre_object." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="name_lastpart" nullable="true" remarks="The last or remaining part of the name for the cadastre object. Only applicable if the type_code is cadastre_object." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="geom" nullable="false" remarks="The geometry for the spaital unit." size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="2" id="7" name="official_area" nullable="true" remarks="The official area for the cadastre object. Only applicable if the type_code is cadastre_object." size="29" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="8" name="label" nullable="true" remarks="The label to use for the spatial unit. Only applicable if the type_code IS NOT cadastre_object." size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="9" name="rowidentifier" nullable="false" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="10" name="rowversion" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="spatial_unit_temporary_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="spatial_unit_temporary_cadastre_object_type_code_fk133_ind" unique="false">
+            <column ascending="true" name="cadastre_object_type_code"/>
+         </index>
+         <index name="spatial_unit_temporary_index_on_geom" unique="false">
+            <column ascending="true" name="geom"/>
+         </index>
+         <index name="spatial_unit_temporary_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="spatial_unit_temporary_transaction_id_fk132_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+      </table>
+   </tables>
+</database>

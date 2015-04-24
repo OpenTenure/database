@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_original" schema="party" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="communication_type" remarks="Code list of communication types. Used to identify the types of communication that can be used between the land administration agency and their clients.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the communication type." size="20" type="varchar">
+            <child column="preferred_communication_code" foreignKey="party_preferred_communication_code_fk11" implied="false" onDeleteCascade="false" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the communication type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the communication type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the communication type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="communication_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="communication_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="Function: is_rightholder" remarks="Indicates if the party is associated to one or more land rights as a rightholder." schema="party" type="TABLE"/>
+      <table name="gender_type" remarks="Code list of gender types. Used to identify the gender of the party where the party represents an individual.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the gender type." size="20" type="varchar">
+            <child column="gender_code" foreignKey="party_gender_code_fk13" implied="false" onDeleteCascade="false" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the gender type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the gender type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the gender type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="gender_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="gender_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="group_party" remarks="Groups any number of parties into a distinct entity. Implementation of the LADM LA_GroupParty class. Not used by SOLA&#13;&#10;Tags: LADM Reference Object, Change History, Not Used" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Identifier for the group party." size="40" type="varchar">
+            <child column="group_id" foreignKey="party_member_group_id_fk35" implied="false" onDeleteCascade="true" table="party_member"/>
+            <parent column="id" foreignKey="group_party_id_fk32" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="type_code" nullable="false" remarks="LADM Definition: The type of the group party. E.g. family, tribe, association, etc." size="20" type="varchar">
+            <parent column="code" foreignKey="group_party_type_code_fk33" implied="false" onDeleteCascade="false" table="group_party_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the group_party_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="group_party_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="group_party_id_fk32_ind" unique="false">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="group_party_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="group_party_type_code_fk33_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="group_party_type" remarks="Code list of group party type types. Implementation of the LADM LA_GroupPartyType class. Not used by SOLA.&#13;&#10;Tags: Reference Table, LADM Reference Object, Not Used" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the group party type." size="20" type="varchar">
+            <child column="type_code" foreignKey="group_party_type_code_fk33" implied="false" onDeleteCascade="false" table="group_party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the group party type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the group party type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the group party type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="group_party_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="group_party_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="id_type" remarks="Code list of id types. Used to identify the types of id that can be used to verify the identity of an individual, group or organisation. E.g. nationalId, nationalPassport, driverLicense, etc.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the id type." size="20" type="varchar">
+            <child column="id_type_code" foreignKey="party_id_type_code_fk12" implied="false" onDeleteCascade="false" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the id type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the id type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the id type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="id_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="id_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="party" remarks="An individual, group or organisation that is associated in some way with land office services. Implementation of the LADM LA_Party class.&#13;&#10;Tags: LADM Reference Object, Change History" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Identifier for the party." size="40" type="varchar">
+            <child column="agent_id" foreignKey="application_agent_id_fk8" implied="false" onDeleteCascade="false" table="application"/>
+            <child column="contact_person_id" foreignKey="application_contact_person_id_fk14" implied="false" onDeleteCascade="false" table="application"/>
+            <child column="party_id" foreignKey="ba_unit_as_party_party_id_fk72" implied="false" onDeleteCascade="true" table="ba_unit_as_party"/>
+            <child column="id" foreignKey="group_party_id_fk32" implied="false" onDeleteCascade="true" table="group_party"/>
+            <child column="party_id" foreignKey="party_for_rrr_party_id_fk82" implied="false" onDeleteCascade="true" table="party_for_rrr"/>
+            <child column="party_id" foreignKey="party_member_party_id_fk34" implied="false" onDeleteCascade="true" table="party_member"/>
+            <child column="party_id" foreignKey="party_role_party_id_fk36" implied="false" onDeleteCascade="true" table="party_role"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ext_id" nullable="true" remarks="SOLA Extension: An identifier for the party from some external system such as a customer relationship management (CRM) system." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="type_code" nullable="false" remarks="LADM Definition: The type of the party. E.g. naturalPerson, nonNaturalPerson, etc." size="20" type="varchar">
+            <parent column="code" foreignKey="party_type_code_fk9" implied="false" onDeleteCascade="false" table="party_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="LADM Definition: The first name(s) for the party or the group or organisation name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="last_name" nullable="true" remarks="SOLA Extension: The last name for the party or blank for groups and organisations." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="fathers_name" nullable="true" remarks="SOLA Extension: The first name of the father for the party. Relevant where the fathers first name forms part of the name for the party." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="fathers_last_name" nullable="true" remarks="SOLA Extension: The last name of the father for the party. Relevant where the fathers last name forms part of the name for the party." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="alias" nullable="true" remarks="SOLA Extension: Any alias for the party. A party can have more than one alias. If so, the aliases should be separated by a comma." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="gender_code" nullable="true" remarks="SOLA Extension: Identifies the gender for the party. If the party is of type naturalPerson then a gender code must be specified." size="20" type="varchar">
+            <parent column="code" foreignKey="party_gender_code_fk13" implied="false" onDeleteCascade="false" table="gender_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="9" name="address_id" nullable="true" remarks="SOLA Extension: Identifier for the contact address of the party." size="40" type="varchar">
+            <parent column="id" foreignKey="party_address_id_fk10" implied="false" onDeleteCascade="false" table="address"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="10" name="id_type_code" nullable="true" remarks="SOLA Extension: Used to indicate the type of id used to verify the identity of the party." size="20" type="varchar">
+            <parent column="code" foreignKey="party_id_type_code_fk12" implied="false" onDeleteCascade="false" table="id_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="11" name="id_number" nullable="true" remarks="SOLA Extension: The number from the id used to verify the identity of the party." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="email" nullable="true" remarks="SOLA Extension: The party's contact email address." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="13" name="mobile" nullable="true" remarks="SOLA Extension: The party's contact mobile phone number." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="14" name="phone" nullable="true" remarks="SOLA Extension: The party's main contact phone number. I.e. landline." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="15" name="fax" nullable="true" remarks="SOLA Extension: The party's fax number." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="16" name="preferred_communication_code" nullable="true" remarks="SOLA Extension: Used to indicate the party's preferred means of communication with the land administration agency." size="20" type="varchar">
+            <parent column="code" foreignKey="party_preferred_communication_code_fk11" implied="false" onDeleteCascade="false" table="communication_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="17" name="birth_date" nullable="true" remarks="SOLA Extension: Date of birth." size="13" type="date"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="18" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the party_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="19" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="20" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="21" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="22" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="party_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="party_address_id_fk10_ind" unique="false">
+            <column ascending="true" name="address_id"/>
+         </index>
+         <index name="party_gender_code_fk13_ind" unique="false">
+            <column ascending="true" name="gender_code"/>
+         </index>
+         <index name="party_id_type_code_fk12_ind" unique="false">
+            <column ascending="true" name="id_type_code"/>
+         </index>
+         <index name="party_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="party_preferred_communication_code_fk11_ind" unique="false">
+            <column ascending="true" name="preferred_communication_code"/>
+         </index>
+         <index name="party_type_code_fk9_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="party_member" remarks="Identifies the parties belonging to a group party. Implementation of the LADM LA_PartyMember class. Not used by SOLA.&#13;&#10;Tags: LADM Reference Object, Change History, Not Used" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="party_id" nullable="false" remarks="LADM Definition: Identifier for the party." size="40" type="varchar">
+            <parent column="id" foreignKey="party_member_party_id_fk34" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="group_id" nullable="false" remarks="LADM Definition: Identifier of the group party" size="40" type="varchar">
+            <parent column="id" foreignKey="party_member_group_id_fk35" implied="false" onDeleteCascade="true" table="group_party"/>
+         </column>
+         <column autoUpdated="false" digits="17" id="2" name="share" nullable="true" remarks="LADM Definition: The share of a RRR held by a party member expressed as a fraction with a numerator and a denominator." size="17" type="float8"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the party_member_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="party_id" sequenceNumberInPK="1"/>
+         <primaryKey column="group_id" sequenceNumberInPK="2"/>
+         <index name="party_member_pkey" unique="true">
+            <column ascending="true" name="party_id"/>
+            <column ascending="true" name="group_id"/>
+         </index>
+         <index name="party_member_group_id_fk35_ind" unique="false">
+            <column ascending="true" name="group_id"/>
+         </index>
+         <index name="party_member_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="party_member_party_id_fk34_ind" unique="false">
+            <column ascending="true" name="party_id"/>
+         </index>
+      </table>
+      <table name="party_role" remarks="Identifies the roles a party has in relation to the land office transactions and data. Implementation of the LADM LA_Party.role feild.&#13;&#10;Tags: LADM Reference Object, Change History" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="party_id" nullable="false" remarks="LADM Definition: Identifier for the party." size="40" type="varchar">
+            <parent column="id" foreignKey="party_role_party_id_fk36" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="type_code" nullable="false" remarks="SOLA Extension: The type of role the party holds" size="20" type="varchar">
+            <parent column="code" foreignKey="party_role_type_code_fk37" implied="false" onDeleteCascade="true" table="party_role_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the party_role_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="party_id" sequenceNumberInPK="1"/>
+         <primaryKey column="type_code" sequenceNumberInPK="2"/>
+         <index name="party_role_pkey" unique="true">
+            <column ascending="true" name="party_id"/>
+            <column ascending="true" name="type_code"/>
+         </index>
+         <index name="party_role_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="party_role_party_id_fk36_ind" unique="false">
+            <column ascending="true" name="party_id"/>
+         </index>
+         <index name="party_role_type_code_fk37_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="party_role_type" remarks="Code list of party role types. Used to identify the types of role a party can have in relation to land office transactions and data. E.g. applicant, bank, lodgingAgent, etc. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the party role type." size="20" type="varchar">
+            <child column="type_code" foreignKey="party_role_type_code_fk37" implied="false" onDeleteCascade="true" table="party_role"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the party role type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the party role type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the party role type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="party_role_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="party_role_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="party_type" remarks="Code list of party type types. Implementation of the LADM LA_PartyType class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="party" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the party type." size="20" type="varchar">
+            <child column="type_code" foreignKey="party_type_code_fk9" implied="false" onDeleteCascade="false" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the party type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the party type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the party type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="party_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="party_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+   </tables>
+</database>

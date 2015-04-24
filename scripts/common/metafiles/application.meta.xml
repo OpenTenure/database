@@ -1,0 +1,10 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Extension to the LADM used by SOLA to implement Case Management functionality.</comments>
+	<tables>
+		<table name="Function: get_concatenated_name" comments="Returns a concatenated list of all cadastre objects associated to the BA Unit referenced by the application."/>
+		<table name="Function: get_work_summary" comments="Returns a summary of the services processed for a specified reporting period. Used by the Lodgement Statistics Report."/>
+		<table name="Function: getlodgement" comments="Not used. Replaced by get_work_summary."/>
+		<table name="Function: getlodgetiming" comments="Not used. Replaced by get_work_summary."/>
+		<table name="Sequence: application_nr_seq" comments="Sequence number used as the basis for the Application nr field. This sequence is used by the generate-application-nr business rule."/> 
+	</tables>
+</schemaMeta>

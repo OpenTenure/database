@@ -1,0 +1,6 @@
+Cut down version of Graphvis 2.36 including only those DLLs and config files 
+required for the dot executable to run with SchemaSpy. 
+
+If a new version of the Graphvis binaries are used, run the command dot -c 
+to ensure the config6 file is correctly generated. config6 identifies the
+pluggins available to dot.

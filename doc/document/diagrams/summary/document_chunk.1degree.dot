@@ -1,0 +1,38 @@
+// dot 2.36.0 on Windows 7 6.1
+// SchemaSpy rev 590
+digraph "document_chunk" {
+  graph [
+    rankdir="RL"
+    bgcolor="#f7f7f7"
+    nodesep="0.18"
+    ranksep="0.46"
+    fontname="Helvetica"
+    fontsize="11"
+  ];
+  node [
+    fontname="Helvetica"
+    fontsize="11"
+    shape="plaintext"
+  ];
+  edge [
+    arrowsize="0.8"
+  ];
+  "document_chunk" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">document_chunk</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="document_id" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">document_id</TD></TR>
+      <TR><TD PORT="claim_id" COLSPAN="3" ALIGN="LEFT">claim_id</TD></TR>
+      <TR><TD PORT="start_position" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">start_position</TD></TR>
+      <TR><TD PORT="size" COLSPAN="3" ALIGN="LEFT">size</TD></TR>
+      <TR><TD PORT="body" COLSPAN="3" ALIGN="LEFT">body</TD></TR>
+      <TR><TD PORT="md5" COLSPAN="3" ALIGN="LEFT">md5</TD></TR>
+      <TR><TD PORT="creation_time" COLSPAN="3" ALIGN="LEFT">creation_time</TD></TR>
+      <TR><TD PORT="user_name" COLSPAN="3" ALIGN="LEFT">user_name</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/document_chunk.html"
+    tooltip="document_chunk"
+  ];
+}

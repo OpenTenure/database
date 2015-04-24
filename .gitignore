@@ -1,0 +1,10 @@
+# Subfolders to ignore
+logs/
+
+# Files to ignore 
+Thumbs.db
+thumbs.db
+*.log
+data/*.sql
+*.zip
+

@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_original" schema="administrative" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="ba_unit" remarks="A Basic Administrative Unit a.k.a. BA Unit or Property. Used to link the rights and restrictions over one or more parcels to the parties that hold those rights and restrictions. A right must be homogeneous over the entire BA Unit. Implementation of the LADM LA_BAUnit class.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Identifier for the BA Unit." size="40" type="varchar">
+            <child column="ba_unit_id" foreignKey="application_property_ba_unit_id_fk124" implied="false" onDeleteCascade="false" table="application_property"/>
+            <child column="ba_unit_id" foreignKey="ba_unit_area_ba_unit_id_fk77" implied="false" onDeleteCascade="true" table="ba_unit_area"/>
+            <child column="ba_unit_id" foreignKey="ba_unit_as_party_ba_unit_id_fk71" implied="false" onDeleteCascade="true" table="ba_unit_as_party"/>
+            <child column="ba_unit_id" foreignKey="ba_unit_contains_spatial_unit_ba_unit_id_fk68" implied="false" onDeleteCascade="true" table="ba_unit_contains_spatial_unit"/>
+            <child column="ba_unit_id" foreignKey="ba_unit_target_ba_unit_id_fk83" implied="false" onDeleteCascade="true" table="ba_unit_target"/>
+            <child column="ba_unit_id" foreignKey="notation_ba_unit_id_fk75" implied="false" onDeleteCascade="true" table="notation"/>
+            <child column="from_ba_unit_id" foreignKey="required_relationship_baunit_from_ba_unit_id_fk52" implied="false" onDeleteCascade="true" table="required_relationship_baunit"/>
+            <child column="to_ba_unit_id" foreignKey="required_relationship_baunit_to_ba_unit_id_fk53" implied="false" onDeleteCascade="true" table="required_relationship_baunit"/>
+            <child column="ba_unit_id" foreignKey="rrr_ba_unit_id_fk42" implied="false" onDeleteCascade="true" table="rrr"/>
+            <child column="ba_unit_id" foreignKey="source_describes_ba_unit_ba_unit_id_fk50" implied="false" onDeleteCascade="true" table="source_describes_ba_unit"/>
+         </column>
+         <column autoUpdated="false" defaultValue="'basicPropertyUnit'::character varying" digits="0" id="1" name="type_code" nullable="false" remarks="LADM Definition: The type of BA Unit. E.g. basicPropertyUnit, administrativeUnit, etc." size="20" type="varchar">
+            <parent column="code" foreignKey="ba_unit_type_code_fk38" implied="false" onDeleteCascade="false" table="ba_unit_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="name" nullable="true" remarks="LADM Definition: The name of the BA Unit. Usually a concatenation of the name_firstpart and name_lastpart formatted as required." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="name_firstpart" nullable="false" remarks="SOLA Extension: The first part of the name or reference assigned by the land administration agency to identify the property." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="name_lastpart" nullable="false" remarks="SOLA Extension: The remaining part of the name or reference assigned by the land administration agency to identify the property." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="5" name="creation_date" nullable="true" remarks="SOLA Extension: The datetime the BA Unit is formally recognised by the land administration agency (i.e. registered or issued)." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="6" name="expiration_date" nullable="true" remarks="SOLA Extension: The datetime the BA Unit was superseded and became historic." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="'pending'::character varying" digits="0" id="7" name="status_code" nullable="false" remarks="LADM Definition: The status of the BA unit." size="20" type="varchar">
+            <parent column="code" foreignKey="ba_unit_status_code_fk39" implied="false" onDeleteCascade="false" table="reg_status_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="8" name="transaction_id" nullable="true" remarks="SOLA Extension: Reference to the SOLA transaction that created the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_transaction_id_fk40" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="9" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the ba_unit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="10" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ba_unit_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ba_unit_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="ba_unit_status_code_fk39_ind" unique="false">
+            <column ascending="true" name="status_code"/>
+         </index>
+         <index name="ba_unit_transaction_id_fk40_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+         <index name="ba_unit_type_code_fk38_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="ba_unit_area" remarks="Identifies the overall area of the BA Unit. This should be the sum of all parcel areas that are part of the BA Unit.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the BA Unit Area." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="ba_unit_id" nullable="false" remarks="Identifier for the BA Unit this area value is associated to." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_area_ba_unit_id_fk77" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="type_code" nullable="false" remarks="The type of area. E.g. officialArea, calculatedArea, etc." size="20" type="varchar">
+            <parent column="code" foreignKey="ba_unit_area_type_code_fk78" implied="false" onDeleteCascade="false" table="area_type"/>
+         </column>
+         <column autoUpdated="false" digits="2" id="3" name="size" nullable="false" remarks="The value of the area. Must be in metres squared and can be converted for display if requried." size="19" type="numeric"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="4" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the ba_unit_area_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="6" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ba_unit_area_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ba_unit_area_ba_unit_id_fk77_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="ba_unit_area_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="ba_unit_area_type_code_fk78_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="ba_unit_as_party" remarks="Associates BA Unit directly to Party. Implementation of the LADM LA_BAUnit to LA_Party relationship. Not used by SOLA.&#13;&#10;Tags: LADM Reference Object, Not Used" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ba_unit_id" nullable="false" remarks="Identifier for the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_as_party_ba_unit_id_fk71" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="party_id" nullable="false" remarks="Identifier for the Party." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_as_party_party_id_fk72" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <primaryKey column="ba_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="party_id" sequenceNumberInPK="2"/>
+         <index name="ba_unit_as_party_pkey" unique="true">
+            <column ascending="true" name="ba_unit_id"/>
+            <column ascending="true" name="party_id"/>
+         </index>
+         <index name="ba_unit_as_party_ba_unit_id_fk71_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="ba_unit_as_party_party_id_fk72_ind" unique="false">
+            <column ascending="true" name="party_id"/>
+         </index>
+      </table>
+      <table name="ba_unit_contains_spatial_unit" remarks="Associates BA Unit with Spatial Unit. Indicates the parcels that comprise the BA Unit. Implementation of the LA_BAUnit to LA_SpatialUnit relationship.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ba_unit_id" nullable="false" remarks="Identifier for the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_contains_spatial_unit_ba_unit_id_fk68" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="spatial_unit_id" nullable="false" remarks="Identifier for the Spatial Unit associated to the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_contains_spatial_unit_spatial_unit_id_fk70" implied="false" onDeleteCascade="true" table="cadastre_object"/>
+            <parent column="id" foreignKey="ba_unit_contains_spatial_unit_spatial_unit_id_fk69" implied="false" onDeleteCascade="true" table="spatial_unit"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the ba_unit_contains_spatial_unit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="ba_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="spatial_unit_id" sequenceNumberInPK="2"/>
+         <index name="ba_unit_contains_spatial_unit_pkey" unique="true">
+            <column ascending="true" name="ba_unit_id"/>
+            <column ascending="true" name="spatial_unit_id"/>
+         </index>
+         <index name="ba_unit_contains_spatial_unit_ba_unit_id_fk68_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="ba_unit_contains_spatial_unit_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="ba_unit_contains_spatial_unit_spatial_unit_id_fk69_ind" unique="false">
+            <column ascending="true" name="spatial_unit_id"/>
+         </index>
+         <index name="ba_unit_contains_spatial_unit_spatial_unit_id_fk70_ind" unique="false">
+            <column ascending="true" name="spatial_unit_id"/>
+         </index>
+      </table>
+      <table name="ba_unit_rel_type" remarks="Code list of BA Unit relationship types. Identifies the type of relationship between two BA Units. E.g. priorTitle, rootTitle, etc. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the relationship type." size="20" type="varchar">
+            <child column="relation_code" foreignKey="required_relationship_baunit_relation_code_fk54" implied="false" onDeleteCascade="false" table="required_relationship_baunit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the relationship type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="Description of the relationship type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="Status of the relationship type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="ba_unit_rel_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ba_unit_rel_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="ba_unit_target" remarks="Identifies existing BA Units that are included in a transaction. Used by SOLA to mark existing BA Units for cancellation when the transaction is approved. &#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ba_unit_id" nullable="false" remarks="Identifier for the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_target_ba_unit_id_fk83" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="transaction_id" nullable="false" remarks="Identifier for the transaction to cancel the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="ba_unit_target_transaction_id_fk84" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the ba_unit_target_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="ba_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="transaction_id" sequenceNumberInPK="2"/>
+         <index name="ba_unit_target_pkey" unique="true">
+            <column ascending="true" name="ba_unit_id"/>
+            <column ascending="true" name="transaction_id"/>
+         </index>
+         <index name="ba_unit_target_ba_unit_id_fk83_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="ba_unit_target_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="ba_unit_target_transaction_id_fk84_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+      </table>
+      <table name="ba_unit_type" remarks="Code list of BA Unit types. E.g. priorTitle, rootTitle, etc. Implementation of the LADM LA_BAUnitType class.&#13;&#10;Tags: LADM Reference Object, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Defintion: The code for the BA Unit type." size="20" type="varchar">
+            <child column="type_code" foreignKey="ba_unit_type_code_fk38" implied="false" onDeleteCascade="false" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Defintion: Displayed value of the BA Unit type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="LADM Defintion: Description of the BA Unit type." size="1000" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="3" name="status" nullable="false" remarks="SOLA Extension: Status of the BA Unit type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="ba_unit_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ba_unit_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="condition_for_rrr" remarks="Captures any statutory or agreed conditions in relation to an RRR. E.g. conditions of lease, etc. An RRR can have multiple conditions associated to it.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the condition." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="rrr_id" nullable="false" remarks="Identifier of the RRR the condition relates to." size="40" type="varchar">
+            <parent column="id" foreignKey="condition_for_rrr_rrr_id_fk86" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="condition_code" nullable="true" remarks="The type of condition." size="20" type="varchar">
+            <parent column="code" foreignKey="condition_for_rrr_condition_code_fk85" implied="false" onDeleteCascade="false" table="condition_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="custom_condition_text" nullable="true" remarks="User entered text describing the condition and/or updated or revised text obtained from the template condition text." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="condition_quantity" nullable="true" remarks="A quantity value associted to the condition." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="condition_unit" nullable="true" remarks="The unit of measure applicable for the condition quantity." size="15" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="6" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the condition_for_rrr_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="8" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="10" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="condition_for_rrr_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="condition_for_rrr_condition_code_fk85_ind" unique="false">
+            <column ascending="true" name="condition_code"/>
+         </index>
+         <index name="condition_for_rrr_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="condition_for_rrr_rrr_id_fk86_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+      </table>
+      <table name="condition_type" remarks="Code list of condition types. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the condition type." size="20" type="varchar">
+            <child column="condition_code" foreignKey="condition_for_rrr_condition_code_fk85" implied="false" onDeleteCascade="false" table="condition_for_rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the condition type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="The template text describing the condition." size="10000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="Status of the condition type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="condition_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="condition_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="Function: ba_unit_name_is_valid" remarks="Checks if the first and last name for a BA Unit match the naming convention used by this SOLA implementation." schema="administrative" type="TABLE"/>
+      <table name="Function: get_ba_unit_pending_action" remarks="Determines the action (New, Vary or Cancel) that applies to the BA Unit based on the service it is associated with." schema="administrative" type="TABLE"/>
+      <table name="Function: get_calculated_area_size_action" remarks="Returns the sum of any official parcel areas (i.e. cadastre.spatial_value_area) associated to the BA Unit." schema="administrative" type="TABLE"/>
+      <table name="Function: get_concatenated_name" remarks="Returns a concatenated list of all cadastre objects associated to the BA Unit" schema="administrative" type="TABLE"/>
+      <table name="Function: get_objections" remarks="Returns a list of dates indicating when objections were lodged against the BA Unit. Used by Systematic Registration." schema="administrative" type="TABLE"/>
+      <table name="Function: get_parcel_ownernames" remarks="Returns a list of names of people associated to the BA Unit as an owner." schema="administrative" type="TABLE"/>
+      <table name="Function: getsysregmanagement" remarks="Used for systematic registration" schema="administrative" type="TABLE"/>
+      <table name="Function: getsysregprogress" remarks="Indicates the number of applications at various stages of the systematic registration process." schema="administrative" type="TABLE"/>
+      <table name="Function: getsysregstatus" remarks="Indicates the number of applications at various states of the systematic registration process" schema="administrative" type="TABLE"/>
+      <table name="mortgage_isbased_in_rrr" remarks="Identifies RRR that is subject to mortgage. Implementation of the LA_Mortgage to LA_Right relationship. Not used by SOLA as the primary right will always be the subject of the mortgage.&#13;&#10;Tags: LADM Reference Object, Change History, Not Used" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="mortgage_id" nullable="false" remarks="Identifier for the mortgage" size="40" type="varchar">
+            <parent column="id" foreignKey="mortgage_isbased_in_rrr_mortgage_id_fk47" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="rrr_id" nullable="false" remarks="Identifier for the RRR associated to the mortgage." size="40" type="varchar">
+            <parent column="id" foreignKey="mortgage_isbased_in_rrr_rrr_id_fk46" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the ba_unit_contains_spatial_unit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="mortgage_id" sequenceNumberInPK="1"/>
+         <primaryKey column="rrr_id" sequenceNumberInPK="2"/>
+         <index name="mortgage_isbased_in_rrr_pkey" unique="true">
+            <column ascending="true" name="mortgage_id"/>
+            <column ascending="true" name="rrr_id"/>
+         </index>
+         <index name="mortgage_isbased_in_rrr_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="mortgage_isbased_in_rrr_mortgage_id_fk47_ind" unique="false">
+            <column ascending="true" name="mortgage_id"/>
+         </index>
+         <index name="mortgage_isbased_in_rrr_rrr_id_fk46_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+      </table>
+      <table name="mortgage_type" remarks="Code list of Mortgage types. E.g. levelPayment, linear, etc. Implementation of the LADM LA_MortgageType class.&#13;&#10;Tags: LADM Reference Object, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Defintion: The code for the mortgage type." size="20" type="varchar">
+            <child column="mortgage_type_code" foreignKey="rrr_mortgage_type_code_fk45" implied="false" onDeleteCascade="false" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Defintion: Displayed value of the mortgage type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="LADM Defintion: Description of the mortgage type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="SOLA Extension: Status of the mortgage type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="mortgage_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="mortgage_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="notation" remarks="Notations (a.k.a memorials) are text that summarise the affect a transaction has to a property/title. SOLA automatically creates template notations for every RRR change.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the notation." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="ba_unit_id" nullable="true" remarks="Identifier of the BA Unit the notation is associated with. Only populated if the notation is linked directly to the BA Unit. NULL if the notation is associated with an RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="notation_ba_unit_id_fk75" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="rrr_id" nullable="true" remarks="Identifier of the RRR the notation is assocaited with. Must not be populated if ba_unit_id is populated." size="40" type="varchar">
+            <parent column="id" foreignKey="notation_rrr_id_fk76" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="transaction_id" nullable="false" remarks="Identifier of the transaction that created the notation." size="40" type="varchar">
+            <parent column="id" foreignKey="notation_transaction_id_fk73" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="reference_nr" nullable="false" remarks="The notation reference number. Value determined using the generate-notation-reference-nr business rule." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="notation_text" nullable="true" remarks="The text of the notation. Note that template notation text can be obtained from the request type (i.e. service) the notation has been created as part of." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="6" name="notation_date" nullable="true" remarks="The date the notation is formalised/registered." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="'pending'::character varying" digits="0" id="7" name="status_code" nullable="false" remarks="The status of the notation." size="20" type="varchar">
+            <parent column="code" foreignKey="notation_status_code_fk74" implied="false" onDeleteCascade="false" table="reg_status_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="8" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the notation_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="9" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="10" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="11" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="12" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="notation_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="notation_ba_unit_id_fk75_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="notation_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="notation_rrr_id_fk76_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+         <index name="notation_status_code_fk74_ind" unique="false">
+            <column ascending="true" name="status_code"/>
+         </index>
+         <index name="notation_transaction_id_fk73_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+      </table>
+      <table name="party_for_rrr" remarks="Identifies the parties involved in each RRR. Also identifies the share each party has in the RRR if the RRR is subject to shared allocation.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="rrr_id" nullable="false" remarks="Identifier for the RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="party_for_rrr_rrr_id_fk81" implied="false" onDeleteCascade="true" table="rrr"/>
+            <parent column="rrr_id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="rrr_share"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="party_id" nullable="false" remarks="Identifier for the party associated to the RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="party_for_rrr_party_id_fk82" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="share_id" nullable="true" remarks="Identifier for the share the party has in the RRR. Not populated unless the RRR is subject to a shared allocation. E.g. Mortgage RRR does not have shares." size="40" type="varchar">
+            <parent column="id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="rrr_share"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the party_for_rrr_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="rrr_id" sequenceNumberInPK="1"/>
+         <primaryKey column="party_id" sequenceNumberInPK="2"/>
+         <index name="party_for_rrr_pkey" unique="true">
+            <column ascending="true" name="rrr_id"/>
+            <column ascending="true" name="party_id"/>
+         </index>
+         <index name="party_for_rrr_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="party_for_rrr_party_id_fk82_ind" unique="false">
+            <column ascending="true" name="party_id"/>
+         </index>
+         <index name="party_for_rrr_rrr_id_fk80_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+            <column ascending="true" name="share_id"/>
+         </index>
+         <index name="party_for_rrr_rrr_id_fk81_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+      </table>
+      <table name="required_relationship_baunit" remarks="Identifies relationships between BA Units. Implementation of the LADM LA_RequiredRelationshipBAUnit class. Used by SOLA to represent a range of relationships such as linking a new BA Unit to the BA Unit it supersedes (a.k.a Prior Title) as well as geographic relationships such as all property within a village, or all villages within a region or island, etc. &#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="from_ba_unit_id" nullable="false" remarks="The originating BA Unit (a.k.a. parent BA Unit). Usually a parent BA Unit will have multiple child BA Units associted to it. E.g. Island/region is the parent BA Unit for a town" size="40" type="varchar">
+            <parent column="id" foreignKey="required_relationship_baunit_from_ba_unit_id_fk52" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="to_ba_unit_id" nullable="false" remarks="The target BA Unit (a.k.a. child BA Unit). For any given relationship type, the child BA Unit will usually only have one logical parent BA Unit. E.g. A new title is the child BA Unit of the original title that is being superseded." size="40" type="varchar">
+            <parent column="id" foreignKey="required_relationship_baunit_to_ba_unit_id_fk53" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="relation_code" nullable="false" remarks="Code that identifies the type of relationship between the two BA Units." size="20" type="varchar">
+            <parent column="code" foreignKey="required_relationship_baunit_relation_code_fk54" implied="false" onDeleteCascade="false" table="ba_unit_rel_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the required_relationship_baunit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="from_ba_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="to_ba_unit_id" sequenceNumberInPK="2"/>
+         <index name="required_relationship_baunit_pkey" unique="true">
+            <column ascending="true" name="from_ba_unit_id"/>
+            <column ascending="true" name="to_ba_unit_id"/>
+         </index>
+         <index name="required_relationship_baunit_from_ba_unit_id_fk52_ind" unique="false">
+            <column ascending="true" name="from_ba_unit_id"/>
+         </index>
+         <index name="required_relationship_baunit_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="required_relationship_baunit_relation_code_fk54_ind" unique="false">
+            <column ascending="true" name="relation_code"/>
+         </index>
+         <index name="required_relationship_baunit_to_ba_unit_id_fk53_ind" unique="false">
+            <column ascending="true" name="to_ba_unit_id"/>
+         </index>
+      </table>
+      <table name="rrr" remarks="RRR are the specific rights, restrictions and responsibilities that can be registered on a property e.g. freehold ownership, lease, mortgage, caveat, etc. Implementation of the LADM LA_RRR class.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Identifier for the RRR" size="40" type="varchar">
+            <child column="rrr_id" foreignKey="condition_for_rrr_rrr_id_fk86" implied="false" onDeleteCascade="true" table="condition_for_rrr"/>
+            <child column="mortgage_id" foreignKey="mortgage_isbased_in_rrr_mortgage_id_fk47" implied="false" onDeleteCascade="true" table="mortgage_isbased_in_rrr"/>
+            <child column="rrr_id" foreignKey="mortgage_isbased_in_rrr_rrr_id_fk46" implied="false" onDeleteCascade="true" table="mortgage_isbased_in_rrr"/>
+            <child column="rrr_id" foreignKey="notation_rrr_id_fk76" implied="false" onDeleteCascade="true" table="notation"/>
+            <child column="rrr_id" foreignKey="party_for_rrr_rrr_id_fk81" implied="false" onDeleteCascade="true" table="party_for_rrr"/>
+            <child column="rrr_id" foreignKey="rrr_share_rrr_id_fk79" implied="false" onDeleteCascade="true" table="rrr_share"/>
+            <child column="rrr_id" foreignKey="source_describes_rrr_rrr_id_fk48" implied="false" onDeleteCascade="true" table="source_describes_rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ba_unit_id" nullable="false" remarks="LADM Definition: Identifier for the BA Unit the RRR applies to." size="40" type="varchar">
+            <parent column="id" foreignKey="rrr_ba_unit_id_fk42" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="nr" nullable="false" remarks="SOLA Extension: Number to identify the RRR. Determined by the generate-rrr-nr business rule. This value is used to track the different versions of the RRR as it is edited over time." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="type_code" nullable="false" remarks="LADM Definition: The type of RRR. E.g. freehold ownership, lease, mortage, caveat, etc." size="20" type="varchar">
+            <parent column="code" foreignKey="rrr_type_code_fk41" implied="false" onDeleteCascade="false" table="rrr_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="'pending'::character varying" digits="0" id="4" name="status_code" nullable="false" remarks="SOLA Extension: The status of the RRR." size="20" type="varchar">
+            <parent column="code" foreignKey="rrr_status_code_fk43" implied="false" onDeleteCascade="false" table="reg_status_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_primary" nullable="false" remarks="SOLA Extension. Flag it indicate if the RRR is the primary RRR for the BA Unit. One one of the current RRRs on the BA Unit can be flagged as the primary RRR." size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="6" name="transaction_id" nullable="false" remarks="SOLA Extension: Identifier of the transaction that created the RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="rrr_transaction_id_fk44" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="7" name="registration_date" nullable="true" remarks="SOLA Extension: The date and time the RRR was formally registered by the Land Administration Agency." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="8" name="expiration_date" nullable="true" remarks="LADM Definition: The date and time defining when the RRR remains in force to. Implementation of the LADM LA_RRR.timespec field." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="17" id="9" name="share" nullable="true" remarks="LADM Defintion: Share of the RRR expressed as a fraction with numerator and denominator. Not used by SOLA as shares in rights are represetned in the rrr_share table. This avoids having multiple RRR of the same type on the BA Unit that only differ by share amounts." size="17" type="float8"/>
+         <column autoUpdated="false" digits="2" id="10" name="amount" nullable="true" remarks="LADM Definition: The value of the mortgage. SOLA Extension: The amount associated with the RRR. E.g the value of the mortgage, the rental amount for a lease, etc." size="29" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="11" name="due_date" nullable="true" remarks="SOLA Extension: The date of the next payment for the RRR. E.g. the lease rental due date." size="13" type="date"/>
+         <column autoUpdated="false" digits="2" id="12" name="mortgage_interest_rate" nullable="true" remarks="LADM Definition: The interest rate of the mortgage as a percentage." size="5" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="13" name="mortgage_ranking" nullable="true" remarks="LADM Definition: The ranking order if more than one mortgage applies to the right." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="14" name="mortgage_type_code" nullable="true" remarks="LADM Definition: The type of mortgage." size="20" type="varchar">
+            <parent column="code" foreignKey="rrr_mortgage_type_code_fk45" implied="false" onDeleteCascade="false" table="mortgage_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="15" name="rowidentifier" nullable="false" remarks="SOLA Extension: Identifies the all change records for the row in the rrr_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="16" name="rowversion" nullable="false" remarks="SOLA Extension: Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="17" name="change_action" nullable="false" remarks="SOLA Extension: Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="18" name="change_user" nullable="true" remarks="SOLA Extension: The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="19" name="change_time" nullable="false" remarks="SOLA Extension: The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="rrr_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="rrr_ba_unit_id_fk42_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="rrr_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="rrr_mortgage_type_code_fk45_ind" unique="false">
+            <column ascending="true" name="mortgage_type_code"/>
+         </index>
+         <index name="rrr_status_code_fk43_ind" unique="false">
+            <column ascending="true" name="status_code"/>
+         </index>
+         <index name="rrr_transaction_id_fk44_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+         <index name="rrr_type_code_fk41_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="rrr_group_type" remarks="Code list of RRR group types. Used to identify if an RRR is a responsibility, right or restriction. SOLA's representation of the LADM LA_Responsibility, LA_Right and LA_Restriction classes.&#13;&#10;Tags: LADM Reference Object, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Defintion: The code for the RRR group type." size="20" type="varchar">
+            <child column="rrr_group_type_code" foreignKey="rrr_type_rrr_group_type_code_fk22" implied="false" onDeleteCascade="false" table="rrr_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Defintion: Displayed value of the RRR group type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="LADM Defintion: Description of the RRR group type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="SOLA Extension: Status of the RRR group type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="rrr_group_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="rrr_group_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="rrr_share" remarks="Identifies the share a party has in an RRR. Implementation of the LADM LA_RRR.share field.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="rrr_id" nullable="false" remarks="Identifier of the RRR the share is assocaited with." size="40" type="varchar">
+            <child column="rrr_id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="party_for_rrr"/>
+            <parent column="id" foreignKey="rrr_share_rrr_id_fk79" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id" nullable="false" remarks="Identifier for the RRR share." size="40" type="varchar">
+            <child column="share_id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="party_for_rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="nominator" nullable="false" remarks="Nominiator part of the share (i.e. top number of fraction)" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="denominator" nullable="false" remarks="Denominator part of the share (i.e. bottom number of fraction)" size="5" type="int2"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="4" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the rrr_share_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="6" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="rrr_id" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="rrr_share_pkey" unique="true">
+            <column ascending="true" name="rrr_id"/>
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="rrr_share_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="rrr_share_rrr_id_fk79_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+      </table>
+      <table name="rrr_type" remarks="Code list of RRR types. E.g. freehold owernship, lease, mortgage, caveat, etc. Implementation of the LADM LA_ResponsibilityType, LA_RightType and LA_RestrictionType classes.&#13;&#10;Tags: LADM Reference Object, Reference Table" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Defintion: The code for the RRR type." size="20" type="varchar">
+            <child column="target_rrr_type_code" foreignKey="br_validation_target_rrr_type_code_fk112" implied="false" onDeleteCascade="false" table="br_validation"/>
+            <child column="rrr_type_code" foreignKey="request_type_rrr_type_code_fk21" implied="false" onDeleteCascade="false" table="request_type"/>
+            <child column="type_code" foreignKey="rrr_type_code_fk41" implied="false" onDeleteCascade="false" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="rrr_group_type_code" nullable="false" remarks="LADM Defintion: Identifies if the RRR type is a right, restriction or a responsibility." size="20" type="varchar">
+            <parent column="code" foreignKey="rrr_type_rrr_group_type_code_fk22" implied="false" onDeleteCascade="false" table="rrr_group_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="display_value" nullable="false" remarks="LADM Defintion: Displayed value of the RRR type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_primary" nullable="false" remarks="SOLA Extension: Flag to indicate if the RRR type is a primary RRR." size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="4" name="share_check" nullable="false" remarks="LADM Defintion: Flag to indicate the that the sum of all shares for the RRR must be checked to ensure it equals 1." size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="5" name="party_required" nullable="false" remarks="LADM Defintion: Flag to indicate at least one party must be associated with this RRR." size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="6" name="description" nullable="true" remarks="LADM Defintion: Description of the RRR type." size="1000" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="7" name="status" nullable="false" remarks="SOLA Extension: Status of the RRR type." size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="rrr_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="rrr_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+         <index name="rrr_type_rrr_group_type_code_fk22_ind" unique="false">
+            <column ascending="true" name="rrr_group_type_code"/>
+         </index>
+      </table>
+      <table name="Sequence: ba_unit_first_name_part_seq" remarks="Sequence number used as the basis for the BA Unit first name part. This sequence is used by the generate-baunit-nr business rule." schema="administrative" type="TABLE"/>
+      <table name="Sequence: ba_unit_last_name_part_seq" remarks="Sequence number used as the basis for the BA Unit last name part. This sequence is used by the generate-baunit-nr business rule." schema="administrative" type="TABLE"/>
+      <table name="Sequence: notation_reference_nr_seq" remarks="Sequence number used as the basis for the Notation Nr field. This sequence is used by the generate-notation-reference-nr business rule." schema="administrative" type="TABLE"/>
+      <table name="Sequence: rrr_nr_seq" remarks="Sequence number used as the basis for the RRR Nr field. This sequence is used by the generate-rrr-nr business rule." schema="administrative" type="TABLE"/>
+      <table name="source_describes_ba_unit" remarks="Associates a BA Unit with one or more source (a.k.a. document) records. Implementation of the LADM LA_BAUnit to LA_AdministrativeSource relationship.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="source_id" nullable="false" remarks="Identifier for the source associated with the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="source_describes_ba_unit_source_id_fk51" implied="false" onDeleteCascade="true" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ba_unit_id" nullable="false" remarks="Identifier for the BA Unit." size="40" type="varchar">
+            <parent column="id" foreignKey="source_describes_ba_unit_ba_unit_id_fk50" implied="false" onDeleteCascade="true" table="ba_unit"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the source_describes_ba_unit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="source_id" sequenceNumberInPK="1"/>
+         <primaryKey column="ba_unit_id" sequenceNumberInPK="2"/>
+         <index name="source_describes_ba_unit_pkey" unique="true">
+            <column ascending="true" name="source_id"/>
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="source_describes_ba_unit_ba_unit_id_fk50_ind" unique="false">
+            <column ascending="true" name="ba_unit_id"/>
+         </index>
+         <index name="source_describes_ba_unit_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="source_describes_ba_unit_source_id_fk51_ind" unique="false">
+            <column ascending="true" name="source_id"/>
+         </index>
+      </table>
+      <table name="source_describes_rrr" remarks="Associates a RRR with one or more source (a.k.a. document) records. Implementation of the LADM LA_RRR to LA_AdministrativeSource relationship.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="rrr_id" nullable="false" remarks="Identifier for the RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="source_describes_rrr_rrr_id_fk48" implied="false" onDeleteCascade="true" table="rrr"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="source_id" nullable="false" remarks="Identifier for the source associated with the RRR." size="40" type="varchar">
+            <parent column="id" foreignKey="source_describes_rrr_source_id_fk49" implied="false" onDeleteCascade="true" table="source"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the source_describes_ba_unit_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="rrr_id" sequenceNumberInPK="1"/>
+         <primaryKey column="source_id" sequenceNumberInPK="2"/>
+         <index name="source_describes_rrr_pkey" unique="true">
+            <column ascending="true" name="rrr_id"/>
+            <column ascending="true" name="source_id"/>
+         </index>
+         <index name="source_describes_rrr_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="source_describes_rrr_rrr_id_fk48_ind" unique="false">
+            <column ascending="true" name="rrr_id"/>
+         </index>
+         <index name="source_describes_rrr_source_id_fk49_ind" unique="false">
+            <column ascending="true" name="source_id"/>
+         </index>
+      </table>
+      <table name="sys_reg_owner_name" remarks="Used by systematic registration to identify the owners for each property subject to SR." schema="administrative" type="VIEW">
+         <column autoUpdated="false" digits="0" id="0" name="value" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="last_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="name_firstpart" nullable="true" remarks="" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="name_lastpart" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="land_use_code" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="ba_unit_id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="2" id="8" name="size" nullable="true" remarks="" size="29" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="9" name="residential" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="agricultural" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="11" name="commercial" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="12" name="industrial" nullable="true" remarks="" size="131089" type="numeric"/>
+      </table>
+      <table name="sys_reg_state_land" remarks="Used by systematic registration to identify state land under SR." schema="administrative" type="VIEW">
+         <column autoUpdated="false" digits="0" id="0" name="value" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="name_firstpart" nullable="true" remarks="" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="name_lastpart" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="land_use_code" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="ba_unit_id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="2" id="6" name="size" nullable="true" remarks="" size="29" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="7" name="residential" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="8" name="agricultural" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="9" name="commercial" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="industrial" nullable="true" remarks="" size="131089" type="numeric"/>
+      </table>
+      <table name="systematic_registration_listing" remarks="Used by systematic registration to list parcels subject to SR." schema="administrative" type="VIEW">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="name_firstpart" nullable="true" remarks="" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="name_lastpart" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="2" id="3" name="size" nullable="true" remarks="" size="29" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="4" name="land_use_code" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="ba_unit_id" nullable="true" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="name" nullable="true" remarks="" size="2147483647" type="text"/>
+      </table>
+      <table name="Trigger Function: f_for_tbl_rrr_trg_change_from_pending" remarks="Function triggered on an update to the RRR table that sets the status of any Current RRR matching the Nr of the RRR record being updated to Previous. Used to implement versioning of RRR records." schema="administrative" type="TABLE"/>
+   </tables>
+</database>

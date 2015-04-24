@@ -1,0 +1,11 @@
+administrative_source_type
+archive
+availability_status_type
+presentation_form_type
+spatial_source_type
+source
+spatial_source
+power_of_attorney
+spatial_source_measurement
+Sequence: source_la_nr_seq
+Trigger Function: f_for_tbl_source_trg_change_of_status

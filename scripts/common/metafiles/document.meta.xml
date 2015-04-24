@@ -1,0 +1,6 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Extension to the LADM used by SOLA to store electronic copies of documentation provided in support of land related dealings. Allows SOLA to support integration with external Document Management Systems (DMS) if required.</comments>
+	<tables>
+		<table name="Sequence: document_nr_seq" comments="Sequence number used as the basis for the document Nr field. This sequence is used by the Digital Archive EJB."/>
+	</tables>
+</schemaMeta>

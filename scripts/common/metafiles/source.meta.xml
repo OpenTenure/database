@@ -1,0 +1,7 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>The SOLA implementation of the LADM LA_Source class. Represents metadata about documents provided to support land related dealings.</comments>
+	<tables>
+		<table name="Sequence: source_la_nr_seq" comments="Sequence number used as the basis for the Source nr field. This sequence is used by the generate-source-nr business rule."/>
+		<table name="Trigger Function: f_for_tbl_source_trg_change_of_status" comments="Function triggered on update of the source table that updates the status of any previous version of a source record to Previous when the new source record receives a Current or Historic status."/>
+	</tables>
+</schemaMeta>

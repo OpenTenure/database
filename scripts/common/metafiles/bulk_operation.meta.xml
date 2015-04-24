@@ -1,0 +1,9 @@
+<schemaMeta  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2011/02/05/schemaspy.meta.xsd">
+	<comments>Extension to the LADM used by SOLA to implement Bulk Operation functionality such as loading of shapefiles and documents.</comments>
+	<tables>
+		<table name="Function: clean_after_rollback" comments="Runs clean up tasks after the transaction of bulk operation is rolled back."/>
+		<table name="Function: move_cadastre_objects" comments="Moves cadastre objects from the Bulk Operation schema to the Cadastre schema."/>
+		<table name="Function: move_other_objects" comments="Moves general spatial objects other than cadastre objects from the Bulk Operation schema to the Cadastre schema. If an appropriate level and/or structure type do not exist in the Cadastre schema, this function will add them."/>
+		<table name="Function: move_spatial_units" comments="Moves all spatial data from teh Bulk Operation schema to the Cadastre schema using the move_cadastre_objects and move_other_objects functions. This function is called after the bulk opearation transaction is created by the Bulk Operation application."/>
+	</tables>
+</schemaMeta>
