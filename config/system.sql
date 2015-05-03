@@ -405,6 +405,8 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-body'
 Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-service', '1', true, 'Enables or disables email service. 1 - enable, 0 - disable');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-mailer-jndi-name', 'mail/sola', true, 'Configured mailer service JNDI name');
+INSERT INTO setting (name, vl, active, description) VALUES ('product-name', 'SOLA Community Server', true, 'SOLA product name');
+INSERT INTO setting (name, vl, active, description) VALUES ('product-code', 'scs', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
