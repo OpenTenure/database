@@ -1,0 +1,2 @@
+﻿INSERT INTO system.version SELECT '1507a' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1507a');
+INSERT INTO system.setting(name, vl, active, description) VALUES ('moderation_date', '2015-01-01', 't', 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.');
