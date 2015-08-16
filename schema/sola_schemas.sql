@@ -12010,7 +12010,8 @@ CREATE TABLE field_constraint_option (
     rowversion integer DEFAULT 0 NOT NULL,
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer DEFAULT 1 NOT NULL
 );
 
 
@@ -12087,6 +12088,13 @@ COMMENT ON COLUMN field_constraint_option.change_time IS 'The date and time the 
 
 
 --
+-- Name: COLUMN field_constraint_option.item_order; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN field_constraint_option.item_order IS 'Field constraint option ordering number.';
+
+
+--
 -- Name: field_constraint_option_historic; Type: TABLE; Schema: opentenure; Owner: postgres; Tablespace: 
 --
 
@@ -12100,7 +12108,8 @@ CREATE TABLE field_constraint_option_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer
 );
 
 
@@ -12173,7 +12182,8 @@ CREATE TABLE field_payload (
     rowversion integer DEFAULT 0 NOT NULL,
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer DEFAULT 1 NOT NULL
 );
 
 
@@ -12278,6 +12288,13 @@ COMMENT ON COLUMN field_payload.change_time IS 'The date and time the row was la
 
 
 --
+-- Name: COLUMN field_payload.item_order; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN field_payload.item_order IS 'Field ordering number.';
+
+
+--
 -- Name: field_payload_historic; Type: TABLE; Schema: opentenure; Owner: postgres; Tablespace: 
 --
 
@@ -12296,7 +12313,8 @@ CREATE TABLE field_payload_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer
 );
 
 
@@ -12317,7 +12335,8 @@ CREATE TABLE field_template (
     rowversion integer DEFAULT 0 NOT NULL,
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer DEFAULT 1 NOT NULL
 );
 
 
@@ -12408,6 +12427,13 @@ COMMENT ON COLUMN field_template.change_time IS 'The date and time the row was l
 
 
 --
+-- Name: COLUMN field_template.item_order; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN field_template.item_order IS 'Field ordering number.';
+
+
+--
 -- Name: field_template_historic; Type: TABLE; Schema: opentenure; Owner: postgres; Tablespace: 
 --
 
@@ -12423,7 +12449,8 @@ CREATE TABLE field_template_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer
 );
 
 
@@ -13158,7 +13185,8 @@ CREATE TABLE section_payload (
     rowversion integer DEFAULT 0 NOT NULL,
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer DEFAULT 1 NOT NULL
 );
 
 
@@ -13263,6 +13291,13 @@ COMMENT ON COLUMN section_payload.change_time IS 'The date and time the row was 
 
 
 --
+-- Name: COLUMN section_payload.item_order; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN section_payload.item_order IS 'Section ordering number.';
+
+
+--
 -- Name: section_payload_historic; Type: TABLE; Schema: opentenure; Owner: postgres; Tablespace: 
 --
 
@@ -13280,7 +13315,8 @@ CREATE TABLE section_payload_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer
 );
 
 
@@ -13304,7 +13340,8 @@ CREATE TABLE section_template (
     rowversion integer DEFAULT 0 NOT NULL,
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer DEFAULT 1 NOT NULL
 );
 
 
@@ -13409,6 +13446,13 @@ COMMENT ON COLUMN section_template.change_time IS 'The date and time the row was
 
 
 --
+-- Name: COLUMN section_template.item_order; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN section_template.item_order IS 'Section ordering number.';
+
+
+--
 -- Name: section_template_historic; Type: TABLE; Schema: opentenure; Owner: postgres; Tablespace: 
 --
 
@@ -13427,7 +13471,8 @@ CREATE TABLE section_template_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    item_order integer
 );
 
 

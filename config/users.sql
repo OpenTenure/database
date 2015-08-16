@@ -66,6 +66,7 @@ INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversi
 INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ChangeSecClass', 'ff94bfad-7079-41ea-bf4b-6962e36cad1f', '387c38eb-7ff7-49f6-98f7-126b3b0d32ee', 1, 'i', 'test', '2015-02-27 15:31:06.736');
 INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('01SEC_Unrestricted', 'ff94bfad-7079-41ea-bf4b-6962e36cad1f', 'a91afd78-3921-4993-a256-f7b2482c081b', 1, 'i', 'test', '2015-02-27 15:31:06.736');
 INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('02SEC_Restricted', 'ff94bfad-7079-41ea-bf4b-6962e36cad1f', '1bfe00f6-6b0e-42d2-9c12-a779593a8f24', 1, 'i', 'test', '2015-02-27 15:31:06.736');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ViewReports', 'super-group-id', '2c4da65a-43f6-11e5-9c67-9f326dbd1cf8', 1, 'i', 'db:postgres', '2015-08-16 15:07:08.677');
 
 
 ALTER TABLE approle_appgroup ENABLE TRIGGER ALL;
@@ -107,6 +108,7 @@ INSERT INTO appuser_appgroup (appuser_id, appgroup_id, rowidentifier, rowversion
 INSERT INTO appuser_appgroup (appuser_id, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('9e7bb800-cc11-4174-a35d-2aac04f5d6dc', 'CommunityRecorders', '2a6904fb-09e4-4a14-8f5e-9cf8c08b294f', 1, 'i', 'test', '2015-02-12 11:48:35.832');
 INSERT INTO appuser_appgroup (appuser_id, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('6843b8e6-0738-4a89-a0cc-fa03d385184e', 'ff94bfad-7079-41ea-bf4b-6962e36cad1f', 'eda84249-a431-4a47-9807-a74b8ec30df7', 1, 'i', 'test', '2015-02-27 15:33:00.741');
 INSERT INTO appuser_appgroup (appuser_id, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('020bf9c9-2fd9-4014-aa65-09463b3c9e56', 'ff94bfad-7079-41ea-bf4b-6962e36cad1f', '4b756401-3ccb-48e8-9993-633a9dcb6073', 1, 'i', 'test', '2015-02-27 16:27:02.988');
+INSERT INTO appuser_appgroup (appuser_id, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('test-id', 'CommunityMembers', 'bf6cd289-18fe-45f1-93ac-da251a864bee', 1, 'i', 'test', '2015-05-26 12:02:40.793');
 
 
 ALTER TABLE appuser_appgroup ENABLE TRIGGER ALL;

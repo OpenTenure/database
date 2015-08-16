@@ -74,7 +74,7 @@ ALTER TABLE query ENABLE TRIGGER ALL;
 
 ALTER TABLE config_map_layer DISABLE TRIGGER ALL;
 
-INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims', 'wms', false, false, 12, NULL, 'https://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims', '1.1.1', 'image/png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, false, false, true);
+INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims::::::::::::::::::::::::::::::::', 'wms', false, false, 12, '', 'http://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims_kebbi', '1.1.1', 'image/png', '', '', NULL, NULL, '', '', '', false, false, true);
 
 
 ALTER TABLE config_map_layer ENABLE TRIGGER ALL;
@@ -392,8 +392,6 @@ Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has be
 <i>You are receiving this notification as the #{partyRole}</i><br /><br />
 Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge withdrawal notice body');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-withdraw-subject', 'SOLA OpenTenure - claim challenge withdrawal', true, 'Claim withdrawal notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((175.068823 -36.785949,175.070902 -36.786461,175.079644 -36.787528,175.087001 -36.788041,175.090519 -36.787699,175.092118 -36.787101,175.093344 -36.785564,175.094677 -36.784967,175.096862 -36.785564,175.097875 -36.786290,175.102033 -36.784967,175.103366 -36.784796,175.106138 -36.782917,175.106991 -36.781636,175.117919 -36.784540,175.117274 -36.830375,175.113668 -36.831440,175.112302 -36.829328,175.109315 -36.828175,175.108238 -36.824562,175.107966 -36.821181,175.107092 -36.820481,175.104627 -36.821072,175.103862 -36.823171,175.101666 -36.827659,175.098931 -36.826071,175.097525 -36.828629,175.094896 -36.831006,175.094560 -36.832145,175.095884 -36.833196,175.093828 -36.836375,175.086922 -36.837365,175.085134 -36.834587,175.081358 -36.833326,175.078821 -36.834071,175.077160 -36.835777,175.075854 -36.836182,175.073712 -36.835163,175.071524 -36.836100,175.070229 -36.833666,175.068580 -36.834116,175.063665 -36.831845,175.064985 -36.830216,175.066285 -36.829052,175.066763 -36.826629,175.070516 -36.828458,175.072053 -36.826502,175.072377 -36.823365,175.071137 -36.820436,175.068876 -36.818138,175.068876 -36.807121,175.068876 -36.807121,175.068876 -36.807121,175.068876 -36.805628,175.068876 -36.805628,175.068823 -36.785949))', true, 'Open Tenure community area where parcels can be claimed');
-INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', '', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-notifiable-submit-body', 'Dear #{notifiablePartyName},<p></p> this is to inform you that one <b>#{actionToNotify}</b> action has been requested 
 				<br>by <b>#{targetPartyName}</b> 
 				<br>on the following property: <b>#{baUnitName}</b>. <p></p><p></p>Regards,<br />#{sendingOffice}', true, 'Action on Interest body text');
@@ -407,6 +405,14 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-
 INSERT INTO setting (name, vl, active, description) VALUES ('email-mailer-jndi-name', 'mail/sola', true, 'Configured mailer service JNDI name');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-name', 'SOLA Community Server', true, 'SOLA product name');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-code', 'scs', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server');
+INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', '/usr/bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
+INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((3.6546347734302973 12.503351883221237,4.138033210930267 13.218287390843976,4.352266609367719 13.223634960225066,4.561006843742729 13.084560169718053,4.835665046867779 13.113986410005568,5.9954093095631675 11.338744732248433,6.033861458000722 11.120531078294285,5.956957161125703 11.13670069644962,5.90202552050073 11.045061019556199,5.8031485673756675 11.045061019556199,5.632860481438213 10.956089256523349,5.440599739250714 10.95339272380661,5.437853157219447 11.13670069644962,5.36094886034443 11.212147017445373,5.338976204094476 11.327972633047608,5.215380012688194 11.34682354017023,4.9105094072194815 11.287573650514492,4.742967903313202 11.212147017445373,4.756700813469445 11.158258789807642,5.003893196281918 11.069321375481042,5.0533316728444495 11.020798658328957,5.075304329094402 10.91563868943104,5.036852180656939 10.875182614114964,5.089037239250736 10.799649936291091,5.089037239250736 10.729495435225711,4.817125618156953 10.675519350732438,4.822618782219487 10.478425629923413,4.9105094072194815 10.289313777172788,4.651644050774079 10.193025691767962,4.63516455858639 10.09569448354739,4.530794441398975 10.106510521430744,4.571993171867705 10.276814871915613,4.481355964836445 10.330860631093227,4.5033286210865775 10.495642614408489,4.731294929680363 10.657637656614744,4.714815437492763 10.873496825060736,4.495088874992778 11.002937585727846,4.017183601555252 11.00832972180687,3.7315390703052254 11.121541705721823,3.495333015617729 11.2885836944594,3.6546347734302973 12.503351883221237))', true, 'Open Tenure community area where parcels can be claimed');
+INSERT INTO setting (name, vl, active, description) VALUES ('moderation_date', '2015-01-01', true, 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.');
+INSERT INTO setting (name, vl, active, description) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.');
+INSERT INTO setting (name, vl, active, description) VALUES ('report_server_user', 'jasperadmin', true, 'Reporting server user name.');
+INSERT INTO setting (name, vl, active, description) VALUES ('report_server_pass', 'jasperadmin', true, 'Reporting server user password.');
+INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports', true, 'Folder URL on the reporting server containing reports to display on the menu.');
+INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reporting server URL.');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
@@ -418,6 +424,10 @@ ALTER TABLE setting ENABLE TRIGGER ALL;
 ALTER TABLE version DISABLE TRIGGER ALL;
 
 INSERT INTO version (version_num) VALUES ('1504a');
+INSERT INTO version (version_num) VALUES ('1506a');
+INSERT INTO version (version_num) VALUES ('1507a');
+INSERT INTO version (version_num) VALUES ('1507b');
+INSERT INTO version (version_num) VALUES ('1508a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;
