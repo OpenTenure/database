@@ -15820,7 +15820,7 @@ CREATE TABLE config_map_layer (
     security_password character varying(30),
     added_from_bulk_operation boolean DEFAULT false NOT NULL,
     use_in_public_display boolean DEFAULT false NOT NULL,
-    use_for_ot boolean DEFAULT false NOT NULL,
+    use_for_ot boolean DEFAULT true NOT NULL,
     CONSTRAINT config_map_layer_fields_required CHECK (CASE WHEN ((type_code)::text = 'wms'::text) THEN ((url IS NOT NULL) AND (wms_layers IS NOT NULL)) WHEN ((type_code)::text = 'pojo'::text) THEN (((pojo_query_name IS NOT NULL) AND (pojo_structure IS NOT NULL)) AND (style IS NOT NULL)) WHEN ((type_code)::text = 'shape'::text) THEN ((shape_location IS NOT NULL) AND (style IS NOT NULL)) ELSE NULL::boolean END)
 );
 
@@ -15989,11 +15989,19 @@ COMMENT ON COLUMN config_map_layer.use_for_ot IS 'Flag to indicate if the layer 
 CREATE TABLE config_map_layer_metadata (
     name_layer character varying(50) NOT NULL,
     name character varying(50) NOT NULL,
-    value character varying(100) NOT NULL
+    value character varying(100) NOT NULL,
+    for_client boolean DEFAULT false
 );
 
 
 ALTER TABLE system.config_map_layer_metadata OWNER TO postgres;
+
+--
+-- Name: COLUMN config_map_layer_metadata.for_client; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN config_map_layer_metadata.for_client IS 'Indicates whether an option is for use by the client or server. If true, it''s supposed to be used by the client map control, otherwise option is sent to the server.';
+
 
 --
 -- Name: config_map_layer_type; Type: TABLE; Schema: system; Owner: postgres; Tablespace: 
@@ -22739,7 +22747,7 @@ ALTER TABLE ONLY br_validation
 --
 
 ALTER TABLE ONLY config_map_layer_metadata
-    ADD CONSTRAINT config_map_layer_metadata_name_fk FOREIGN KEY (name_layer) REFERENCES config_map_layer(name) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT config_map_layer_metadata_name_fk FOREIGN KEY (name_layer) REFERENCES config_map_layer(name) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
