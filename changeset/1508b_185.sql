@@ -4,5 +4,5 @@ COMMENT ON COLUMN system.config_map_layer_metadata.for_client IS 'Indicates whet
 ALTER TABLE system.config_map_layer_metadata DROP CONSTRAINT config_map_layer_metadata_name_fk;
 ALTER TABLE system.config_map_layer_metadata ADD CONSTRAINT config_map_layer_metadata_name_fk FOREIGN KEY (name_layer)
       REFERENCES system.config_map_layer (name) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE
+      ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE system.config_map_layer ALTER COLUMN use_for_ot SET DEFAULT true;
