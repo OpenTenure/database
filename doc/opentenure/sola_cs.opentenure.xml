@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_cs" schema="opentenure" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="attachment" remarks="Extension to the LADM used by SOLA to store claim files attachments." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the attachment." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="type_code" nullable="false" remarks="Attached document type code." size="20" type="varchar">
+            <parent column="code" foreignKey="fk_document_type_code" implied="false" onDeleteCascade="false" table="administrative_source_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="reference_nr" nullable="true" remarks="Document reference number." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="document_date" nullable="true" remarks="Document date." size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="4" name="description" nullable="true" remarks="Short document description." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="body" nullable="false" remarks="Binary content of the attachment." size="2147483647" type="bytea"/>
+         <column autoUpdated="false" digits="0" id="6" name="size" nullable="false" remarks="File size." size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="7" name="mime_type" nullable="false" remarks="Mime type of the attachment." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="file_name" nullable="false" remarks="Actual file name of the attachment." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="file_extension" nullable="false" remarks="File extension of the attachment. E.g. pdf, tiff, doc, etc" size="5" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="user_name" nullable="false" remarks="User's ID, who has created the attachment." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="11" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the document_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="12" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="13" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="14" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="15" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="attachment_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="attachment_chunk" remarks="Holds temporary pieces of attachment uploaded on the server. In case of large files, document can be split into smaller pieces (chunks) allowing reliable upload. After all pieces uploaded, client will instruct server to create a document and remove temporary files stored in this table." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="0" name="id" nullable="false" remarks="Unique ID of the chunk" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="attachment_id" nullable="false" remarks="Attachment ID, which will be used to create final document object. Used to group all chunks together." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="claim_id" nullable="true" remarks="Claim ID. Used to clean the table when saving claim. It will guarantee that no orphan chunks left in the table." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="start_position" nullable="false" remarks="Staring position of the byte in the source/destination document" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="4" name="size" nullable="false" remarks="Size of the chunk in bytes." size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="5" name="body" nullable="false" remarks="The content of the chunk." size="2147483647" type="bytea"/>
+         <column autoUpdated="false" digits="0" id="6" name="md5" nullable="true" remarks="Checksum of the chunk, calculated using MD5." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="creation_time" nullable="false" remarks="Date and time when chuck was created." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="8" name="user_name" nullable="false" remarks="User's id (name), who has loaded the chunk" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="id_pkey_document_chunk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="start_unique_document_chunk" unique="true">
+            <column ascending="true" name="attachment_id"/>
+            <column ascending="true" name="start_position"/>
+         </index>
+      </table>
+      <table name="claim" remarks="Main table to store claim and claim challenge information submitted by the community recorders. SOLA Open Tenure extention." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the claim." size="40" type="varchar">
+            <child column="challenged_claim_id" foreignKey="fk_challenged_claim" implied="false" onDeleteCascade="false" table="claim"/>
+            <child column="claim_id" foreignKey="claim_comment_claim_id_fk8" implied="false" onDeleteCascade="true" table="claim_comment"/>
+            <child column="claim_id" foreignKey="claim_location_claim_id_fk8" implied="false" onDeleteCascade="true" table="claim_location"/>
+            <child column="claim_id" foreignKey="claim_share_claim_id_fk12" implied="false" onDeleteCascade="true" table="claim_share"/>
+            <child column="claim_id" foreignKey="claim_uses_attachment_claim_id_fk126" implied="false" onDeleteCascade="true" table="claim_uses_attachment"/>
+            <child column="claim_id" foreignKey="form_payload_claim_id_fkey" implied="false" onDeleteCascade="true" table="form_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="nr" nullable="false" remarks="Auto generated claim number. Generated by the generate-claim-nr business rule when the claim record is initially saved." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="2" name="lodgement_date" nullable="true" remarks="The lodgement date and time of the claim." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="3" name="challenge_expiry_date" nullable="true" remarks="Expiration date when challenge claim can be submitted." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="4" name="decision_date" nullable="true" remarks="The decision date on the claim by the authority." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="5" name="description" nullable="true" remarks="Free description of the claim." size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="challenged_claim_id" nullable="true" remarks="The identifier of the challenged claim. If this value is provided, it means the record is a claim challenge type." size="40" type="varchar">
+            <parent column="id" foreignKey="fk_challenged_claim" implied="false" onDeleteCascade="false" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="7" name="claimant_id" nullable="false" remarks="The identifier of the claimant." size="40" type="varchar">
+            <parent column="id" foreignKey="claim_claimant_id_fk8" implied="false" onDeleteCascade="false" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="8" name="mapped_geometry" nullable="true" remarks="Claimed property geometry calculated using system SRID" size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="9" name="gps_geometry" nullable="true" remarks="Claimed property geometry in Lat/Long format" size="2147483647" type="geometry"/>
+         <column autoUpdated="false" defaultValue="'created'::character varying" digits="0" id="10" name="status_code" nullable="false" remarks="The status of the claim." size="20" type="varchar">
+            <parent column="code" foreignKey="claim_status_code_fk18" implied="false" onDeleteCascade="false" table="claim_status"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="11" name="recorder_name" nullable="false" remarks="User's ID, who has created the claim." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="12" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the claim_historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="13" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="14" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="15" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="16" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="17" name="type_code" nullable="true" remarks="Type of claim (e.g. ownership, usufruct, occupation)." size="20" type="varchar">
+            <parent column="code" foreignKey="claim_fk_type_code" implied="false" onDeleteCascade="false" table="rrr_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="18" name="start_date" nullable="true" remarks="Start date of right (occupation)" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="19" name="land_use_code" nullable="true" remarks="Land use code" size="20" type="varchar">
+            <parent column="code" foreignKey="fk_claim_land_use_type" implied="false" onDeleteCascade="false" table="land_use_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="20" name="notes" nullable="true" remarks="Any note that could be usefully stored as part of the claim" size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="21" name="north_adjacency" nullable="true" remarks="Optional information about adjacency on the north" size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="22" name="south_adjacency" nullable="true" remarks="Optional information about adjacency on the south" size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="23" name="east_adjacency" nullable="true" remarks="Optional information about adjacency on the east" size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="24" name="west_adjacency" nullable="true" remarks="Optional information about adjacency on the west" size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="25" name="assignee_name" nullable="true" remarks="User name who is assigned to work with claim" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="26" name="rejection_reason_code" nullable="true" remarks="Rejection reason code." size="20" type="varchar">
+            <parent column="code" foreignKey="fk_claim_rejection_reason_code" implied="false" onDeleteCascade="false" table="rejection_reason"/>
+         </column>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="27" name="claim_area" nullable="true" remarks="Claim area in square meters." size="19" type="int8"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="claim_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="claim_comment" remarks="" schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the claim comment." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="claim_id" nullable="false" remarks="Identifier for the claim." size="40" type="varchar">
+            <parent column="id" foreignKey="claim_comment_claim_id_fk8" implied="false" onDeleteCascade="true" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="comment" nullable="false" remarks="Comment text." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="comment_user" nullable="false" remarks="The user id who has created comment." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="creation_time" nullable="false" remarks="The date and time when comment was created." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="5" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the claim_historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="6" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="7" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="9" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="claim_comment_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="claim_location" remarks="" schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the claim location." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="claim_id" nullable="false" remarks="Identifier for the claim." size="40" type="varchar">
+            <parent column="id" foreignKey="claim_location_claim_id_fk8" implied="false" onDeleteCascade="true" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="mapped_location" nullable="false" remarks="Additional claim location geometry." size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="3" name="gps_location" nullable="true" remarks="Additional claim location geometry in Lat/Long format." size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="4" name="description" nullable="true" remarks="Claim location description." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="5" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the claim_historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="6" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="7" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="9" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="claim_location_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="claim_share" remarks="Identifies the share a party has in a claim." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the claim share." size="40" type="varchar">
+            <child column="claim_share_id" foreignKey="party_for_claim_share_claim_id_fk43" implied="false" onDeleteCascade="true" table="party_for_claim_share"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="claim_id" nullable="false" remarks="Identifier of the claim the share is assocaited with." size="40" type="varchar">
+            <parent column="id" foreignKey="claim_share_claim_id_fk12" implied="false" onDeleteCascade="true" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="nominator" nullable="true" remarks="Nominiator part of the share (i.e. top number of fraction)" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="denominator" nullable="true" remarks="Denominator part of the share (i.e. bottom number of fraction)" size="5" type="int2"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="4" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the claim_share_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="6" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="17" id="9" name="percentage" nullable="true" remarks="Percentage of the share. Another form of nominator/denominator presentation." size="17" type="float8"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="claim_share_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="claim_status" remarks="Code list of claim status." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the claim status." size="20" type="varchar">
+            <child column="status_code" foreignKey="claim_status_code_fk18" implied="false" onDeleteCascade="false" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the claim status." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the service claim." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the claim status." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="claim_status_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="claim_status_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="claim_uses_attachment" remarks="Links the claim to the attachment submitted with the claim. SOLA Open Tenure extension." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="claim_id" nullable="false" remarks="Identifier for the claim the record is associated to." size="40" type="varchar">
+            <parent column="id" foreignKey="claim_uses_attachment_claim_id_fk126" implied="false" onDeleteCascade="true" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="attachment_id" nullable="false" remarks="Identifier of the attachment associated to the claim." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Unique row identifier." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="claim_id" sequenceNumberInPK="1"/>
+         <primaryKey column="attachment_id" sequenceNumberInPK="2"/>
+         <index name="claim_uses_attachment_pkey" unique="true">
+            <column ascending="true" name="claim_id"/>
+            <column ascending="true" name="attachment_id"/>
+         </index>
+      </table>
+      <table name="field_constraint" remarks="Dynamic form field constraint." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar">
+            <child column="field_constraint_id" foreignKey="field_constraint_option_field_constraint_id_fkey" implied="false" onDeleteCascade="true" table="field_constraint_option"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Field name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text (header) of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="error_msg" nullable="false" remarks="Error message to display in case of constraint violation." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="format" nullable="true" remarks="Regular expression, used to check field value" size="255" type="varchar"/>
+         <column autoUpdated="false" digits="10" id="5" name="min_value" nullable="true" remarks="Minimum field value, used in range constraint." size="20" type="numeric"/>
+         <column autoUpdated="false" digits="10" id="6" name="max_value" nullable="true" remarks="Maximum field value, used in range constraint." size="20" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="7" name="field_constraint_type" nullable="false" remarks="Type of constraint." size="255" type="varchar">
+            <parent column="code" foreignKey="field_constraint_field_constraint_type_fkey" implied="false" onDeleteCascade="true" table="field_constraint_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="8" name="field_template_id" nullable="false" remarks="Field template id, which constraint relates to." size="40" type="varchar">
+            <parent column="id" foreignKey="field_constraint_field_template_id_fkey" implied="false" onDeleteCascade="true" table="field_template"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="9" name="rowidentifier" nullable="false" remarks="" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="10" name="rowversion" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="field_constraint_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_field_constraint_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="field_template_id"/>
+         </index>
+      </table>
+      <table name="field_constraint_option" remarks="Dynamic form field constraint option, used to limit field values." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Field name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="field_constraint_id" nullable="false" remarks="Field constraint ID." size="40" type="varchar">
+            <parent column="id" foreignKey="field_constraint_option_field_constraint_id_fkey" implied="false" onDeleteCascade="true" table="field_constraint"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="4" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="6" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="9" name="item_order" nullable="false" remarks="Field constraint option ordering number." size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="field_constraint_option_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_field_constraint_option_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="field_constraint_id"/>
+         </index>
+      </table>
+      <table name="field_constraint_type" remarks="Reference table for the field constraint types, used in dynamic forms." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the constraint type." size="255" type="varchar">
+            <child column="field_constraint_type" foreignKey="field_constraint_field_constraint_type_fkey" implied="false" onDeleteCascade="true" table="field_constraint"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the constraint type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'c'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the constraint type." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the constraint type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="field_constraint_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="field_constraint_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="field_payload" remarks="Dynamic form field payload." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Field name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="field_type" nullable="false" remarks="Field type code." size="255" type="varchar">
+            <parent column="code" foreignKey="field_payload_field_type_fkey" implied="false" onDeleteCascade="true" table="field_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="section_element_payload_id" nullable="false" remarks="Section element id." size="40" type="varchar">
+            <parent column="id" foreignKey="field_payload_section_element_payload_id_fkey" implied="false" onDeleteCascade="true" table="section_element_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="string_payload" nullable="true" remarks="String field value." size="2048" type="varchar"/>
+         <column autoUpdated="false" digits="10" id="6" name="big_decimal_payload" nullable="true" remarks="Decimal or integer field value." size="20" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="7" name="boolean_payload" nullable="true" remarks="Boolean field value." size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="8" name="field_value_type" nullable="false" remarks="" size="255" type="varchar">
+            <parent column="code" foreignKey="field_payload_field_value_type_fkey" implied="false" onDeleteCascade="true" table="field_value_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="9" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="10" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="14" name="item_order" nullable="false" remarks="Field ordering number." size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="field_payload_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_field_payload_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="section_element_payload_id"/>
+         </index>
+      </table>
+      <table name="field_template" remarks="Dynamic form field template." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar">
+            <child column="field_template_id" foreignKey="field_constraint_field_template_id_fkey" implied="false" onDeleteCascade="true" table="field_constraint"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Field name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text (header) of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="hint" nullable="true" remarks="Field hint to be used for UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="field_type" nullable="false" remarks="Field type code." size="255" type="varchar">
+            <parent column="code" foreignKey="field_template_field_type_fkey" implied="false" onDeleteCascade="true" table="field_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="section_template_id" nullable="false" remarks="Section template ID." size="40" type="varchar">
+            <parent column="id" foreignKey="field_template_section_template_id_fkey" implied="false" onDeleteCascade="true" table="section_template"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="6" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="8" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="10" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="11" name="item_order" nullable="false" remarks="Field ordering number." size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="field_template_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_field_template_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="section_template_id"/>
+         </index>
+      </table>
+      <table name="field_type" remarks="Reference table for the field types, used in dynamic forms." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the field type." size="255" type="varchar">
+            <child column="field_type" foreignKey="field_payload_field_type_fkey" implied="false" onDeleteCascade="true" table="field_payload"/>
+            <child column="field_type" foreignKey="field_template_field_type_fkey" implied="false" onDeleteCascade="true" table="field_template"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the field type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'c'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the field type." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the field type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="field_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="field_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="field_value_type" remarks="Reference table for the field value types, used in dynamic forms." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the field value type." size="255" type="varchar">
+            <child column="field_value_type" foreignKey="field_payload_field_value_type_fkey" implied="false" onDeleteCascade="true" table="field_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the field value type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'c'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the field value type." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the field value type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="field_value_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="field_value_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="form_payload" remarks="Dynamic form payload." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar">
+            <child column="form_payload_id" foreignKey="section_payload_form_payload_id_fkey" implied="false" onDeleteCascade="true" table="section_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="claim_id" nullable="false" remarks="Foreign key to the parent claim object." size="40" type="varchar">
+            <parent column="id" foreignKey="form_payload_claim_id_fkey" implied="false" onDeleteCascade="true" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="form_template_name" nullable="false" remarks="Foreign key to relevant dynamic form template." size="255" type="varchar">
+            <parent column="name" foreignKey="form_payload_form_template_name_fkey" implied="false" onDeleteCascade="true" table="form_template"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="form_payload_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="form_template" remarks="Dynamic form template." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="name" nullable="false" remarks="" size="255" type="varchar">
+            <child column="form_template_name" foreignKey="form_payload_form_template_name_fkey" implied="false" onDeleteCascade="true" table="form_payload"/>
+            <child column="form_template_name" foreignKey="section_template_form_template_name_fkey" implied="false" onDeleteCascade="true" table="section_template"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_name" nullable="false" remarks="Form name, which can be used for displaying on the UI." size="255" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="is_default" nullable="false" remarks="Indicates whether form is default for all new claims." size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="name" sequenceNumberInPK="1"/>
+         <index name="form_template_pkey" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="party" remarks="Extension to the LADM used by SOLA to store party information (cliamant or owner)." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="0" name="id" nullable="false" remarks="Unique identifier for the party." size="40" type="varchar">
+            <child column="claimant_id" foreignKey="claim_claimant_id_fk8" implied="false" onDeleteCascade="false" table="claim"/>
+            <child column="party_id" foreignKey="party_for_claim_share_party_id_fk23" implied="false" onDeleteCascade="true" table="party_for_claim_share"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="First name of party." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="last_name" nullable="true" remarks="Last name of claimant." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="id_type_code" nullable="true" remarks="ID document type code" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="id_number" nullable="true" remarks="ID document number." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="birth_date" nullable="true" remarks="Date of birth of the party." size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="6" name="gender_code" nullable="true" remarks="Gender code of the party." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="mobile_phone" nullable="true" remarks="Mobile phone number of the party." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="phone" nullable="true" remarks="Landline phone number of the party." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="email" nullable="true" remarks="Email address of the party." size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="address" nullable="true" remarks="Living address of the party." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="11" name="user_name" nullable="false" remarks="User name who has created the record." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="12" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the document_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="13" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="14" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="15" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="16" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="17" name="is_person" nullable="false" remarks="Indicates if record is for individual or company (legal entity)" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="claimant_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="party_for_claim_share" remarks="Identifies parties involved in the claim share." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="party_id" nullable="false" remarks="Identifier for the party." size="40" type="varchar">
+            <parent column="id" foreignKey="party_for_claim_share_party_id_fk23" implied="false" onDeleteCascade="true" table="party"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="claim_share_id" nullable="false" remarks="Identifier of the claim share." size="40" type="varchar">
+            <parent column="id" foreignKey="party_for_claim_share_claim_id_fk43" implied="false" onDeleteCascade="true" table="claim_share"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the party_for_claim_share_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="party_id" sequenceNumberInPK="1"/>
+         <primaryKey column="claim_share_id" sequenceNumberInPK="2"/>
+         <index name="party_for_claim_share_pkey" unique="true">
+            <column ascending="true" name="party_id"/>
+            <column ascending="true" name="claim_share_id"/>
+         </index>
+      </table>
+      <table name="rejection_reason" remarks="Rejection reason codes" schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the rejection reason." size="20" type="varchar">
+            <child column="rejection_reason_code" foreignKey="fk_claim_rejection_reason_code" implied="false" onDeleteCascade="false" table="claim"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the rejection reason." size="2000" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="Status of the rejection reason." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="Description of the rejection reason." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="rejection_reason_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="rejection_reason_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="section_element_payload" remarks="Dynamic form section element payload." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="40" type="varchar">
+            <child column="section_element_payload_id" foreignKey="field_payload_section_element_payload_id_fkey" implied="false" onDeleteCascade="true" table="field_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="section_payload_id" nullable="false" remarks="Section payload ID." size="40" type="varchar">
+            <parent column="id" foreignKey="section_element_payload_section_payload_id_fkey" implied="false" onDeleteCascade="true" table="section_payload"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="section_element_payload_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="section_payload" remarks="Dynamic form section payload." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Primary key." size="40" type="varchar">
+            <child column="section_payload_id" foreignKey="section_element_payload_section_payload_id_fkey" implied="false" onDeleteCascade="true" table="section_element_payload"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Section name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text (header) of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="element_name" nullable="false" remarks="Section element name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="element_display_name" nullable="false" remarks="Text value to be used as a visible label of the section element UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="min_occurrences" nullable="false" remarks="Minimum occurane of the section elements on the form." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="max_occurrences" nullable="false" remarks="Maximum occurane of the section elements on the form. If max &gt; 1, UI will be shown as a table." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="form_payload_id" nullable="false" remarks="Foreign key reference to form payload." size="40" type="varchar">
+            <parent column="id" foreignKey="section_payload_form_payload_id_fkey" implied="false" onDeleteCascade="true" table="form_payload"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="8" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="9" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="10" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="11" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="12" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="13" name="item_order" nullable="false" remarks="Section ordering number." size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="section_payload_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_section_payload_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="form_payload_id"/>
+         </index>
+      </table>
+      <table name="section_template" remarks="Sections of dynamic form template." schema="opentenure" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="40" type="varchar">
+            <child column="section_template_id" foreignKey="field_template_section_template_id_fkey" implied="false" onDeleteCascade="true" table="field_template"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Section name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="Value to be used as a visible text (header) of UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="error_msg" nullable="false" remarks="Error message to show when min/max conditions are not met." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="min_occurrences" nullable="false" remarks="Minimum occurane of the section elements on the form." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="max_occurrences" nullable="false" remarks="Maximum occurane of the section elements on the form. If max &gt; 1, UI will be shown as a table." size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="form_template_name" nullable="false" remarks="Foreign key reference to form template." size="255" type="varchar">
+            <parent column="name" foreignKey="section_template_form_template_name_fkey" implied="false" onDeleteCascade="true" table="form_template"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="7" name="element_name" nullable="false" remarks="Section element name to be used as UI component name." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="element_display_name" nullable="false" remarks="Text value to be used as a visible label of the section element UI component." size="255" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="9" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the form historic table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="10" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="14" name="item_order" nullable="false" remarks="Section ordering number." size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="section_template_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="unique_section_template_name_idx" unique="true">
+            <column ascending="true" name="name"/>
+            <column ascending="true" name="form_template_name"/>
+         </index>
+      </table>
+   </tables>
+</database>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_cs" schema="transaction" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="reg_status_type" remarks="Code list of registration status types. E.g. current, historic, pending, previous. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="transaction" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the registration status type." size="20" type="varchar">
+            <child column="status_code" foreignKey="ba_unit_status_code_fk39" implied="false" onDeleteCascade="false" table="ba_unit"/>
+            <child column="target_reg_moment" foreignKey="br_validation_target_reg_moment_fk115" implied="false" onDeleteCascade="false" table="br_validation"/>
+            <child column="status_code" foreignKey="cadastre_object_status_code_fk63" implied="false" onDeleteCascade="false" table="cadastre_object"/>
+            <child column="status_code" foreignKey="notation_status_code_fk74" implied="false" onDeleteCascade="false" table="notation"/>
+            <child column="status_code" foreignKey="rrr_status_code_fk43" implied="false" onDeleteCascade="false" table="rrr"/>
+            <child column="status_code" foreignKey="source_status_code_fk4" implied="false" onDeleteCascade="false" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the registration status type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="Description of the registration status type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="Status of the registration status type" size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="reg_status_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="reg_status_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="transaction" remarks="Transactions are used to group changes to registered data (i.e. Property, RRR and Parcels). Each service initiates a transaction that is then recorded against any data edits made by the user. When the service is complete and the application approved, the data associated with the transction can be approved/registered as well. If the user chooses to reject their changes prior to approval, the transaction can be used to determine which data edits need to be removed from the system without affecting the currently registered data. &#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="transaction" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the transaction." size="40" type="varchar">
+            <child column="transaction_id" foreignKey="ba_unit_transaction_id_fk40" implied="false" onDeleteCascade="true" table="ba_unit"/>
+            <child column="transaction_id" foreignKey="ba_unit_target_transaction_id_fk84" implied="false" onDeleteCascade="true" table="ba_unit_target"/>
+            <child column="transaction_id" foreignKey="cadastre_object_transaction_id_fk65" implied="false" onDeleteCascade="true" table="cadastre_object"/>
+            <child column="transaction_id" foreignKey="cadastre_object_node_target_transaction_id_fk102" implied="false" onDeleteCascade="true" table="cadastre_object_node_target"/>
+            <child column="transaction_id" foreignKey="cadastre_object_target_transaction_id_fk98" implied="false" onDeleteCascade="true" table="cadastre_object_target"/>
+            <child column="transaction_id" foreignKey="notation_transaction_id_fk73" implied="false" onDeleteCascade="true" table="notation"/>
+            <child column="transaction_id" foreignKey="rrr_transaction_id_fk44" implied="false" onDeleteCascade="true" table="rrr"/>
+            <child column="transaction_id" foreignKey="source_transaction_id_fk5" implied="false" onDeleteCascade="true" table="source"/>
+            <child column="transaction_id" foreignKey="spatial_unit_transaction_id_fk67" implied="false" onDeleteCascade="true" table="spatial_unit"/>
+            <child column="transaction_id" foreignKey="spatial_unit_temporary_transaction_id_fk132" implied="false" onDeleteCascade="true" table="spatial_unit_temporary"/>
+            <child column="transaction_id" foreignKey="survey_point_transaction_id_fk99" implied="false" onDeleteCascade="true" table="survey_point"/>
+            <child column="transaction_id" foreignKey="transaction_source_transaction_id_fk100" implied="false" onDeleteCascade="true" table="transaction_source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="from_service_id" nullable="true" remarks="The identifier of the service that initiated the transaction. NULL if the transaction has been created using other means. E.g. for migration or bulk data loading purposes." size="40" type="varchar">
+            <parent column="id" foreignKey="transaction_from_service_id_fk6" implied="false" onDeleteCascade="false" table="service"/>
+         </column>
+         <column autoUpdated="false" defaultValue="'pending'::character varying" digits="0" id="2" name="status_code" nullable="false" remarks="The status of the transaction" size="20" type="varchar">
+            <parent column="code" foreignKey="transaction_status_code_fk27" implied="false" onDeleteCascade="false" table="transaction_status_type"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="3" name="approval_datetime" nullable="true" remarks="The date and time the transaction is approved." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="bulk_generate_first_part" nullable="false" remarks="Flag used by the bulk operations functionality to determine if the first_namepart for cadastre objects should be automatically generated." size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_bulk_operation" nullable="false" remarks="Flag used to indicate the transaction was created in support of a bulk operation." size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="6" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the transaction_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="8" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="10" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="transaction_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="transaction_from_service_id_fk6_ind" unique="false">
+            <column ascending="true" name="from_service_id"/>
+         </index>
+         <index name="transaction_from_service_id_unique" unique="true">
+            <column ascending="true" name="from_service_id"/>
+         </index>
+         <index name="transaction_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="transaction_status_code_fk27_ind" unique="false">
+            <column ascending="true" name="status_code"/>
+         </index>
+      </table>
+      <table name="transaction_source" remarks="Associates transactions to source (a.k.a. documents) that justify the transaction. Used by the Cadastre Change and Cadastre Redefintion services.  &#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="transaction" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="transaction_id" nullable="false" remarks="Identifier for the transaction." size="40" type="varchar">
+            <parent column="id" foreignKey="transaction_source_transaction_id_fk100" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="source_id" nullable="false" remarks="The identifier of the source associated to the transation." size="40" type="varchar">
+            <parent column="id" foreignKey="transaction_source_source_id_fk101" implied="false" onDeleteCascade="true" table="source"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the transaction_source_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="transaction_id" sequenceNumberInPK="1"/>
+         <primaryKey column="source_id" sequenceNumberInPK="2"/>
+         <index name="transaction_source_pkey" unique="true">
+            <column ascending="true" name="transaction_id"/>
+            <column ascending="true" name="source_id"/>
+         </index>
+         <index name="transaction_source_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="transaction_source_source_id_fk101_ind" unique="false">
+            <column ascending="true" name="source_id"/>
+         </index>
+         <index name="transaction_source_transaction_id_fk100_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+      </table>
+      <table name="transaction_status_type" remarks="Code list of transaction status types. E.g. pending, approved, cancelled, completed. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="transaction" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the transaction status type." size="20" type="varchar">
+            <child column="status_code" foreignKey="transaction_status_code_fk27" implied="false" onDeleteCascade="false" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the transaction status type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="Description of the transaction status type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="Status of the transaction status type" size="1" type="bpchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="transaction_status_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="transaction_status_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+   </tables>
+</database>

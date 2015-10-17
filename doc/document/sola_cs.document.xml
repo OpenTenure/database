@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_cs" schema="document" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="document" remarks="Extension to the LADM used by SOLA to store electronic copies of documentation provided in support of land related dealings.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="document" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the document." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="nr" nullable="false" remarks="Unique number to identify the document. Determined by the Digital Archive EJB when saving the document record." size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="extension" nullable="false" remarks="The file extension of the electronic file. E.g. pdf, tiff, doc, etc" size="5" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="mime_type" nullable="true" remarks="Mime type of the file." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="body" nullable="false" remarks="The content of the electronic file." size="2147483647" type="bytea"/>
+         <column autoUpdated="false" digits="0" id="5" name="description" nullable="true" remarks="A descriptive name to help recognizs the file such as the original file name." size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="6" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the document_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="8" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="10" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="document_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="document_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="document_nr_unique" unique="true">
+            <column ascending="true" name="nr"/>
+         </index>
+      </table>
+      <table name="document_chunk" remarks="Holds temporary pieces of a document uploaded on the server. In case of large files, document can be split into smaller pieces (chunks) allowing reliable upload. After all pieces uploaded, client will instruct server to create a document and remove temporary files stored in this table." schema="document" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="0" name="id" nullable="false" remarks="Unique ID of the chunk" size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="document_id" nullable="false" remarks="Document ID, which will be used to create final document object. Used to group all chunks together." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="claim_id" nullable="true" remarks="Claim ID. Used to clean the table when saving claim. It will guarantee that no orphan chunks left in the table." size="40" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="start_position" nullable="false" remarks="Staring position of the byte in the source/destination document" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="4" name="size" nullable="false" remarks="Size of the chunk in bytes." size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="5" name="body" nullable="false" remarks="The content of the chunk." size="2147483647" type="bytea"/>
+         <column autoUpdated="false" digits="0" id="6" name="md5" nullable="true" remarks="Checksum of the chunk, calculated using MD5." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="creation_time" nullable="false" remarks="Date and time when chuck was created." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="8" name="user_name" nullable="false" remarks="User's id (name), who has loaded the chunk" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="id_pkey_document_chunk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="start_unique_document_chunk" unique="true">
+            <column ascending="true" name="document_id"/>
+            <column ascending="true" name="start_position"/>
+         </index>
+      </table>
+      <table name="Sequence: document_nr_seq" remarks="Sequence number used as the basis for the document Nr field. This sequence is used by the Digital Archive EJB." schema="document" type="TABLE"/>
+   </tables>
+</database>

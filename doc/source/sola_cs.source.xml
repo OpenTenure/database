@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="sola_cs" schema="source" type="PostgreSQL - 9.1.4">
+   <tables>
+      <table name="administrative_source_type" remarks="Code list of administrative source types. Used by SOLA to identify document types.&#13;&#10;Implementation of the LADM LA_AdministrativeSourceType class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the administrative source type." size="20" type="varchar">
+            <child column="type_code" foreignKey="fk_document_type_code" implied="false" onDeleteCascade="false" table="attachment"/>
+            <child column="source_type_code" foreignKey="request_type_requires_source_type_source_type_code_fk128" implied="false" onDeleteCascade="true" table="request_type_requires_source_type"/>
+            <child column="type_code" foreignKey="source_type_code_fk3" implied="false" onDeleteCascade="false" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the administrative source type." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the administrative source type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the administrative source type." size="1000" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_for_registration" nullable="true" remarks="SOLA Extension: Flag that identifies whether documents of this type must be formally registered in SOLA before they can be used in rights registration. E.g. Power of Attorney documents must be registered in SOLA before they can be associated with transfer transactions, etc." size="1" type="bool"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="administrative_source_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="administrative_source_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="archive" remarks="Represents an archive where collections of physical documents may be kept such as a filing cabinet, library or storage unit. May also refer to digital archives if applicable. &#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the archive." size="40" type="varchar">
+            <child column="archive_id" foreignKey="source_archive_id_fk0" implied="false" onDeleteCascade="false" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Description of the archive and/or it's location." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the archive_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="archive_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="archive_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+      </table>
+      <table name="availability_status_type" remarks="Code list of availability status types. Indicates if a  document is available, archived, destroyed or incomplete. Implementation of the LADM LA_AvailabilityStatusType class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the availability status type." size="20" type="varchar">
+            <child column="availability_status_code" foreignKey="source_availability_status_code_fk2" implied="false" onDeleteCascade="false" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the availability status type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'c'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the availability status type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the availability status type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="availability_status_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="availability_status_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="power_of_attorney" remarks="An extension of the soure.source table that captures details for power of attorney documents. &#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the power of attorney record. Matches the source identifier for the power of attorney record." size="40" type="varchar">
+            <parent column="id" foreignKey="power_of_attorney_id_fk31" implied="false" onDeleteCascade="true" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="person_name" nullable="false" remarks="The name of the person that is granting the power of attorney (a.k.a. grantor)." size="500" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="attorney_name" nullable="false" remarks="The name of the person that will act on behalf of the grantor as their attorney." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the power_of_attorney_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="power_of_attorney_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="power_of_attorney_id_fk31_ind" unique="false">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="power_of_attorney_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+      </table>
+      <table name="presentation_form_type" remarks="Code list of presentation form types. Indicates the original format of the document when presented to the land office (e.g. Hardcopy, digital, image, video, etc). Implementation of the LADM CI_PresentationFormCode class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the presentation form type." size="20" type="varchar">
+            <child column="maintype" foreignKey="source_maintype_fk1" implied="false" onDeleteCascade="false" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the presentation form type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the presentation form type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the presentation form type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="presentation_form_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="presentation_form_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="Sequence: source_la_nr_seq" remarks="Sequence number used as the basis for the Source nr field. This sequence is used by the generate-source-nr business rule." schema="source" type="TABLE"/>
+      <table name="source" remarks="Represents metadata about documents or recognised facts that provide the basis for the recording of a registration, cadastre change, right, responsibility or administrative action by the land office. Implementation of the LADM LA_Source class.&#13;&#10;Tags: LADM Reference Object, Change History" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Source identifier." size="40" type="varchar">
+            <child column="source_id" foreignKey="application_uses_source_source_id_fk127" implied="false" onDeleteCascade="true" table="application_uses_source"/>
+            <child column="id" foreignKey="power_of_attorney_id_fk31" implied="false" onDeleteCascade="true" table="power_of_attorney"/>
+            <child column="source_id" foreignKey="source_describes_ba_unit_source_id_fk51" implied="false" onDeleteCascade="true" table="source_describes_ba_unit"/>
+            <child column="source_id" foreignKey="source_describes_party_source_id_fk42" implied="false" onDeleteCascade="true" table="source_describes_party"/>
+            <child column="source_id" foreignKey="source_describes_rrr_source_id_fk49" implied="false" onDeleteCascade="true" table="source_describes_rrr"/>
+            <child column="id" foreignKey="spatial_source_id_fk28" implied="false" onDeleteCascade="true" table="spatial_source"/>
+            <child column="source_id" foreignKey="transaction_source_source_id_fk101" implied="false" onDeleteCascade="true" table="transaction_source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="maintype" nullable="true" remarks="LADM Definition: The type of the representation of the content of the source." size="20" type="varchar">
+            <parent column="code" foreignKey="source_maintype_fk1" implied="false" onDeleteCascade="false" table="presentation_form_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="la_nr" nullable="false" remarks="SOLA Extension: Reference number or identifier assigned to the document by the land office." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="reference_nr" nullable="true" remarks="SOLA Extension: Reference number or identifier assigned to the document by an external agency." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="archive_id" nullable="true" remarks="SOLA Extension: Archive identifier for the source." size="40" type="varchar">
+            <parent column="id" foreignKey="source_archive_id_fk0" implied="false" onDeleteCascade="false" table="archive"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="acceptance" nullable="true" remarks="LADM Definition: The date of force of law of the source by an authority." size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="6" name="recordation" nullable="true" remarks="LADM Definition: The date of formalization by the source agency." size="13" type="date"/>
+         <column autoUpdated="false" defaultValue="now()" digits="0" id="7" name="submission" nullable="true" remarks="LADM Definition: The date of submission of the source by a party." size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="8" name="expiration_date" nullable="true" remarks="SOLA Extension: The date the document expires and is no longer enforceable." size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="9" name="ext_archive_id" nullable="true" remarks="SOLA Extension: Identifier of the source in an external document management system. Used by SOLA to reference the digital copy of the document in the document table." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'available'::character varying" digits="0" id="10" name="availability_status_code" nullable="false" remarks="LADM Definition: The code describing the availability status of the document." size="20" type="varchar">
+            <parent column="code" foreignKey="source_availability_status_code_fk2" implied="false" onDeleteCascade="false" table="availability_status_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="11" name="type_code" nullable="false" remarks="LADM Definition: The type of document." size="20" type="varchar">
+            <parent column="code" foreignKey="source_type_code_fk3" implied="false" onDeleteCascade="false" table="administrative_source_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="12" name="content" nullable="true" remarks="LADM Definition: The content of the source. Not used by SOLA as digital copies of documents are stored in the document table." size="4000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="13" name="status_code" nullable="true" remarks="SOLA Extension: Status (pending, current, historic) of the source. Only used for transactioned documents such as power of attorney." size="20" type="varchar">
+            <parent column="code" foreignKey="source_status_code_fk4" implied="false" onDeleteCascade="false" table="reg_status_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="14" name="transaction_id" nullable="true" remarks="SOLA Extension: Reference to the transaction used to register the document in SOLA. Only used for transactioned documents such as power of attorney." size="40" type="varchar">
+            <parent column="id" foreignKey="source_transaction_id_fk5" implied="false" onDeleteCascade="true" table="transaction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="15" name="owner_name" nullable="true" remarks="SOLA Extension: The name of the firm or bank that created the document (a.k.a. Source Agency)." size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="16" name="version" nullable="true" remarks="SOLA Extension: The document version." size="10" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="17" name="description" nullable="true" remarks="" size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="18" name="signing_date" nullable="true" remarks="SOLA Extension: The date the document was signed by all parties." size="13" type="date"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="19" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the source_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="20" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="21" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="22" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="23" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="24" name="classification_code" nullable="true" remarks="FROM  SOLA State Land Extension: The security classification for this Source. Only users with the security classification (or a higher classification) will be able to view the record. If null, the record is considered unrestricted." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="25" name="redact_code" nullable="true" remarks="FROM  SOLA State Land Extension: The redact classification for this Source. Only users with the redact classification (or a higher classification) will be able to view the record with un-redacted fields. If null, the record is considered unrestricted and no redaction to the record will occur unless bulk redaction classifications have been set for fields of the record." size="20" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="source_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="source_archive_id_fk0_ind" unique="false">
+            <column ascending="true" name="archive_id"/>
+         </index>
+         <index name="source_availability_status_code_fk2_ind" unique="false">
+            <column ascending="true" name="availability_status_code"/>
+         </index>
+         <index name="source_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="source_maintype_fk1_ind" unique="false">
+            <column ascending="true" name="maintype"/>
+         </index>
+         <index name="source_status_code_fk4_ind" unique="false">
+            <column ascending="true" name="status_code"/>
+         </index>
+         <index name="source_transaction_id_fk5_ind" unique="false">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+         <index name="source_type_code_fk3_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="spatial_source" remarks="A spatial source may be the final (sometimes formal) documents, or all documents related to a survey. Sometimes serveral documents are the result of a single survey. A spatial source may be official or not (i.e. a registered survey plan or an aerial photograph). Implementation of the LADM LA_Source class. Not used by SOLA.&#13;&#10;Tags: LADM Reference Object, Change History, Not Used" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Spatial source identifier." size="40" type="varchar">
+            <child column="spatial_source_id" foreignKey="spatial_source_measurement_spatial_source_id_fk30" implied="false" onDeleteCascade="true" table="spatial_source_measurement"/>
+            <parent column="id" foreignKey="spatial_source_id_fk28" implied="false" onDeleteCascade="true" table="source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="procedure" nullable="true" remarks="LADM Definition:  Procedures, steps or method adopted" size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="type_code" nullable="false" remarks="LADM Definition: Code type assigned to the source." size="20" type="varchar">
+            <parent column="code" foreignKey="spatial_source_type_code_fk29" implied="false" onDeleteCascade="false" table="spatial_source_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="3" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the spatial_source_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="5" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="spatial_source_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="spatial_source_id_fk28_ind" unique="false">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="spatial_source_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="spatial_source_type_code_fk29_ind" unique="false">
+            <column ascending="true" name="type_code"/>
+         </index>
+      </table>
+      <table name="spatial_source_measurement" remarks="The observations and measurements as a basis of mapping, and as a basis for historical reconstruction of the location of (parts of) the spatial unit in the field. Implementation of the LADM OM_Observation class. Not used by SOLA.&#13;&#10;Tags: LADM Reference Object, Change History, Not Used" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="spatial_source_id" nullable="false" remarks="LADM Definition: Spatial source identifier." size="40" type="varchar">
+            <parent column="id" foreignKey="spatial_source_measurement_spatial_source_id_fk30" implied="false" onDeleteCascade="true" table="spatial_source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id" nullable="false" remarks="LADM Definition: Spatial source measurement identifier." size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="2" name="rowidentifier" nullable="false" remarks="Identifies the all change records for the row in the spatial_source_measurement_historic table" size="40" type="varchar"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="rowversion" nullable="false" remarks="Sequential value indicating the number of times this row has been modified." size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="4" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="6" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <primaryKey column="spatial_source_id" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="spatial_source_measurement_pkey" unique="true">
+            <column ascending="true" name="spatial_source_id"/>
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="spatial_source_measurement_index_on_rowidentifier" unique="false">
+            <column ascending="true" name="rowidentifier"/>
+         </index>
+         <index name="spatial_source_measurement_spatial_source_id_fk30_ind" unique="false">
+            <column ascending="true" name="spatial_source_id"/>
+         </index>
+      </table>
+      <table name="spatial_source_type" remarks="Code list of spatial source types. Implementation of the LADM LA_SpatialSourceType class. Not used by SOLA.&#13;&#10;Tags: Reference Table, LADM Reference Object, Not Used" schema="source" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the spatial source type." size="20" type="varchar">
+            <child column="type_code" foreignKey="spatial_source_type_code_fk29" implied="false" onDeleteCascade="false" table="spatial_source"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="LADM Definition: Displayed value of the spatial source type." size="500" type="varchar"/>
+         <column autoUpdated="false" defaultValue="'t'::bpchar" digits="0" id="2" name="status" nullable="false" remarks="SOLA Extension: Status of the spatial source type" size="1" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="LADM Definition: Description of the spatial source type." size="1000" type="varchar"/>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="spatial_source_type_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="spatial_source_type_display_value_unique" unique="true">
+            <column ascending="true" name="display_value"/>
+         </index>
+      </table>
+      <table name="Trigger Function: f_for_tbl_source_trg_change_of_status" remarks="Function triggered on update of the source table that updates the status of any previous version of a source record to Previous when the new source record receives a Current or Historic status." schema="source" type="TABLE"/>
+   </tables>
+</database>
