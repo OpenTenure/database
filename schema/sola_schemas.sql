@@ -3622,6 +3622,8 @@ BEGIN
         ELSE
 	    IF (TG_OP = 'UPDATE' AND (SELECT COUNT(1) FROM opentenure.form_template WHERE is_default = 't' AND name != OLD.name) < 1) THEN
 	         UPDATE opentenure.form_template SET is_default = 't' WHERE name = OLD.name;
+	    ELSIF (TG_OP = 'INSERT' AND (SELECT COUNT(1) FROM opentenure.form_template WHERE is_default = 't') < 1) THEN
+		 UPDATE opentenure.form_template SET is_default = 't' WHERE name = NEW.name;
 	    END IF;
         END IF;
     ELSIF (TG_OP = 'DELETE') THEN
@@ -3642,6 +3644,28 @@ ALTER FUNCTION opentenure.f_for_trg_set_default() OWNER TO postgres;
 --
 
 COMMENT ON FUNCTION f_for_trg_set_default() IS 'This function is to set default flag and have at least 1 form as default.';
+
+
+--
+-- Name: generate_form_name(); Type: FUNCTION; Schema: opentenure; Owner: postgres
+--
+
+CREATE FUNCTION generate_form_name() RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$
+begin
+  return ('F' || to_char(now(), 'yymm-') || trim(to_char(nextval('opentenure.form_nr_seq'), '0000')));
+end;
+$$;
+
+
+ALTER FUNCTION opentenure.generate_form_name() OWNER TO postgres;
+
+--
+-- Name: FUNCTION generate_form_name(); Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON FUNCTION generate_form_name() IS 'Generates dynamic form name.';
 
 
 SET search_path = party, pg_catalog;
@@ -11107,9 +11131,7 @@ CREATE TABLE claim (
     assignee_name character varying(50),
     rejection_reason_code character varying(20),
     claim_area bigint DEFAULT 0,
-    CONSTRAINT enforce_geotype_gps_geometry CHECK ((((public.geometrytype(gps_geometry) = 'POLYGON'::text) OR (public.geometrytype(gps_geometry) = 'POINT'::text)) OR (gps_geometry IS NULL))),
     CONSTRAINT enforce_geotype_mapped_geometry CHECK ((((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text)) OR (mapped_geometry IS NULL))),
-    CONSTRAINT enforce_valid_gps_geometry CHECK (public.st_isvalid(gps_geometry)),
     CONSTRAINT enforce_valid_mapped_geometry CHECK (public.st_isvalid(mapped_geometry))
 );
 
@@ -12552,6 +12574,28 @@ COMMENT ON COLUMN field_value_type.status IS 'Status of the field value type.';
 --
 
 COMMENT ON COLUMN field_value_type.description IS 'Description of the field value type.';
+
+
+--
+-- Name: form_nr_seq; Type: SEQUENCE; Schema: opentenure; Owner: postgres
+--
+
+CREATE SEQUENCE form_nr_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    MAXVALUE 9999
+    CACHE 1
+    CYCLE;
+
+
+ALTER TABLE opentenure.form_nr_seq OWNER TO postgres;
+
+--
+-- Name: SEQUENCE form_nr_seq; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON SEQUENCE form_nr_seq IS 'Sequence number used to generate dynamiic form number.';
 
 
 --
