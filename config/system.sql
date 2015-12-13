@@ -414,6 +414,10 @@ INSERT INTO setting (name, vl, active, description) VALUES ('report_server_pass'
 INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports', true, 'Folder URL on the reporting server containing reports to display on the menu.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reporting server URL.');
 INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.1\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
+INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '1', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
+INSERT INTO setting (name, vl, active, description) VALUES ('community-name', 'Open Community', true, 'Community name');
+INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-wkt', '', true, 'Custom Coordinate Reference System in WKT format of the map image, generated for claim certificate in OpenTenure');
+INSERT INTO setting (name, vl, active, description) VALUES ('claim_cetificate_report_url', '/reports/cert/Claim_certificate', true, 'URL to the claim certificate report, hosted on the reporting server');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
@@ -431,6 +435,7 @@ INSERT INTO version (version_num) VALUES ('1507b');
 INSERT INTO version (version_num) VALUES ('1508a');
 INSERT INTO version (version_num) VALUES ('1508b');
 INSERT INTO version (version_num) VALUES ('1511a');
+INSERT INTO version (version_num) VALUES ('1512a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;

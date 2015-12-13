@@ -11131,7 +11131,7 @@ CREATE TABLE claim (
     assignee_name character varying(50),
     rejection_reason_code character varying(20),
     claim_area bigint DEFAULT 0,
-    CONSTRAINT enforce_geotype_mapped_geometry CHECK ((((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text)) OR (mapped_geometry IS NULL))),
+    CONSTRAINT enforce_geotype_mapped_geometry CHECK (((((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text)) OR (public.geometrytype(mapped_geometry) = 'LINESTRING'::text)) OR (mapped_geometry IS NULL))),
     CONSTRAINT enforce_valid_mapped_geometry CHECK (public.st_isvalid(mapped_geometry))
 );
 
@@ -11513,9 +11513,7 @@ CREATE TABLE claim_location (
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
-    CONSTRAINT enforce_geotype_gps_location CHECK ((((public.geometrytype(gps_location) = 'POLYGON'::text) OR (public.geometrytype(gps_location) = 'POINT'::text)) OR (gps_location IS NULL))),
-    CONSTRAINT enforce_geotype_mapped_location CHECK (((public.geometrytype(mapped_location) = 'POLYGON'::text) OR (public.geometrytype(mapped_location) = 'POINT'::text))),
-    CONSTRAINT enforce_valid_gps_location CHECK (public.st_isvalid(gps_location)),
+    CONSTRAINT enforce_geotype_mapped_location CHECK ((((public.geometrytype(mapped_location) = 'POLYGON'::text) OR (public.geometrytype(mapped_location) = 'POINT'::text)) OR (public.geometrytype(mapped_location) = 'LINESTRING'::text))),
     CONSTRAINT enforce_valid_mapped_location CHECK (public.st_isvalid(mapped_location))
 );
 
@@ -22418,6 +22416,22 @@ ALTER TABLE ONLY claim
 
 ALTER TABLE ONLY attachment
     ADD CONSTRAINT fk_document_type_code FOREIGN KEY (type_code) REFERENCES source.administrative_source_type(code);
+
+
+--
+-- Name: fk_party_gender; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party
+    ADD CONSTRAINT fk_party_gender FOREIGN KEY (gender_code) REFERENCES party.gender_type(code);
+
+
+--
+-- Name: fk_party_id_type; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party
+    ADD CONSTRAINT fk_party_id_type FOREIGN KEY (id_type_code) REFERENCES party.id_type(code);
 
 
 --
