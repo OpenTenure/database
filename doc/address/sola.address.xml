@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="address" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="address" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="address" remarks="Describes a postal or physical address.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="address" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Address identifier." size="40" type="varchar">

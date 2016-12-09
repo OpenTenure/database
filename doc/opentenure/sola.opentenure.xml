@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="opentenure" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="opentenure" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="attachment" remarks="Extension to the LADM used by SOLA to store claim files attachments." schema="opentenure" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v1()" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the attachment." size="40" type="varchar"/>
@@ -227,6 +227,7 @@
          <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="6" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
          <column autoUpdated="false" digits="0" id="7" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
          <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="9" name="item_order" nullable="false" remarks="Field constraint option ordering number." size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="field_constraint_option_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -272,6 +273,7 @@
          <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
          <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
          <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="14" name="item_order" nullable="false" remarks="Field ordering number." size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="field_payload_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -299,6 +301,7 @@
          <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="8" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
          <column autoUpdated="false" digits="0" id="9" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
          <column autoUpdated="false" defaultValue="now()" digits="6" id="10" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="11" name="item_order" nullable="false" remarks="Field ordering number." size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="field_template_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -383,10 +386,14 @@
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="First name of party." size="255" type="varchar"/>
          <column autoUpdated="false" digits="0" id="2" name="last_name" nullable="true" remarks="Last name of claimant." size="50" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="3" name="id_type_code" nullable="true" remarks="ID document type code" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="id_type_code" nullable="true" remarks="ID document type code" size="20" type="varchar">
+            <parent column="code" foreignKey="fk_party_id_type" implied="false" onDeleteCascade="false" table="id_type"/>
+         </column>
          <column autoUpdated="false" digits="0" id="4" name="id_number" nullable="true" remarks="ID document number." size="20" type="varchar"/>
          <column autoUpdated="false" digits="0" id="5" name="birth_date" nullable="true" remarks="Date of birth of the party." size="13" type="date"/>
-         <column autoUpdated="false" digits="0" id="6" name="gender_code" nullable="true" remarks="Gender code of the party." size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="gender_code" nullable="true" remarks="Gender code of the party." size="20" type="varchar">
+            <parent column="code" foreignKey="fk_party_gender" implied="false" onDeleteCascade="false" table="gender_type"/>
+         </column>
          <column autoUpdated="false" digits="0" id="7" name="mobile_phone" nullable="true" remarks="Mobile phone number of the party." size="15" type="varchar"/>
          <column autoUpdated="false" digits="0" id="8" name="phone" nullable="true" remarks="Landline phone number of the party." size="15" type="varchar"/>
          <column autoUpdated="false" digits="0" id="9" name="email" nullable="true" remarks="Email address of the party." size="50" type="varchar"/>
@@ -472,6 +479,7 @@
          <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="10" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
          <column autoUpdated="false" digits="0" id="11" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
          <column autoUpdated="false" defaultValue="now()" digits="6" id="12" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="13" name="item_order" nullable="false" remarks="Section ordering number." size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="section_payload_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -500,6 +508,7 @@
          <column autoUpdated="false" defaultValue="'i'::bpchar" digits="0" id="11" name="change_action" nullable="false" remarks="Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d)." size="1" type="bpchar"/>
          <column autoUpdated="false" digits="0" id="12" name="change_user" nullable="true" remarks="The user id of the last person to modify the row." size="50" type="varchar"/>
          <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="change_time" nullable="false" remarks="The date and time the row was last modified." size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="14" name="item_order" nullable="false" remarks="Section ordering number." size="10" type="int4"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="section_template_pkey" unique="true">
             <column ascending="true" name="id"/>

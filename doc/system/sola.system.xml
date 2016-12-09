@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="system" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="system" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="active_users" remarks="Identifies the users currently active in the system. If the users password has expired, then they are treated as inactive users, unless they are System Administrators. This view is intended to replace the system.appuser table in the SolaRealm configuration in Glassfish." schema="system" type="VIEW">
          <column autoUpdated="false" digits="0" id="0" name="username" nullable="true" remarks="" size="40" type="varchar"/>
@@ -304,7 +304,7 @@
          </column>
          <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="The text value that will be displayed to the user." size="500" type="varchar"/>
          <column autoUpdated="false" digits="0" id="2" name="status" nullable="false" remarks="The status of the validation target type." size="1" type="bpchar"/>
-         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="A description of the validation target type." size="1000" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="A description of the validation target type." size="5000" type="varchar"/>
          <primaryKey column="code" sequenceNumberInPK="1"/>
          <index name="br_validation_target_type_pkey" unique="true">
             <column ascending="true" name="code"/>
@@ -315,7 +315,7 @@
       </table>
       <table name="config_map_layer" remarks="Identifies the layers available for display in the SOLA Map Viewer.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table, Map Configuration" schema="system" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="name" nullable="false" remarks="Name assigned to the map layer." size="50" type="varchar">
-            <child column="name_layer" foreignKey="config_map_layer_metadata_name_fk" implied="false" onDeleteCascade="false" table="config_map_layer_metadata"/>
+            <child column="name_layer" foreignKey="config_map_layer_metadata_name_fk" implied="false" onDeleteCascade="true" table="config_map_layer_metadata"/>
             <child column="config_map_layer_name" foreignKey="level_config_map_layer_name_fk" implied="false" onDeleteCascade="true" table="level_config_map_layer"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="title" nullable="false" remarks="The title used for the layer when it is displayed in the map control." size="100" type="varchar"/>
@@ -343,7 +343,7 @@
          <column autoUpdated="false" digits="0" id="17" name="security_password" nullable="true" remarks="The password to access a secure wms layer. Not currently used." size="30" type="varchar"/>
          <column autoUpdated="false" defaultValue="false" digits="0" id="18" name="added_from_bulk_operation" nullable="false" remarks="Flag to indicate the layer was added when using the SOLA Bulk Operation feature." size="1" type="bool"/>
          <column autoUpdated="false" defaultValue="false" digits="0" id="19" name="use_in_public_display" nullable="false" remarks="Flag to indicate if the layer must be visible when printing the public display map. Not relevant for other kinds of map operations." size="1" type="bool"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="20" name="use_for_ot" nullable="false" remarks="Flag to indicate if the layer must be visible on open tenure map." size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="20" name="use_for_ot" nullable="false" remarks="Flag to indicate if the layer must be visible on open tenure map." size="1" type="bool"/>
          <primaryKey column="name" sequenceNumberInPK="1"/>
          <index name="config_map_layer_pkey" unique="true">
             <column ascending="true" name="name"/>
@@ -363,10 +363,11 @@
       </table>
       <table name="config_map_layer_metadata" remarks="" schema="system" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="name_layer" nullable="false" remarks="" size="50" type="varchar">
-            <parent column="name" foreignKey="config_map_layer_metadata_name_fk" implied="false" onDeleteCascade="false" table="config_map_layer"/>
+            <parent column="name" foreignKey="config_map_layer_metadata_name_fk" implied="false" onDeleteCascade="true" table="config_map_layer"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="" size="50" type="varchar"/>
          <column autoUpdated="false" digits="0" id="2" name="value" nullable="false" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="for_client" nullable="true" remarks="Indicates whether an option is for use by the client or server. If true, it's supposed to be used by the client map control, otherwise option is sent to the server." size="1" type="bool"/>
          <primaryKey column="name_layer" sequenceNumberInPK="1"/>
          <primaryKey column="name" sequenceNumberInPK="2"/>
          <index name="pk_config_map_layer_metadata" unique="true">

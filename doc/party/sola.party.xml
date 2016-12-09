@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="party" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="party" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="communication_type" remarks="Code list of communication types. Used to identify the types of communication that can be used between the land administration agency and their clients.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the communication type." size="20" type="varchar">
@@ -19,6 +19,7 @@
       <table name="Function: is_rightholder" remarks="Indicates if the party is associated to one or more land rights as a rightholder." schema="party" type="TABLE"/>
       <table name="gender_type" remarks="Code list of gender types. Used to identify the gender of the party where the party represents an individual.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the gender type." size="20" type="varchar">
+            <child column="gender_code" foreignKey="fk_party_gender" implied="false" onDeleteCascade="false" table="party"/>
             <child column="gender_code" foreignKey="party_gender_code_fk13" implied="false" onDeleteCascade="false" table="party"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the gender type." size="500" type="varchar"/>
@@ -76,6 +77,7 @@
       </table>
       <table name="id_type" remarks="Code list of id types. Used to identify the types of id that can be used to verify the identity of an individual, group or organisation. E.g. nationalId, nationalPassport, driverLicense, etc.&#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="party" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the id type." size="20" type="varchar">
+            <child column="id_type_code" foreignKey="fk_party_id_type" implied="false" onDeleteCascade="false" table="party"/>
             <child column="id_type_code" foreignKey="party_id_type_code_fk12" implied="false" onDeleteCascade="false" table="party"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="display_value" nullable="false" remarks="Displayed value of the id type." size="500" type="varchar"/>

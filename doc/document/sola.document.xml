@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="document" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="document" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="document" remarks="Extension to the LADM used by SOLA to store electronic copies of documentation provided in support of land related dealings.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="document" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the document." size="40" type="varchar"/>

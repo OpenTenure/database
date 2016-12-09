@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="transaction" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="transaction" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="reg_status_type" remarks="Code list of registration status types. E.g. current, historic, pending, previous. &#13;&#10;Tags: FLOSS SOLA Extension, Reference Table" schema="transaction" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="The code for the registration status type." size="20" type="varchar">

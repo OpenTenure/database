@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="bulk_operation" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="bulk_operation" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="Function: clean_after_rollback" remarks="Runs clean up tasks after the transaction of bulk operation is rolled back." schema="bulk_operation" type="TABLE"/>
       <table name="Function: move_cadastre_objects" remarks="Moves cadastre objects from the Bulk Operation schema to the Cadastre schema." schema="bulk_operation" type="TABLE"/>

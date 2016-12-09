@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="application" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="application" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="application" remarks="Applications capture details and manage requests received by the land administration agency to change, update or report on land registry and/or cadastre information. Applications have a lifecycle and transition into different states as the land administration agency processes the request that instigated the application. The primary role of an application is to implement case management functionality in SOLA.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="application" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="Identifier for the application." size="40" type="varchar">

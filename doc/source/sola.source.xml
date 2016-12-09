@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="source" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="source" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="administrative_source_type" remarks="Code list of administrative source types. Used by SOLA to identify document types.&#13;&#10;Implementation of the LADM LA_AdministrativeSourceType class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="source" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the administrative source type." size="20" type="varchar">

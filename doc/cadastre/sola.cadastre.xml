@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="cadastre" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="cadastre" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="area_type" remarks="Code list of area types. Identifies the types of area (calculated, official, survey defined, etc) that can be recorded for a parcel (a.k.a. cadastre object). Implementation of the LADM LA_AreaType class.&#13;&#10;Tags: Reference Table, LADM Reference Object" schema="cadastre" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="code" nullable="false" remarks="LADM Definition: The code for the area type." size="20" type="varchar">

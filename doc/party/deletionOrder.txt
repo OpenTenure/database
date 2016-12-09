@@ -6,7 +6,7 @@ group_party
 party
 party_type
 party_role_type
-id_type
 group_party_type
-gender_type
 communication_type
+id_type
+gender_type

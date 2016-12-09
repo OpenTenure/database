@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="administrative" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="administrative" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="ba_unit" remarks="A Basic Administrative Unit a.k.a. BA Unit or Property. Used to link the rights and restrictions over one or more parcels to the parties that hold those rights and restrictions. A right must be homogeneous over the entire BA Unit. Implementation of the LADM LA_BAUnit class.&#13;&#10;Tags: LADM Reference Object, Change History" schema="administrative" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="LADM Definition: Identifier for the BA Unit." size="40" type="varchar">
@@ -359,8 +359,8 @@
       </table>
       <table name="party_for_rrr" remarks="Identifies the parties involved in each RRR. Also identifies the share each party has in the RRR if the RRR is subject to shared allocation.&#13;&#10;Tags: FLOSS SOLA Extension, Change History" schema="administrative" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="rrr_id" nullable="false" remarks="Identifier for the RRR." size="40" type="varchar">
-            <parent column="rrr_id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="rrr_share"/>
             <parent column="id" foreignKey="party_for_rrr_rrr_id_fk81" implied="false" onDeleteCascade="true" table="rrr"/>
+            <parent column="rrr_id" foreignKey="party_for_rrr_rrr_id_fk80" implied="false" onDeleteCascade="true" table="rrr_share"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="party_id" nullable="false" remarks="Identifier for the party associated to the RRR." size="40" type="varchar">
             <parent column="id" foreignKey="party_for_rrr_party_id_fk82" implied="false" onDeleteCascade="true" table="party"/>

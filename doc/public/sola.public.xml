@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="sola" schema="public" type="PostgreSQL - 9.2.3">
+<database name="sola" schema="public" type="PostgreSQL - 9.4.6">
    <tables>
       <table name="Function: clean_db" remarks="This function will delete any table or function from the database that does not belong to the standard postgis template." schema="public" type="TABLE"/>
       <table name="Function: clean_db_foreign_constraints" remarks="Drops all foreign key constraints from the database." schema="public" type="TABLE"/>
@@ -19,9 +19,9 @@
       </table>
       <table name="geometry_columns" remarks="PostGIS view." schema="public" type="VIEW">
          <column autoUpdated="false" digits="0" id="0" name="f_table_catalog" nullable="true" remarks="" size="256" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="1" name="f_table_schema" nullable="true" remarks="" size="256" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="2" name="f_table_name" nullable="true" remarks="" size="256" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="3" name="f_geometry_column" nullable="true" remarks="" size="256" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="f_table_schema" nullable="true" remarks="" size="2147483647" type="name"/>
+         <column autoUpdated="false" digits="0" id="2" name="f_table_name" nullable="true" remarks="" size="2147483647" type="name"/>
+         <column autoUpdated="false" digits="0" id="3" name="f_geometry_column" nullable="true" remarks="" size="2147483647" type="name"/>
          <column autoUpdated="false" digits="0" id="4" name="coord_dimension" nullable="true" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="5" name="srid" nullable="true" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="6" name="type" nullable="true" remarks="" size="30" type="varchar"/>
@@ -43,6 +43,7 @@
          <column autoUpdated="false" digits="17" id="13" name="nodata_values" nullable="true" remarks="" size="17" type="_float8"/>
          <column autoUpdated="false" digits="0" id="14" name="out_db" nullable="true" remarks="" size="1" type="_bool"/>
          <column autoUpdated="false" digits="0" id="15" name="extent" nullable="true" remarks="" size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="16" name="spatial_index" nullable="true" remarks="" size="1" type="bool"/>
       </table>
       <table name="raster_overviews" remarks="" schema="public" type="VIEW">
          <column autoUpdated="false" digits="0" id="0" name="o_table_catalog" nullable="true" remarks="" size="2147483647" type="name"/>
