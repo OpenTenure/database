@@ -2,11 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 SET search_path = system, pg_catalog;
 
@@ -74,7 +79,7 @@ ALTER TABLE query ENABLE TRIGGER ALL;
 
 ALTER TABLE config_map_layer DISABLE TRIGGER ALL;
 
-INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims::::::::::::::::::::::::::::::::::::အဆိုပြုမှု', 'wms', true, false, 12, '', 'http://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims_kebbi', '1.1.1', 'image/png', '', '', NULL, NULL, '', '', '', false, false, true);
+INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims::::::::::::::::::::::::::::::::::::အဆိုပြုမှုများ', 'wms', true, false, 12, '', 'http://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims_kebbi', '1.1.1', 'image/png', '', '', NULL, NULL, '', '', '', false, false, true);
 
 
 ALTER TABLE config_map_layer ENABLE TRIGGER ALL;
