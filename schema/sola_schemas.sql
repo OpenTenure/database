@@ -11319,6 +11319,11 @@ CREATE TABLE claim (
     assignee_name character varying(50),
     rejection_reason_code character varying(20),
     claim_area bigint DEFAULT 0,
+    issuance_date timestamp without time zone,
+    termination_date date,
+    termination_reason_code character varying(20),
+    create_transaction character varying(40),
+    terminate_transaction character varying(40),
     CONSTRAINT enforce_geotype_mapped_geometry CHECK (((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text) OR (public.geometrytype(mapped_geometry) = 'LINESTRING'::text) OR (mapped_geometry IS NULL))),
     CONSTRAINT enforce_valid_mapped_geometry CHECK (public.st_isvalid(mapped_geometry))
 );
