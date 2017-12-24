@@ -135,3 +135,9 @@ CREATE TRIGGER __track_history
   EXECUTE PROCEDURE public.f_for_trg_track_history();
 
 
+ALTER TABLE opentenure.claim ADD COLUMN boundary_id character varying(40);
+ALTER TABLE opentenure.claim ADD CONSTRAINT fk_claim_administrative_boundary FOREIGN KEY (boundary_id) REFERENCES opentenure.administrative_boundary (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+COMMENT ON COLUMN opentenure.claim.boundary_id IS 'Administrative boundary id';
+
+ALTER TABLE opentenure.claim_historic ADD COLUMN boundary_id character varying(40);

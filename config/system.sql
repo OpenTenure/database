@@ -407,23 +407,24 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-acti
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-activation-subject', 'SOLA OpenTenure account activation', true, 'Subject text to notify Community member account activation on the Community Server Web-site');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-body', 'Dear #{userFullName},<p></p>You have registered on SOLA OpenTenure Web-site. Before you can use your account, it will be reviewed and approved by Community Technologist. 
 Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-service', '1', true, 'Enables or disables email service. 1 - enable, 0 - disable');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-mailer-jndi-name', 'mail/sola', true, 'Configured mailer service JNDI name');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-name', 'SOLA Community Server', true, 'SOLA product name');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-code', 'scs', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((3.6546347734302973 12.503351883221237,4.138033210930267 13.218287390843976,4.352266609367719 13.223634960225066,4.561006843742729 13.084560169718053,4.835665046867779 13.113986410005568,5.9954093095631675 11.338744732248433,6.033861458000722 11.120531078294285,5.956957161125703 11.13670069644962,5.90202552050073 11.045061019556199,5.8031485673756675 11.045061019556199,5.632860481438213 10.956089256523349,5.440599739250714 10.95339272380661,5.437853157219447 11.13670069644962,5.36094886034443 11.212147017445373,5.338976204094476 11.327972633047608,5.215380012688194 11.34682354017023,4.9105094072194815 11.287573650514492,4.742967903313202 11.212147017445373,4.756700813469445 11.158258789807642,5.003893196281918 11.069321375481042,5.0533316728444495 11.020798658328957,5.075304329094402 10.91563868943104,5.036852180656939 10.875182614114964,5.089037239250736 10.799649936291091,5.089037239250736 10.729495435225711,4.817125618156953 10.675519350732438,4.822618782219487 10.478425629923413,4.9105094072194815 10.289313777172788,4.651644050774079 10.193025691767962,4.63516455858639 10.09569448354739,4.530794441398975 10.106510521430744,4.571993171867705 10.276814871915613,4.481355964836445 10.330860631093227,4.5033286210865775 10.495642614408489,4.731294929680363 10.657637656614744,4.714815437492763 10.873496825060736,4.495088874992778 11.002937585727846,4.017183601555252 11.00832972180687,3.7315390703052254 11.121541705721823,3.495333015617729 11.2885836944594,3.6546347734302973 12.503351883221237))', true, 'Open Tenure community area where parcels can be claimed');
 INSERT INTO setting (name, vl, active, description) VALUES ('moderation_date', '2015-01-01', true, 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.');
 INSERT INTO setting (name, vl, active, description) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_user', 'jasperadmin', true, 'Reporting server user name.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_pass', 'jasperadmin', true, 'Reporting server user password.');
-INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports', true, 'Folder URL on the reporting server containing reports to display on the menu.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reporting server URL.');
-INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.1\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
 INSERT INTO setting (name, vl, active, description) VALUES ('community-name', 'Open Community', true, 'Community name');
 INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-wkt', '', true, 'Custom Coordinate Reference System in WKT format of the map image, generated for claim certificate in OpenTenure');
-INSERT INTO setting (name, vl, active, description) VALUES ('claim_cetificate_report_url', '/reports/cert/Claim_certificate', true, 'URL to the claim certificate report, hosted on the reporting server');
-INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '0', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
 INSERT INTO setting (name, vl, active, description) VALUES ('offline-mode', '0', true, 'Indicates whether Community Server is connected to the Internet or not. 0 - connected, 1 - not connected');
+INSERT INTO setting (name, vl, active, description) VALUES ('docs_for_issuing_cert', 'signed_cert', true, 'List of document type codes, required to set certificate issued status');
+INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports/community_server', true, 'Folder URL on the reporting server containing reports to display on the menu.');
+INSERT INTO setting (name, vl, active, description) VALUES ('claim_certificate_report_url', ' 	/reports/cert/Claim_certificate', true, '	URL to the claim certificate report, hosted on the reporting server');
+INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '1', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
+INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-service', '0', true, 'Enables or disables email service. 1 - enable, 0 - disable');
+INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((109.74609411031194 0.09813301791300173,109.7153231752756 -0.023668551286050537,109.7384013765506 -0.07837241202817027,109.740110872944 -0.12068238290721188,109.90806889334426 -0.13350357426959336,109.90550464876313 -0.10615169209230177,109.84994601605841 -0.045464626171931775,109.83797954132254 0.022487850017511038,109.86490410947373 0.023342598144547932,109.87131472093999 0.09086766813866418,109.74609411031194 0.09813301791300173))', true, 'Open Tenure community area where parcels can be claimed');
+INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.5\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
@@ -443,6 +444,9 @@ INSERT INTO version (version_num) VALUES ('1508b');
 INSERT INTO version (version_num) VALUES ('1511a');
 INSERT INTO version (version_num) VALUES ('1512a');
 INSERT INTO version (version_num) VALUES ('1606a');
+INSERT INTO version (version_num) VALUES ('1712a');
+INSERT INTO version (version_num) VALUES ('1709a');
+INSERT INTO version (version_num) VALUES ('1708a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;

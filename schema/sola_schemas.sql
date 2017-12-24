@@ -11019,6 +11019,257 @@ COMMENT ON SEQUENCE document_nr_seq IS 'Sequence number used as the basis for th
 SET search_path = opentenure, pg_catalog;
 
 --
+-- Name: administrative_boundary; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE administrative_boundary (
+    id character varying(40) NOT NULL,
+    name character varying(255) NOT NULL,
+    type_code character varying(20) NOT NULL,
+    authority_name character varying(255),
+    parent_id character varying(40),
+    geom public.geometry,
+    status_code character varying(20) DEFAULT 'pending'::character varying NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT enforce_geom_geometry CHECK (((public.geometrytype(geom) = 'POLYGON'::text) OR (geom IS NULL))),
+    CONSTRAINT enforce_valid_geom CHECK (public.st_isvalid(geom))
+);
+
+
+ALTER TABLE administrative_boundary OWNER TO postgres;
+
+--
+-- Name: TABLE administrative_boundary; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE administrative_boundary IS 'Administrative boundaries, such as villages, distrcits, etc.';
+
+
+--
+-- Name: COLUMN administrative_boundary.id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.id IS 'Identifier for the boundary.';
+
+
+--
+-- Name: COLUMN administrative_boundary.name; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.name IS 'Official boundary name.';
+
+
+--
+-- Name: COLUMN administrative_boundary.type_code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.type_code IS 'Boundary type code';
+
+
+--
+-- Name: COLUMN administrative_boundary.authority_name; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.authority_name IS 'Authority name, rulling the boundary';
+
+
+--
+-- Name: COLUMN administrative_boundary.parent_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.parent_id IS 'Parent boundary ID.';
+
+
+--
+-- Name: COLUMN administrative_boundary.geom; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.geom IS 'Actual geometry of the boundary.';
+
+
+--
+-- Name: COLUMN administrative_boundary.status_code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.status_code IS 'Status code of the boundary.';
+
+
+--
+-- Name: COLUMN administrative_boundary.rowidentifier; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.rowidentifier IS 'Identifies the all change records for the row in the claim_share_historic table';
+
+
+--
+-- Name: COLUMN administrative_boundary.rowversion; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN administrative_boundary.change_action; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN administrative_boundary.change_user; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN administrative_boundary.change_time; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: administrative_boundary_historic; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE administrative_boundary_historic (
+    id character varying(40),
+    name character varying(255),
+    type_code character varying(20),
+    authority_name character varying(255),
+    parent_id character varying(40),
+    geom public.geometry,
+    status_code character varying(20),
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE administrative_boundary_historic OWNER TO postgres;
+
+--
+-- Name: TABLE administrative_boundary_historic; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE administrative_boundary_historic IS 'Historic for administrative boundaries table.';
+
+
+--
+-- Name: administrative_boundary_status; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE administrative_boundary_status (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    status character(1) DEFAULT 't'::bpchar NOT NULL,
+    description character varying(1000)
+);
+
+
+ALTER TABLE administrative_boundary_status OWNER TO postgres;
+
+--
+-- Name: TABLE administrative_boundary_status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE administrative_boundary_status IS 'Code list of administrative boundary statuses.';
+
+
+--
+-- Name: COLUMN administrative_boundary_status.code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_status.code IS 'The code of the boundary status.';
+
+
+--
+-- Name: COLUMN administrative_boundary_status.display_value; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_status.display_value IS 'Displayed value of the boundary status.';
+
+
+--
+-- Name: COLUMN administrative_boundary_status.status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_status.status IS 'Status of the record.';
+
+
+--
+-- Name: COLUMN administrative_boundary_status.description; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_status.description IS 'Description of the boundary status.';
+
+
+--
+-- Name: administrative_boundary_type; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE administrative_boundary_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    status character(1) DEFAULT 't'::bpchar NOT NULL,
+    level smallint DEFAULT 1 NOT NULL,
+    description character varying(1000)
+);
+
+
+ALTER TABLE administrative_boundary_type OWNER TO postgres;
+
+--
+-- Name: TABLE administrative_boundary_type; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE administrative_boundary_type IS 'Code list of administrative boundary types.';
+
+
+--
+-- Name: COLUMN administrative_boundary_type.code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_type.code IS 'The code of the boundary type.';
+
+
+--
+-- Name: COLUMN administrative_boundary_type.display_value; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_type.display_value IS 'Displayed value of the boundary type.';
+
+
+--
+-- Name: COLUMN administrative_boundary_type.status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_type.status IS 'Status of the type.';
+
+
+--
+-- Name: COLUMN administrative_boundary_type.level; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_type.level IS 'Boundary level. Smaller number means higher level.';
+
+
+--
+-- Name: COLUMN administrative_boundary_type.description; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary_type.description IS 'Description of the boundary type.';
+
+
+--
 -- Name: attachment; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11319,6 +11570,7 @@ CREATE TABLE claim (
     assignee_name character varying(50),
     rejection_reason_code character varying(20),
     claim_area bigint DEFAULT 0,
+    boundary_id character varying(40),
     issuance_date timestamp without time zone,
     termination_date date,
     termination_reason_code character varying(20),
@@ -11535,6 +11787,48 @@ COMMENT ON COLUMN claim.claim_area IS 'Claim area in square meters.';
 
 
 --
+-- Name: COLUMN claim.boundary_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.boundary_id IS 'Administrative boundary id';
+
+
+--
+-- Name: COLUMN claim.issuance_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.issuance_date IS 'Claim issuance date';
+
+
+--
+-- Name: COLUMN claim.termination_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.termination_date IS 'Date when claim was terminated';
+
+
+--
+-- Name: COLUMN claim.termination_reason_code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.termination_reason_code IS 'Termination reason code';
+
+
+--
+-- Name: COLUMN claim.create_transaction; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.create_transaction IS 'Transaction code, used to create claim. It used for split/merge transaction to link parent and children claims.';
+
+
+--
+-- Name: COLUMN claim.terminate_transaction; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.terminate_transaction IS 'Transaction code, used to terminate claim. It used for split/merge transaction to link parent and children claims.';
+
+
+--
 -- Name: claim_comment; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11678,7 +11972,13 @@ CREATE TABLE claim_historic (
     assignee_name character varying(50),
     land_use_code character varying(20),
     rejection_reason_code character varying(20),
-    claim_area bigint
+    claim_area bigint,
+    boundary_id character varying(40),
+    issuance_date timestamp without time zone,
+    termination_date date,
+    termination_reason_code character varying(20),
+    create_transaction character varying(40),
+    terminate_transaction character varying(40)
 );
 
 
@@ -11840,7 +12140,10 @@ CREATE TABLE claim_share (
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
-    percentage double precision
+    percentage double precision,
+    status character(1) DEFAULT 'a'::bpchar NOT NULL,
+    registration_date date,
+    termination_date date
 );
 
 
@@ -11924,6 +12227,27 @@ COMMENT ON COLUMN claim_share.percentage IS 'Percentage of the share. Another fo
 
 
 --
+-- Name: COLUMN claim_share.status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim_share.status IS 'Indicating the status of the share. a - active (approved), h - historic, p - pending.';
+
+
+--
+-- Name: COLUMN claim_share.registration_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim_share.registration_date IS 'Registration date of the share. For initial claims must be equal to the date of the claim approval';
+
+
+--
+-- Name: COLUMN claim_share.termination_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim_share.termination_date IS 'Termination date of the share (when share became historic)';
+
+
+--
 -- Name: claim_share_historic; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11938,7 +12262,10 @@ CREATE TABLE claim_share_historic (
     change_user character varying(50),
     change_time timestamp without time zone,
     change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
-    percentage double precision
+    percentage double precision,
+    status character(1) DEFAULT 'a'::bpchar NOT NULL,
+    registration_date date,
+    termination_date date
 );
 
 
@@ -13235,6 +13562,97 @@ CREATE TABLE party_for_claim_share_historic (
 ALTER TABLE party_for_claim_share_historic OWNER TO postgres;
 
 --
+-- Name: party_for_restriction; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE party_for_restriction (
+    party_id character varying(40) NOT NULL,
+    restriction_id character varying(40) NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE party_for_restriction OWNER TO postgres;
+
+--
+-- Name: TABLE party_for_restriction; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE party_for_restriction IS 'Identifies parties involved in the restriction.';
+
+
+--
+-- Name: COLUMN party_for_restriction.party_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.party_id IS 'Identifier for the party.';
+
+
+--
+-- Name: COLUMN party_for_restriction.restriction_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.restriction_id IS 'Identifier of the restriction.';
+
+
+--
+-- Name: COLUMN party_for_restriction.rowidentifier; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.rowidentifier IS 'Identifies the all change records for the row in the party_for_claim_share_historic table';
+
+
+--
+-- Name: COLUMN party_for_restriction.rowversion; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN party_for_restriction.change_action; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN party_for_restriction.change_user; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN party_for_restriction.change_time; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN party_for_restriction.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: party_for_restriction_historic; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE party_for_restriction_historic (
+    party_id character varying(40),
+    restriction_id character varying(40),
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE party_for_restriction_historic OWNER TO postgres;
+
+--
 -- Name: party_historic; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -13318,6 +13736,169 @@ COMMENT ON COLUMN rejection_reason.status IS 'Status of the rejection reason.';
 
 COMMENT ON COLUMN rejection_reason.description IS 'Description of the rejection reason.';
 
+
+--
+-- Name: restriction; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE restriction (
+    id character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    claim_id character varying(40) NOT NULL,
+    type_code character varying(20) NOT NULL,
+    amount numeric(29,2),
+    start_date date,
+    end_date date,
+    interest_rate numeric(5,2),
+    registration_date timestamp without time zone DEFAULT now() NOT NULL,
+    termination_date timestamp without time zone,
+    status character(1) DEFAULT 'a'::bpchar NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE restriction OWNER TO postgres;
+
+--
+-- Name: TABLE restriction; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE restriction IS 'Various claim restrictions.';
+
+
+--
+-- Name: COLUMN restriction.id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.id IS 'Unique identifier for the restriction.';
+
+
+--
+-- Name: COLUMN restriction.claim_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.claim_id IS 'Claim ID.';
+
+
+--
+-- Name: COLUMN restriction.type_code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.type_code IS 'Restriction type code.';
+
+
+--
+-- Name: COLUMN restriction.amount; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.amount IS 'Mortgage amount';
+
+
+--
+-- Name: COLUMN restriction.start_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.start_date IS 'Restriction start date. For mortgage start date of payment.';
+
+
+--
+-- Name: COLUMN restriction.end_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.end_date IS 'Restriction end date.';
+
+
+--
+-- Name: COLUMN restriction.interest_rate; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.interest_rate IS 'Mortgage interest rate.';
+
+
+--
+-- Name: COLUMN restriction.registration_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.registration_date IS 'Date when restriction was registered.';
+
+
+--
+-- Name: COLUMN restriction.termination_date; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.termination_date IS 'Date when restriction was terminated.';
+
+
+--
+-- Name: COLUMN restriction.status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.status IS 'Indicating the status of the restriction. a - active (approved), h - historic, p - pending.';
+
+
+--
+-- Name: COLUMN restriction.rowidentifier; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.rowidentifier IS 'Identifies the all change records for the row in the document_historic table';
+
+
+--
+-- Name: COLUMN restriction.rowversion; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN restriction.change_action; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN restriction.change_user; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN restriction.change_time; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN restriction.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: restriction_historic; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE restriction_historic (
+    id character varying(40),
+    claim_id character varying(40),
+    type_code character varying(20),
+    amount numeric(29,2),
+    start_date date,
+    end_date date,
+    interest_rate numeric(5,2),
+    registration_date timestamp without time zone,
+    termination_date timestamp without time zone,
+    status character(1),
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE restriction_historic OWNER TO postgres;
 
 --
 -- Name: section_element_payload; Type: TABLE; Schema: opentenure; Owner: postgres
@@ -13712,6 +14293,55 @@ CREATE TABLE section_template_historic (
 
 
 ALTER TABLE section_template_historic OWNER TO postgres;
+
+--
+-- Name: termination_reason; Type: TABLE; Schema: opentenure; Owner: postgres
+--
+
+CREATE TABLE termination_reason (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    status character(1) DEFAULT 't'::bpchar NOT NULL,
+    description character varying(1000)
+);
+
+
+ALTER TABLE termination_reason OWNER TO postgres;
+
+--
+-- Name: TABLE termination_reason; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON TABLE termination_reason IS 'Code list of termination reasons which can happen to the claim.';
+
+
+--
+-- Name: COLUMN termination_reason.code; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN termination_reason.code IS 'The code for the termination reason.';
+
+
+--
+-- Name: COLUMN termination_reason.display_value; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN termination_reason.display_value IS 'Displayed value of the termination reason.';
+
+
+--
+-- Name: COLUMN termination_reason.status; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN termination_reason.status IS 'Status of the termination reason.';
+
+
+--
+-- Name: COLUMN termination_reason.description; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN termination_reason.description IS 'Description of the termination reason.';
+
 
 SET search_path = party, pg_catalog;
 
@@ -18023,6 +18653,54 @@ ALTER TABLE ONLY document_chunk
 SET search_path = opentenure, pg_catalog;
 
 --
+-- Name: administrative_boundary_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary
+    ADD CONSTRAINT administrative_boundary_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: administrative_boundary_status_display_value_unique; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary_status
+    ADD CONSTRAINT administrative_boundary_status_display_value_unique UNIQUE (display_value);
+
+
+--
+-- Name: administrative_boundary_status_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary_status
+    ADD CONSTRAINT administrative_boundary_status_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: administrative_boundary_type_display_value_unique; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary_type
+    ADD CONSTRAINT administrative_boundary_type_display_value_unique UNIQUE (display_value);
+
+
+--
+-- Name: administrative_boundary_type_level_unique; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary_type
+    ADD CONSTRAINT administrative_boundary_type_level_unique UNIQUE (level);
+
+
+--
+-- Name: administrative_boundary_type_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary_type
+    ADD CONSTRAINT administrative_boundary_type_pkey PRIMARY KEY (code);
+
+
+--
 -- Name: attachment_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
 --
 
@@ -18207,6 +18885,14 @@ ALTER TABLE ONLY party_for_claim_share
 
 
 --
+-- Name: party_for_restriction_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party_for_restriction
+    ADD CONSTRAINT party_for_restriction_pkey PRIMARY KEY (party_id, restriction_id);
+
+
+--
 -- Name: rejection_reason_display_value_unique; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
 --
 
@@ -18220,6 +18906,14 @@ ALTER TABLE ONLY rejection_reason
 
 ALTER TABLE ONLY rejection_reason
     ADD CONSTRAINT rejection_reason_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: restriction_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY restriction
+    ADD CONSTRAINT restriction_pkey PRIMARY KEY (id);
 
 
 --
@@ -18252,6 +18946,22 @@ ALTER TABLE ONLY section_template
 
 ALTER TABLE ONLY attachment_chunk
     ADD CONSTRAINT start_unique_document_chunk UNIQUE (attachment_id, start_position);
+
+
+--
+-- Name: termination_reason_display_value_unique; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY termination_reason
+    ADD CONSTRAINT termination_reason_display_value_unique UNIQUE (display_value);
+
+
+--
+-- Name: termination_reason_pkey; Type: CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY termination_reason
+    ADD CONSTRAINT termination_reason_pkey PRIMARY KEY (code);
 
 
 SET search_path = party, pg_catalog;
@@ -21435,6 +22145,27 @@ CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON field_payload FOR EACH
 
 
 --
+-- Name: __track_changes; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON administrative_boundary FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
+-- Name: __track_changes; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON restriction FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
+-- Name: __track_changes; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON party_for_restriction FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
 -- Name: __track_history; Type: TRIGGER; Schema: opentenure; Owner: postgres
 --
 
@@ -21551,6 +22282,27 @@ CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON section_element_payload
 --
 
 CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON field_payload FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
+
+
+--
+-- Name: __track_history; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON administrative_boundary FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
+
+
+--
+-- Name: __track_history; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON restriction FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
+
+
+--
+-- Name: __track_history; Type: TRIGGER; Schema: opentenure; Owner: postgres
+--
+
+CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON party_for_restriction FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
 
 
 --
@@ -22540,6 +23292,30 @@ ALTER TABLE ONLY survey_point
 SET search_path = opentenure, pg_catalog;
 
 --
+-- Name: administrative_boundary_parent_id_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary
+    ADD CONSTRAINT administrative_boundary_parent_id_fk FOREIGN KEY (parent_id) REFERENCES administrative_boundary(id);
+
+
+--
+-- Name: administrative_boundary_status_code_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary
+    ADD CONSTRAINT administrative_boundary_status_code_fk FOREIGN KEY (status_code) REFERENCES administrative_boundary_status(code) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: administrative_boundary_type_code_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary
+    ADD CONSTRAINT administrative_boundary_type_code_fk FOREIGN KEY (type_code) REFERENCES administrative_boundary_type(code) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
 -- Name: claim_claimant_id_fk8; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
 --
 
@@ -22668,6 +23444,14 @@ ALTER TABLE ONLY claim
 
 
 --
+-- Name: fk_claim_administrative_boundary; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY claim
+    ADD CONSTRAINT fk_claim_administrative_boundary FOREIGN KEY (boundary_id) REFERENCES administrative_boundary(id);
+
+
+--
 -- Name: fk_claim_land_use_type; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
 --
 
@@ -22681,6 +23465,14 @@ ALTER TABLE ONLY claim
 
 ALTER TABLE ONLY claim
     ADD CONSTRAINT fk_claim_rejection_reason_code FOREIGN KEY (rejection_reason_code) REFERENCES rejection_reason(code);
+
+
+--
+-- Name: fk_claim_termination_reason; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY claim
+    ADD CONSTRAINT fk_claim_termination_reason FOREIGN KEY (termination_reason_code) REFERENCES termination_reason(code);
 
 
 --
@@ -22737,6 +23529,38 @@ ALTER TABLE ONLY party_for_claim_share
 
 ALTER TABLE ONLY party_for_claim_share
     ADD CONSTRAINT party_for_claim_share_party_id_fk23 FOREIGN KEY (party_id) REFERENCES party(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: party_for_restriction_party_id_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party_for_restriction
+    ADD CONSTRAINT party_for_restriction_party_id_fk FOREIGN KEY (party_id) REFERENCES party(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: party_for_restriction_restriction_id_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party_for_restriction
+    ADD CONSTRAINT party_for_restriction_restriction_id_fk FOREIGN KEY (restriction_id) REFERENCES restriction(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: restriction_claim_id_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY restriction
+    ADD CONSTRAINT restriction_claim_id_fk FOREIGN KEY (claim_id) REFERENCES claim(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: restriction_type_fk; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY restriction
+    ADD CONSTRAINT restriction_type_fk FOREIGN KEY (type_code) REFERENCES administrative.rrr_type(code);
 
 
 --

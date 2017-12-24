@@ -464,6 +464,18 @@ ALTER TABLE utility_network_type ENABLE TRIGGER ALL;
 SET search_path = opentenure, pg_catalog;
 
 --
+-- Data for Name: administrative_boundary_type; Type: TABLE DATA; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE administrative_boundary_type DISABLE TRIGGER ALL;
+
+INSERT INTO administrative_boundary_type (code, display_value, status, level, description) VALUES ('district', 'District', 'c', 1, 'District');
+INSERT INTO administrative_boundary_type (code, display_value, status, level, description) VALUES ('village', 'Village', 'c', 2, 'Village');
+
+
+ALTER TABLE administrative_boundary_type ENABLE TRIGGER ALL;
+
+--
 -- Data for Name: claim_status; Type: TABLE DATA; Schema: opentenure; Owner: postgres
 --
 
@@ -475,6 +487,8 @@ INSERT INTO claim_status (code, display_value, status, description) VALUES ('cre
 INSERT INTO claim_status (code, display_value, status, description) VALUES ('moderated', 'Moderated::::::::عدلت::::Modéré::::Moderado::::I moderuar::::Moderado::::មធ្យម::::已调整::::ညှိနှိုင်းပြင်ဆင်ထားခြင်း', 'i', 'Statut pour les déclarations modérées::::::::حالة الأدعاءات التي تم تعديلها::::::::Estado de las declaraciones moderadas::::Statusi për pretendimet e moderuara::::Estado dos requerimentos moderados::::Statut pour les déclarations modérées::::Statut pour les déclarations modérées::::ညှိနှိုင်းပြင်ဆင်သော အခြေအနေရှိသည့် အဆိုပြုမှုများ');
 INSERT INTO claim_status (code, display_value, status, description) VALUES ('reviewed', 'Reviewed::::::::روجعت::::Revue::::Revisado::::I rishikuar::::Revisado::::បានត្រួតពិនិត្យឡើងវិញ::::已审查::::ပြန်လည်သုံးသပ်ခြင်း', 'c', 'Status for reviewed claims::::::::حالة الادعاءات التي تم مراجعتها::::Statut pour les déclarations revues::::Estatus de reclamaciones revisadas::::Statusi për pretendimet e rishikuara::::Estado dos requerimentos revisados::::ស្ថានភាពសម្រាប់ការត្រួតពិនិត្យឡើងវិញនៃបណ្តឹងទាមទា::::复查请求状态::::အဆိုပြုမှုကို ပြန်လည်သုံးသပ်ခြင်း အဆင့်');
 INSERT INTO claim_status (code, display_value, status, description) VALUES ('unmoderated', 'Un-moderated::::::::لم تعدل::::Non modéré::::No moderado::::I pa moderuar::::Não moderado::::មិនទំហំមធ្យម::::未调整::::ညှိနှိုင်းပြင်ဆင်မှု မလုပ်ရသေးခြင်း', 'i', 'Statut pour les déclarations non modérées::::::::حالة الأدعاءات التي لم يتم تعديلها::::::::Estado de las declaraciones no moderados::::Statusi për pretendimet e pa moderuara::::Estado dos requerimentos não moderados::::Statut pour les déclarations non modérées::::Statut pour les déclarations non modérées::::ညှိနှိုင်းပြင်ဆင်မှု မလုပ်ရသေးသည့် အဆိုပြုမှုများ');
+INSERT INTO claim_status (code, display_value, status, description) VALUES ('issued', 'Issued', 'c', 'Final status for the claim, indicating it is issued to the owner');
+INSERT INTO claim_status (code, display_value, status, description) VALUES ('historic', 'Historic', 'c', 'Historic status, indicating that parcel was split or merged.');
 
 
 ALTER TABLE claim_status ENABLE TRIGGER ALL;
@@ -566,7 +580,7 @@ ALTER TABLE gender_type DISABLE TRIGGER ALL;
 
 INSERT INTO gender_type (code, display_value, status, description) VALUES ('female', 'Female::::Женский::::أنثى::::Femme::::Femenino::::Femër::::Feminino::::ភេទស្រី::::女性::::ကျား', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
 INSERT INTO gender_type (code, display_value, status, description) VALUES ('male', 'Male::::Мужской::::ذكر::::Homme::::Masculino::::Mashkull::::Masculino::::ភេទប្រុស::::男性::::မ', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
-INSERT INTO gender_type (code, display_value, status, description) VALUES ('na', 'Not applicable::::::::غير متاح::::::::No es aplicable::::I pa aplikueshëm::::Não aplicável::::មិនអាចប្រើបាន::::不适用::::မဖြေလိုပါ ', 'c', '...::::::::::::::::::::::::...::::::::...::::...');
+INSERT INTO gender_type (code, display_value, status, description) VALUES ('na', 'Not applicable::::::::غير متاح::::::::No es aplicable::::I pa aplikueshëm::::Não aplicável::::មិនអាចប្រើបាន::::不适用::::မဖြေလိုပါ ', 'x', '...::::::::::::::::::::::::...::::::::...::::...');
 
 
 ALTER TABLE gender_type ENABLE TRIGGER ALL;
@@ -688,6 +702,7 @@ INSERT INTO administrative_source_type (code, display_value, status, description
 INSERT INTO administrative_source_type (code, display_value, status, description, is_for_registration) VALUES ('publicNotification', 'Public Notification for Systematic Registration::::Публичное Уведомление о Системной Регистрации::::إعلان عام للتسجيل المنتظم::::Notification Publique pour Enregistrement Systématique::::Notificación Pública de Registro Sistemático::::::::Notificação Pública do Registro Regular::::ការកត់សម្គាល់សាធារណៈសម្រាប់ប្រព័ន្ធចុះបញ្ជី::::系统登记公示::::စနစ်တကျ မှတ်ပုံတင်နိုင်ရန် အများပြည်သူအား အသိပေးခြင်း', 'x', 'Extension to LADM::::Расширение LADM::::ميزة إضافية للنظام::::Extension au LADM::::Extension a LADM::::::::Extensão para LADM::::ពង្រីកទៅដល់ LADM::::扩展为 LADM::::LADM စံသတ်မှတ်ချက်', false);
 INSERT INTO administrative_source_type (code, display_value, status, description, is_for_registration) VALUES ('officeNote', 'Office Note::::::::::::::::::::::::Nota Oficial::::::::::::ရုံးမှတ်ချက်', 'c', 'Document created by a staff member to note information or points of interest related to a given application::::::::::::::::::::::::Document created by a staff member to note information or points of interest related to a given application::::::::::::ထုတ်ပေးထားသော စာရွက်စာတမ်းနှင့် ပတ်သက်ပြီး ထုတ်ပေးသူမှ မှတ်ချက်ပြု ရေးသားထားချက်၊ အရေးပါသည့် မှတ်ချက် စသည့် အထောက်အထား အချက်အလက်', false);
 INSERT INTO administrative_source_type (code, display_value, status, description, is_for_registration) VALUES ('systematicRegn', 'Systematic Registration Application::::Заявление на Системную Регистрацию::::طلب تسجيل منتظم::::Demande Enregistrement Systématique::::Solicitud de Inscripción Sistemática::::::::Pedido de Registro Regular::::កម្មវិធីចុះបញ្ជីជាប្រព័ន្ធ::::系统登记申请::::စနစ်တကျ မှတ်ပုံတင် လျှောက်လွှာ', 'x', 'Extension to LADM::::Расширение LADM::::ميزة إضافية للنظام::::Extension au LADM::::Extension a LADM::::::::Extensão para LADM::::ពង្រីកទៅដល់ LADM::::扩展为 LADM::::LADM စံသတ်မှတ်ချက်', false);
+INSERT INTO administrative_source_type (code, display_value, status, description, is_for_registration) VALUES ('signed_cert', 'Signed certificate', 'c', '', false);
 
 
 ALTER TABLE administrative_source_type ENABLE TRIGGER ALL;
