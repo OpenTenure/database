@@ -11035,6 +11035,7 @@ CREATE TABLE administrative_boundary (
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
+    recorder_name character varying(50) NOT NULL,
     CONSTRAINT enforce_geom_geometry CHECK (((public.geometrytype(geom) = 'POLYGON'::text) OR (geom IS NULL))),
     CONSTRAINT enforce_valid_geom CHECK (public.st_isvalid(geom))
 );
@@ -11134,6 +11135,13 @@ COMMENT ON COLUMN administrative_boundary.change_time IS 'The date and time the 
 
 
 --
+-- Name: COLUMN administrative_boundary.recorder_name; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.recorder_name IS 'Boundary recorder name';
+
+
+--
 -- Name: administrative_boundary_historic; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11150,7 +11158,8 @@ CREATE TABLE administrative_boundary_historic (
     change_action character(1),
     change_user character varying(50),
     change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
+    recorder_name character varying(50)
 );
 
 

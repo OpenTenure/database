@@ -54,6 +54,7 @@ CREATE TABLE opentenure.administrative_boundary
   type_code character varying(20) NOT NULL, 
   authority_name character varying(255),
   parent_id character varying(40),
+  recorder_name character varying(50) NOT NULL,
   geom geometry,
   status_code character varying(20) NOT NULL DEFAULT 'pending', 
   rowidentifier character varying(40) NOT NULL DEFAULT uuid_generate_v1(), 
@@ -86,6 +87,7 @@ COMMENT ON COLUMN opentenure.administrative_boundary.name IS 'Official boundary 
 COMMENT ON COLUMN opentenure.administrative_boundary.type_code IS 'Boundary type code';
 COMMENT ON COLUMN opentenure.administrative_boundary.authority_name IS 'Authority name, rulling the boundary';
 COMMENT ON COLUMN opentenure.administrative_boundary.parent_id IS 'Parent boundary ID.';
+COMMENT ON COLUMN opentenure.administrative_boundary.recorder_name IS 'Boundary recorder name';
 COMMENT ON COLUMN opentenure.administrative_boundary.geom IS 'Actual geometry of the boundary.';
 COMMENT ON COLUMN opentenure.administrative_boundary.status_code IS 'Status code of the boundary.';
 COMMENT ON COLUMN opentenure.administrative_boundary.rowidentifier IS 'Identifies the all change records for the row in the claim_share_historic table';
@@ -101,6 +103,7 @@ CREATE TABLE opentenure.administrative_boundary_historic
   type_code character varying(20), 
   authority_name character varying(255),
   parent_id character varying(40),
+  recorder_name character varying(50),
   geom geometry,
   status_code character varying(20), 
   rowidentifier character varying(40), 
