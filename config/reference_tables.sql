@@ -470,7 +470,7 @@ SET search_path = opentenure, pg_catalog;
 ALTER TABLE administrative_boundary_type DISABLE TRIGGER ALL;
 
 INSERT INTO administrative_boundary_type (code, display_value, status, level, description) VALUES ('district', 'District', 'c', 1, 'District');
-INSERT INTO administrative_boundary_type (code, display_value, status, level, description) VALUES ('village', 'Village', 'c', 2, 'Village');
+INSERT INTO administrative_boundary_type (code, display_value, status, level, description) VALUES ('village', 'Village::::::::::::::::::::::::::::::::::::', 'c', 2, 'Village::::::::::::::::::::::::::::::::::::');
 
 
 ALTER TABLE administrative_boundary_type ENABLE TRIGGER ALL;

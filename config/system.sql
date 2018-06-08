@@ -420,11 +420,15 @@ INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-w
 INSERT INTO setting (name, vl, active, description) VALUES ('offline-mode', '0', true, 'Indicates whether Community Server is connected to the Internet or not. 0 - connected, 1 - not connected');
 INSERT INTO setting (name, vl, active, description) VALUES ('docs_for_issuing_cert', 'signed_cert', true, 'List of document type codes, required to set certificate issued status');
 INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports/community_server', true, 'Folder URL on the reporting server containing reports to display on the menu.');
-INSERT INTO setting (name, vl, active, description) VALUES ('claim_certificate_report_url', ' 	/reports/cert/Claim_certificate', true, '	URL to the claim certificate report, hosted on the reporting server');
-INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '1', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-service', '0', true, 'Enables or disables email service. 1 - enable, 0 - disable');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((109.74609411031194 0.09813301791300173,109.7153231752756 -0.023668551286050537,109.7384013765506 -0.07837241202817027,109.740110872944 -0.12068238290721188,109.90806889334426 -0.13350357426959336,109.90550464876313 -0.10615169209230177,109.84994601605841 -0.045464626171931775,109.83797954132254 0.022487850017511038,109.86490410947373 0.023342598144547932,109.87131472093999 0.09086766813866418,109.74609411031194 0.09813301791300173))', true, 'Open Tenure community area where parcels can be claimed');
+INSERT INTO setting (name, vl, active, description) VALUES ('claim_certificate_report_url', '/reports/cert/Claim_certificate', true, '	URL to the claim certificate report, hosted on the reporting server');
+INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '0', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
 INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.5\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
+INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((-12.209399245759217 8.646044458409799,-11.991389297028434 8.647741560571333,-11.99310591079809 8.499725679896729,-12.211802505036012 8.49938612785351,-12.209399245759217 8.646044458409799))', true, 'Open Tenure community area where parcels can be claimed');
+INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-crs-description', 'Unit: degree<br>Geodetic CRS: WGS 84<br>Datum: World Geodetic System 1984<br>Ellipsoid: WGS 84<br>Prime meridian: Greenwich', true, 'Description of Coordinate Reference System, which will be listed in the legend area.');
+INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-produced-by', 'Community Server of OpenTenure solution', true, 'Name of report producer. In real environment can be Ministry''s name.');
+INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-country-name', '', true, 'Country name for adding at the end of the boundary location description');
+INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-proj4', '', true, 'Custom Coordinate Reference System in Proj4 format, used for generating map image for claim certificate or boundary in OpenTenure. It should match to ot-title-plan-crs-wkt setting. If not provided, WGS84 will be used as default.');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
@@ -447,6 +451,7 @@ INSERT INTO version (version_num) VALUES ('1606a');
 INSERT INTO version (version_num) VALUES ('1712a');
 INSERT INTO version (version_num) VALUES ('1709a');
 INSERT INTO version (version_num) VALUES ('1708a');
+INSERT INTO version (version_num) VALUES ('1805a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;
