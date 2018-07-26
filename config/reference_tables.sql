@@ -464,6 +464,18 @@ ALTER TABLE utility_network_type ENABLE TRIGGER ALL;
 SET search_path = opentenure, pg_catalog;
 
 --
+-- Data for Name: administrative_boundary_status; Type: TABLE DATA; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE administrative_boundary_status DISABLE TRIGGER ALL;
+
+INSERT INTO administrative_boundary_status (code, display_value, status, description) VALUES ('approved', 'Approved', 'c', 'Approved');
+INSERT INTO administrative_boundary_status (code, display_value, status, description) VALUES ('pending', 'Pending', 'c', 'Pending');
+
+
+ALTER TABLE administrative_boundary_status ENABLE TRIGGER ALL;
+
+--
 -- Data for Name: administrative_boundary_type; Type: TABLE DATA; Schema: opentenure; Owner: postgres
 --
 
