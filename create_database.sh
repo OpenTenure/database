@@ -16,7 +16,7 @@ current_dir=$(pwd)
 # Default install location for psql on linux/Debian. This location
 # may need to be modified if a different version of postgresql
 # is being used and/or it is installed in a custom location.
-psql="/usr/lib/postgresql/9.3/bin/psql"
+psql="/Library/PostgreSQL/11/bin/psql"
 # Default install location for p7zip on linux/Debian. This location
 # may need to be modified if a custom install location is used
 # and/or a different archiver (e.g. Keka on MacOS) is used to unzip 
