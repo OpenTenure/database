@@ -1,7 +1,7 @@
 #!/bin/bash
 # 02 Jan 2020
 # modified to add MacOS path for p7zip command line (installed - homebrew install p7zip)
-# 21 Feb 2014
+# 13 Jan 2020
 # Linux/MacOS Bash script to create the SOLA database
 # and load it with configuration data. The scipt also
 # de-compresses and loads the Waiheke test data.
@@ -73,7 +73,7 @@ if [ $createDb == "y" ]; then
    # Create database passing in dbName as a variable
    echo "Creating database..."
    echo "Creating database..." >> %BUILD_LOG% 2>&1
-   $psql --host=$host --port=$port --username=$username --file=database.sql -v dbName=$dbname >>$BUILD_LOG 2>&1
+   PGPASSWORD=$pword $psql --host=$host --port=$port --username=$username --file=database.sql -v dbName=$dbname >>$BUILD_LOG 2>&1
 fi
 
 # Run the files to create the tables, functions and views, etc, of the database
@@ -82,7 +82,7 @@ for sqlfile in schema/*.sql config/*.sql
 do
    echo "Running $sqlfile..."
    echo "### Running $sqlfile..." >> $BUILD_LOG 2>&1
-   $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
+   PGPASSWORD=$pword $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
 done
 
 # Extract the test data from the 7z archive and load it into the database.
@@ -98,7 +98,7 @@ for sqlfile in data/*.sql
 do
    echo "Loading $sqlfile..."
    echo "### Loading $sqlfile" >> $BUILD_LOG 2>&1
-   $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
+   PGPASSWORD=$pword $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
 done
 
 #Clear the pg password from the shell
