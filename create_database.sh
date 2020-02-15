@@ -1,27 +1,37 @@
 #!/bin/bash
+# 02 Jan 2020
+# modified to add MacOS path for p7zip command line (installed - homebrew install p7zip)
 # 21 Feb 2014
-# Linux/MacOS Bash script to create the SOLA database 
-# and load it with configuration data. The scipt also 
+# Linux/MacOS Bash script to create the SOLA database
+# and load it with configuration data. The scipt also
 # de-compresses and loads the Waiheke test data.
 #
 # The SQL files used by this batch can be generated using the
 # extract scripts from the scripts directory. The extract
 # scripts will export the schema, configuration and test data
-# from an existing SOLA database into the necessary SQL files. 
+# from an existing SOLA database into the necessary SQL files.
 
 # Configure variables to use for script:
 
 # The current directory where this command has been executed from
-current_dir=$(pwd)  
+current_dir=$(pwd)
 # Default install location for psql on linux/Debian. This location
 # may need to be modified if a different version of postgresql
 # is being used and/or it is installed in a custom location.
-psql="/Library/PostgreSQL/11/bin/psql"
+# For Ubuntu January 2020
+# psql="/Library/PostgreSQL/11/bin/psql"
+# For Mac January 2020
+# psql="/Applications/Postgres.app/Contents/Versions/12/bin/psql"
+psql="/Applications/Postgres.app/Contents/Versions/12/bin/psql"
 # Default install location for p7zip on linux/Debian. This location
 # may need to be modified if a custom install location is used
-# and/or a different archiver (e.g. Keka on MacOS) is used to unzip 
+# and/or a different archiver (e.g. Keka on MacOS) is used to unzip
 # the data files.  Note that p7zip is also available for MacOS.
-zip_exe="/usr/bin/7z"
+# Ubuntu
+# zip_exe="/usr/lib/p7zip/7zr"
+# MacOS
+# zip_exe="/usr/local/Cellar/p7zip/16.02_2/bin/7zr"
+zip_exe="/usr/local/Cellar/p7zip/16.02_2/bin/7zr"
 data_path="$current_dir/data/"
 BUILD_LOG="$current_dir/build.log"
 
@@ -53,12 +63,12 @@ PGPASSWORD=$pword
 # read -p "Test Data Archive Password [?] : " archive_password
 
 # Start the build
-echo 
-echo 
+echo
+echo
 echo "Starting Build at $(date)"
 echo "Starting Build at $(date)" > $BUILD_LOG 2>&1
 
-# Skip creating the database depending on the users choice 
+# Skip creating the database depending on the users choice
 if [ $createDb == "y" ]; then
    # Create database passing in dbName as a variable
    echo "Creating database..."
@@ -67,7 +77,7 @@ if [ $createDb == "y" ]; then
 fi
 
 # Run the files to create the tables, functions and views, etc, of the database
-# and load the configuration data from the config directory. 
+# and load the configuration data from the config directory.
 for sqlfile in schema/*.sql config/*.sql
 do
    echo "Running $sqlfile..."
@@ -76,7 +86,7 @@ do
 done
 
 # Extract the test data from the 7z archive and load it into the database.
-echo 
+echo
 echo "Extracting data files..."
 echo "### Extracting data files..." >> $BUILD_LOG 2>&1
 $zip_exe e -y -o"$data_path" "$data_path/waiheke.7z" >> $BUILD_LOG 2>&1
