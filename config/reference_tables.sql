@@ -13,6 +13,64 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+
+ALTER TABLE administrative.ba_unit_rel_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE administrative.ba_unit_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE administrative.condition_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE administrative.mortgage_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE administrative.rrr_group_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE administrative.rrr_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.application_action_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.application_status_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.request_category_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.request_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.service_action_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.service_status_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE application.type_action ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.area_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.building_unit_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.cadastre_object_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.dimension_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.hierarchy_level ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.land_use_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.level_content_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.register_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.structure_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.surface_relation_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.utility_network_status_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE cadastre.utility_network_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.administrative_boundary_status ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.administrative_boundary_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.claim_status ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.field_constraint_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.field_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.field_value_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE opentenure.rejection_reason ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.communication_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.gender_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.group_party_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.id_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.party_role_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE party.party_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE source.administrative_source_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE source.availability_status_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE source.presentation_form_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE source.spatial_source_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.approle ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.br ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.br_severity_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.br_technical_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.br_validation_target_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.config_map_layer ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.config_map_layer_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.config_panel_launcher ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE system.panel_launcher_group ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE transaction.reg_status_type ALTER COLUMN description TYPE character varying(10485760); 
+ALTER TABLE transaction.transaction_status_type ALTER COLUMN description TYPE character varying(10485760); 
+
+
+
+
 SET search_path = administrative, pg_catalog;
 
 --
@@ -20,6 +78,7 @@ SET search_path = administrative, pg_catalog;
 --
 
 SET SESSION AUTHORIZATION DEFAULT;
+
 
 ALTER TABLE ba_unit_rel_type DISABLE TRIGGER ALL;
 

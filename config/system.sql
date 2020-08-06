@@ -452,6 +452,7 @@ INSERT INTO version (version_num) VALUES ('1712a');
 INSERT INTO version (version_num) VALUES ('1709a');
 INSERT INTO version (version_num) VALUES ('1708a');
 INSERT INTO version (version_num) VALUES ('1805a');
+INSERT INTO version (version_num) VALUES ('2008a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;
