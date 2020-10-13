@@ -4874,7 +4874,7 @@ COMMENT ON SEQUENCE ba_unit_last_name_part_seq IS 'Sequence number used as the b
 CREATE TABLE ba_unit_rel_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(),
+    description character varying(10000),
     status character(1) NOT NULL
 );
 
@@ -16324,7 +16324,7 @@ CREATE TABLE br (
     display_name character varying(250) DEFAULT public.uuid_generate_v1() NOT NULL,
     technical_type_code character varying(20) NOT NULL,
     feedback character varying(2000),
-    description character varying(1000),
+    description character varying(10000),
     technical_description character varying(1500)
 );
 

@@ -57,11 +57,9 @@ ALTER TABLE source.availability_status_type ALTER COLUMN description TYPE charac
 ALTER TABLE source.presentation_form_type ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE source.spatial_source_type ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.approle ALTER COLUMN description TYPE character varying(10485760); 
-ALTER TABLE system.br ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.br_severity_type ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.br_technical_type ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.br_validation_target_type ALTER COLUMN description TYPE character varying(10485760); 
-ALTER TABLE system.config_map_layer ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.config_map_layer_type ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.config_panel_launcher ALTER COLUMN description TYPE character varying(10485760); 
 ALTER TABLE system.panel_launcher_group ALTER COLUMN description TYPE character varying(10485760); 
