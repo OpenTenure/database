@@ -15993,7 +15993,7 @@ ALTER TABLE appuser_historic OWNER TO postgres;
 
 CREATE TABLE setting (
     name character varying(50) NOT NULL,
-    vl character varying(2000) NOT NULL,
+    vl character varying(1000000) NOT NULL,
     active boolean DEFAULT true NOT NULL,
     description character varying(555) NOT NULL
 );
