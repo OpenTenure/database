@@ -414,7 +414,9 @@ INSERT INTO setting (name, vl, active, description) VALUES ('moderation_date', '
 INSERT INTO setting (name, vl, active, description) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_user', 'jasperadmin', true, 'Reporting server user name.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_pass', 'jasperadmin', true, 'Reporting server user password.');
-INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reporting server URL.');
+INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reports server URL.');
+INSERT INTO setting (name, vl, active, description) VALUES ('cs_server_url', '', true, 'This setting is used for Docker or similar environments where Community Server sometimes cannot be located by the Reports Server 
+for generating parcel map, used in Claims certificate. The URL should be without ending "/", e.g. http://server:8080. If this setting is empty, Community Server address will be defined automatically.');
 INSERT INTO setting (name, vl, active, description) VALUES ('community-name', 'Open Community', true, 'Community name');
 INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-wkt', '', true, 'Custom Coordinate Reference System in WKT format of the map image, generated for claim certificate in OpenTenure');
 INSERT INTO setting (name, vl, active, description) VALUES ('offline-mode', '0', true, 'Indicates whether Community Server is connected to the Internet or not. 0 - connected, 1 - not connected');
