@@ -647,8 +647,8 @@ ALTER TABLE communication_type ENABLE TRIGGER ALL;
 
 ALTER TABLE gender_type DISABLE TRIGGER ALL;
 
-INSERT INTO gender_type (code, display_value, status, description) VALUES ('female', 'Female::::Женский::::أنثى::::Femme::::Femenino::::Femër::::Feminino::::ភេទស្រី::::女性::::ကျား', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
-INSERT INTO gender_type (code, display_value, status, description) VALUES ('male', 'Male::::Мужской::::ذكر::::Homme::::Masculino::::Mashkull::::Masculino::::ភេទប្រុស::::男性::::မ', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
+INSERT INTO gender_type (code, display_value, status, description) VALUES ('female', 'Female::::Женский::::أنثى::::Femme::::Femenino::::Femër::::Feminino::::ភេទស្រី::::女性::::မ', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
+INSERT INTO gender_type (code, display_value, status, description) VALUES ('male', 'Male::::Мужской::::ذكر::::Homme::::Masculino::::Mashkull::::Masculino::::ភេទប្រុស::::男性::::ကျား', 'c', '...::::::::...::::...::::...::::...::::...::::...::::...::::...');
 INSERT INTO gender_type (code, display_value, status, description) VALUES ('na', 'Not applicable::::::::غير متاح::::::::No es aplicable::::I pa aplikueshëm::::Não aplicável::::មិនអាចប្រើបាន::::不适用::::မဖြေလိုပါ ', 'x', '...::::::::::::::::::::::::...::::::::...::::...');
 
 
