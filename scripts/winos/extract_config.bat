@@ -62,7 +62,7 @@ echo ### Dumping reference tables... >> %EXTRACT_LOG% 2>&1
 	-t source.availability_status_type -t source.presentation_form_type ^
 	-t source.spatial_source_type -t system.approle ^
 	-t system.br_severity_type -t system.br_technical_type ^
-	-t system.br_validation_target_type -t system.language ^
+	-t system.br_validation_target_type -t system.language -t system.report_group ^
 	-t transaction.reg_status_type -t transaction.transaction_status_type ^
 	-t opentenure.administrative_boundary_type -t opentenure.administrative_boundary_status ^
 	-f "%config_path%reference_tables.sql" %db_name% >> %EXTRACT_LOG% 2>&1
@@ -76,7 +76,8 @@ echo ### Dumping system tables... >> %EXTRACT_LOG% 2>&1
 	-t system.crs -t system.map_search_option ^
     -t system.query_field -t system.setting -t system.version ^
 	-t system.config_panel_launcher -t system.panel_launcher_group ^
-	-t system.config_map_layer_metadata ^
+	-t system.config_map_layer_metadata -t system.report ^
+	-t system.project -t system.project_appuser -t system.project_map_layer -t system.project_setting ^
 	-f "%config_path%system.sql" %db_name% >> %EXTRACT_LOG% 2>&1
 	
 echo Dumping user tables...

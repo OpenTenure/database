@@ -39,26 +39,21 @@ ALTER TABLE appgroup ENABLE TRIGGER ALL;
 
 ALTER TABLE approle_appgroup DISABLE TRIGGER ALL;
 
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ManageSettings', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ManageSecurity', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ChangePassword', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ManageRefdata', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ModerateClaim', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('RecordClaim', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ReviewClaim', 'super-group-id');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ViewReports', 'super-group-id');
-
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('AccessCS', 'CommunityRecorders');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('RecordClaim', 'CommunityRecorders');
-
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ModerateClaim', 'claim-moderators');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('AccessCS', 'claim-moderators');
-
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('ReviewClaim', 'claim-reviewers');
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('AccessCS', 'claim-reviewers');
-
-INSERT INTO approle_appgroup (approle_code, appgroup_id) VALUES ('AccessCS', 'CommunityMembers');
-
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ManageSettings', 'super-group-id', 'e1489036-258a-11ef-bb38-0792bc6504e5', 0, 'i', NULL, '2024-06-08 17:33:08.70984');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ManageSecurity', 'super-group-id', 'e14b30ca-258a-11ef-bb39-bb4d5215641c', 0, 'i', NULL, '2024-06-08 17:33:08.729057');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ChangePassword', 'super-group-id', 'e14b585c-258a-11ef-bb3a-cbb7b28ca444', 0, 'i', NULL, '2024-06-08 17:33:08.73007');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ManageRefdata', 'super-group-id', 'e14b7f6c-258a-11ef-bb3b-1b2fd2ece088', 0, 'i', NULL, '2024-06-08 17:33:08.73107');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ModerateClaim', 'super-group-id', 'e14bca58-258a-11ef-bb3c-33bee5d23036', 0, 'i', NULL, '2024-06-08 17:33:08.732988');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('RecordClaim', 'super-group-id', 'e14bf2f8-258a-11ef-bb3d-237cee88fd01', 0, 'i', NULL, '2024-06-08 17:33:08.734028');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ReviewClaim', 'super-group-id', 'e14c1986-258a-11ef-bb3e-237db3b7ac35', 0, 'i', NULL, '2024-06-08 17:33:08.735015');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ViewReports', 'super-group-id', 'e14c40a0-258a-11ef-bb3f-f732a3cc7db0', 0, 'i', NULL, '2024-06-08 17:33:08.736016');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('AccessCS', 'CommunityRecorders', 'e14c67b0-258a-11ef-bb40-f770c961a2a1', 0, 'i', NULL, '2024-06-08 17:33:08.737016');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('RecordClaim', 'CommunityRecorders', 'e14c8eac-258a-11ef-bb41-3300e17c6954', 0, 'i', NULL, '2024-06-08 17:33:08.738014');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ModerateClaim', 'claim-moderators', 'e14cb5d0-258a-11ef-bb42-abce6f0776c4', 0, 'i', NULL, '2024-06-08 17:33:08.739016');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('AccessCS', 'claim-moderators', 'e14cdce0-258a-11ef-bb43-4be796d94fc8', 0, 'i', NULL, '2024-06-08 17:33:08.740016');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ReviewClaim', 'claim-reviewers', 'e14d0404-258a-11ef-bb44-7f68b577db29', 0, 'i', NULL, '2024-06-08 17:33:08.741018');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('AccessCS', 'claim-reviewers', 'e14d2b78-258a-11ef-bb45-376293eca544', 0, 'i', NULL, '2024-06-08 17:33:08.742028');
+INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('AccessCS', 'CommunityMembers', 'e14d5382-258a-11ef-bb46-630f242b6ef8', 0, 'i', NULL, '2024-06-08 17:33:08.743053');
 
 
 ALTER TABLE approle_appgroup ENABLE TRIGGER ALL;
@@ -74,6 +69,7 @@ INSERT INTO appuser (id, username, first_name, last_name, email, mobile_number, 
 INSERT INTO appuser (id, username, first_name, last_name, email, mobile_number, activation_code, passwd, active, description, rowidentifier, rowversion, change_action, change_user, change_time, activation_expiration) VALUES ('claim-recorder', 'ClaimRecorder', 'Claim', 'Recorder', 'claim.recorder@mail.com', '111-222', NULL, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', true, 'Demo user for claim recorder role', '4661fa74-1ba1-11e4-ae33-57068db554f3', 13, 'u', 'db:postgres', '2014-09-21 17:36:36.559', NULL);
 INSERT INTO appuser (id, username, first_name, last_name, email, mobile_number, activation_code, passwd, active, description, rowidentifier, rowversion, change_action, change_user, change_time, activation_expiration) VALUES ('claim-reviewer', 'ClaimReviewer', 'Claim', 'Reviewer', 'claim.reviewer@mail.com', '111-333', NULL, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', true, 'Demo user for claim reviwer role', '466c0cbc-1ba1-11e4-b1a2-877bd2f873c2', 13, 'u', 'db:postgres', '2014-09-21 17:36:36.559', NULL);
 INSERT INTO appuser (id, username, first_name, last_name, email, mobile_number, activation_code, passwd, active, description, rowidentifier, rowversion, change_action, change_user, change_time, activation_expiration) VALUES ('claim-moderator', 'ClaimModerator', 'Claim', 'Moderator', 'claim.moderator@mail.com', '111-444', NULL, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', true, 'Demo user for claim moderator role', '466c33cc-1ba1-11e4-af2b-6f314bab285f', 13, 'u', 'db:postgres', '2014-09-21 17:36:36.559', NULL);
+
 
 ALTER TABLE appuser ENABLE TRIGGER ALL;
 

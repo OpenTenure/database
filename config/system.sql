@@ -270,6 +270,184 @@ INSERT INTO map_search_option (code, title, query_name, active, min_search_str_l
 ALTER TABLE map_search_option ENABLE TRIGGER ALL;
 
 --
+-- Data for Name: project; Type: TABLE DATA; Schema: system; Owner: postgres
+--
+
+ALTER TABLE project DISABLE TRIGGER ALL;
+
+INSERT INTO project (id, display_name, boundary, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'Default', '0103000020E6100000010000000500000091AFC060366B28C0A543D956C64A2140E0AEC06097FB27C0E8D325C8A44B214026AFC06078FC27C07141580BDCFF20405CAEC060716C28C0EF69DE89AFFF204091AFC060366B28C0A543D956C64A2140', '0ef001c2-258b-11ef-b2ee-4b9b44db30e4', 1, 'i', 'db:postgres', '2024-06-08 17:34:25.187998');
+
+
+ALTER TABLE project ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: project_appuser; Type: TABLE DATA; Schema: system; Owner: postgres
+--
+
+ALTER TABLE project_appuser DISABLE TRIGGER ALL;
+
+INSERT INTO project_appuser (project_id, appuser_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'test-id', '0f0201f6-258b-11ef-b2ef-cb7b9174677b', 0, 'i', NULL, '2024-06-08 17:34:25.187998');
+INSERT INTO project_appuser (project_id, appuser_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'e21f7c3d-bb02-4a15-94f3-d076861bf343', '0f022910-258b-11ef-b2f0-b7e085c5da71', 0, 'i', NULL, '2024-06-08 17:34:25.187998');
+INSERT INTO project_appuser (project_id, appuser_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'claim-recorder', '0f02512e-258b-11ef-b2f1-03dd323aee81', 0, 'i', NULL, '2024-06-08 17:34:25.187998');
+INSERT INTO project_appuser (project_id, appuser_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'claim-reviewer', '0f027726-258b-11ef-b2f2-ffa84bf4efa6', 0, 'i', NULL, '2024-06-08 17:34:25.187998');
+INSERT INTO project_appuser (project_id, appuser_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'claim-moderator', '0f027727-258b-11ef-b2f3-07c5bb664f5e', 0, 'i', NULL, '2024-06-08 17:34:25.187998');
+
+
+ALTER TABLE project_appuser ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: project_map_layer; Type: TABLE DATA; Schema: system; Owner: postgres
+--
+
+ALTER TABLE project_map_layer DISABLE TRIGGER ALL;
+
+INSERT INTO project_map_layer (project_id, layer_id, layer_order, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('default-project', 'claims-orthophoto', 12, '0f0585ba-258b-11ef-b2f4-c73ce2bf08c4', 1, 'i', 'db:postgres', '2024-06-08 17:34:25.187998');
+
+
+ALTER TABLE project_map_layer ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: setting; Type: TABLE DATA; Schema: system; Owner: postgres
+--
+
+ALTER TABLE setting DISABLE TRIGGER ALL;
+
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('max-file-size', '10000', true, 'Maximum file size in KB for uploading.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('max-uploading-daily-limit', '100000', true, 'Maximum size of files uploaded daily.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('moderation-days', '30', true, 'Duration of moderation time in days', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-admin-address', '', true, 'Email address of server administrator. If empty, no notifications will be sent', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-admin-name', '', true, 'Name of server administrator', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-body-format', 'html', true, 'Message body format. text - for simple text format, html - for html format', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-interval1', '1', true, 'Time interval in minutes for the first attempt to send email message.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-attempts1', '2', true, 'Number of attempts to send email with first interval', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-interval2', '120', true, 'Time interval in minutes for the second attempt to send email message.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-attempts2', '2', true, 'Number of attempts to send email with second interval', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-interval3', '1440', true, 'Time interval in minutes for the third attempt to send email message.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-send-attempts3', '1', true, 'Number of attempts to send email with third interval', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-user-registration-subject', 'New user registration', true, 'Subject text for new user registration on OpenTenure Web-site. Sent to administrator.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-user-registration-body', 'New user "#{userName}" has been registered registered on SOLA OpenTenure Web-site.', true, 'Message text for new user registration on OpenTenure Web-site', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-failed-send-subject', 'Delivery failure', true, 'Subject text for delivery failure of message', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-failed-send-body', 'Message send to the user #{userName} has been failed to deliver after number of attempts with the following error: <br/>#{error}', true, 'Message text for delivery failure', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-reg-subject', 'SOLA OpenTenure - registration', true, 'Subject text for new user registration on OpenTenure Web-site. Sent to user.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-pswd-restore-subject', 'SOLA OpenTenure - password restore', true, 'Password restore subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-submit-subject', 'SOLA OpenTenure - new claim submitted', true, 'New claim subject text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('account-activation-timeout', '70', true, 'Account activation timeout in hours. After this time, activation should expire.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-service-interval', '10', true, 'Time interval in seconds for email service to check and process scheduled messages.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('pword-expiry-days', '90', false, 'The number of days a users password remains valid', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-pswd-restore-body', 'Dear #{userFullName},<br /><br />You have requested to restore the password. If you didn''t ask for this action, just ignore this message. Otherwise, follow <a href="#{passwordRestoreLink}">this link</a> to reset your password.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Message text for password restore', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-withdraw-body', 'Dear #{userFirstName},<br /><br />
+Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been withdrawn by community recorder.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim withdrawal notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-withdraw-subject', 'SOLA OpenTenure - claim withdrawal', true, 'Claim withdrawal notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-submit-body', 'Dear #{userFullName},<br /><br />
+New claim <b>##{claimNumber}</b> has been submitted. 
+You can follow its status by <a href="#{claimLink}">this address</a>.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'New claim body text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-reject-subject', 'SOLA OpenTenure - claim rejection', true, 'Claim rejection notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-approve-review-body', 'Dear #{userFirstName},<br /><br />
+Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has passed review stage with success.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim review approval notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-approve-review-subject', 'SOLA OpenTenure - claim review approval', true, 'Claim review approval notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-approve-moderation-body', 'Dear #{userFirstName},<br /><br />
+Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been approved.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim moderation approval notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-approve-moderation-subject', 'SOLA OpenTenure - claim moderation approval', true, 'Claim moderation approval notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-updated-body', 'Dear #{userFullName},<br /><br />Claim <b>##{claimNumber}</b> has been updated. Follow <a href="#{claimLink}">this link</a> to check claim status and updated information.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Claim update body text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-submitted-body', 'Dear #{userFullName},<br /><br />
+New claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been submitted 
+to challenge the claim <a href="#{claimLink}"><b>##{claimNumber}</b></a>.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'New claim challenge body text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-updated-body', 'Dear #{userFullName},<br /><br />
+Claim challenge <b>##{challengeNumber}</b> has been updated. 
+Follow <a href="#{challengeLink}">this link</a> to check updated information.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge update body text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-submitted-subject', 'SOLA OpenTenure - new claim challenge to the claim ##{claimNumber}', true, 'New claim challenge subject text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-updated-subject', 'SOLA OpenTenure - claim challenge ##{challengeNumber} update', true, 'Claim challenge update subject text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-updated-subject', 'SOLA OpenTenure - claim ##{claimNumber} update', true, 'Claim update subject text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-approve-review-body', 'Dear #{userFirstName},<br /><br />
+Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has passed review stage.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge review approval notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-approve-review-subject', 'SOLA OpenTenure - claim challenge review', true, 'Claim challenge review approval notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-approve-moderation-body', 'Dear #{userFirstName},<br /><br />
+Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been moderated.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge moderation approval notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-approve-moderation-subj', 'SOLA OpenTenure - claim challenge moderation', true, 'Claim challenge moderation approval notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-reject-body', 'Dear #{userFirstName},<br /><br />
+Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been rejected with the following reason:<br /><br />
+<i>"#{claimRejectionReason}"</i><br /> <br /> 
+The following comments were recorded on the claim:<br />#{claimComments}<br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim rejection notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-reject-body', 'Dear #{userFirstName},<br /><br />
+Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been rejected with the following reason:<br /><br />
+<i>"#{challengeRejectionReason}"</i><br /> <br />
+Claim challenge comments:<br />#{challengeComments}<br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge rejection notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-reject-subject', 'SOLA OpenTenure - claim challenge rejection', true, 'Claim challenge rejection notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-withdraw-body', 'Dear #{userFirstName},<br /><br />
+Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been withdrawn by community recorder.<br /><br />
+<i>You are receiving this notification as the #{partyRole}</i><br /><br />
+Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge withdrawal notice body', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-claim-challenge-withdraw-subject', 'SOLA OpenTenure - claim challenge withdrawal', true, 'Claim withdrawal notice subject', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-notifiable-submit-body', 'Dear #{notifiablePartyName},<p></p> this is to inform you that one <b>#{actionToNotify}</b> action has been requested 
+				<br>by <b>#{targetPartyName}</b> 
+				<br>on the following property: <b>#{baUnitName}</b>. <p></p><p></p>Regards,<br />#{sendingOffice}', true, 'Action on Interest body text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-notifiable-subject', 'SOLA REGISTRY - #{actionToNotify} action on property #{baUnitName}', true, 'Action on Interest subject text', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-user-activation-body', 'Dear #{userFullName},<p></p>Your account has been activated. 
+<p></p>Please use <b>#{userName}</b> to login.<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text to notify Community member account activation on the Community Server Web-site', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-user-activation-subject', 'SOLA OpenTenure account activation', true, 'Subject text to notify Community member account activation on the Community Server Web-site', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-msg-reg-body', 'Dear #{userFullName},<p></p>You have registered on SOLA OpenTenure Web-site. Before you can use your account, it will be reviewed and approved by Community Technologist. 
+Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-mailer-jndi-name', 'mail/sola', true, 'Configured mailer service JNDI name', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('product-name', 'SOLA Community Server', true, 'SOLA product name', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('moderation_date', '2015-01-01', true, 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('community-name', 'Open Community', true, 'Community name', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-title-plan-crs-wkt', '', true, 'Custom Coordinate Reference System in WKT format of the map image, generated for claim certificate in OpenTenure', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('offline-mode', '0', true, 'Indicates whether Community Server is connected to the Internet or not. 0 - connected, 1 - not connected', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('email-enable-email-service', '0', true, 'Enables or disables email service. 1 - enable, 0 - disable', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.5\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('boundary-print-crs-description', 'Unit: degree<br>Geodetic CRS: WGS 84<br>Datum: World Geodetic System 1984<br>Ellipsoid: WGS 84<br>Prime meridian: Greenwich', true, 'Description of Coordinate Reference System, which will be listed in the legend area.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('boundary-print-produced-by', 'Community Server of OpenTenure solution', true, 'Name of report producer. In real environment can be Ministry''s name.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('boundary-print-country-name', '', true, 'Country name for adding at the end of the boundary location description', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-title-plan-crs-proj4', '', true, 'Custom Coordinate Reference System in Proj4 format, used for generating map image for claim certificate or boundary in OpenTenure. It should match to ot-title-plan-crs-wkt setting. If not provided, WGS84 will be used as default.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('docs-for-issuing-cert', 'signed_cert', true, 'List of document type codes, required to set certificate issued status', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('claim-certificate-id', 'ClaimCertificate', true, 'Report id, used for claim certificate.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-use-background-google-map', '0', true, 'This flag indicates whether to use Google map layer as a background on the certificate or not. If 1 is set, then it will be used, 0 is not so use it.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-use-background-wms-map', '0', true, 'This flag indicates whether to use WMS map layer as a background on the certificate or not. If 1 is set, then it will be used, 0 is not so use it. If both WMS and Google layer ("ot-use-background-google-map") are enabled, then Google layer will have the preference.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-wms-server-url', '', true, 'Server URL hosting WMS layer for using it as a background on the certificate. Do not enter "wms" as the end. Example for GeoServer - http://localhost:8080/geoserver/opentenure', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('ot-wms-bg-layer-name', '', true, 'WMS background layer name for using on the certificate. Make sure that the layer is published in WGS84 (4326).', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('system-id', '', true, 'A unique number that identifies the installed SOLA system. This unique number is used in the br that generate unique identifiers.', true);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('product-code', 'scs', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server', true);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('reports-folder-path', '../../cs_reports', true, 'Relative or absolute path to the reports folder. Relative path will be calculated from the deployment folder of the application (WAR file).', true);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('project-language', 'en-US', true, 'Language code, used as the main project language. For instance it can be used as the language for printing forms, demanding them to use project language locale for its localization.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('client-tiles-layer-name', '', true, 'Tiles layer name for mobile client to pull offline map layer.', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('client-tiles-server-type', 'geoserver', true, 'Tiles server type for mobile client to pull offline map layer. Allowed vaules - geoserver, wtms, tms', false);
+INSERT INTO setting (name, vl, active, description, read_only) VALUES ('client-tiles-server-url', '', true, 'Tiles server URL for mobile client to pull offline map layer.', false);
+
+
+ALTER TABLE setting ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: project_setting; Type: TABLE DATA; Schema: system; Owner: postgres
+--
+
+ALTER TABLE project_setting DISABLE TRIGGER ALL;
+
+
+
+ALTER TABLE project_setting ENABLE TRIGGER ALL;
+
+--
 -- Data for Name: query_field; Type: TABLE DATA; Schema: system; Owner: postgres
 --
 
@@ -306,134 +484,22 @@ INSERT INTO query_field (query_name, index_in_query, name, display_value) VALUES
 ALTER TABLE query_field ENABLE TRIGGER ALL;
 
 --
--- Data for Name: setting; Type: TABLE DATA; Schema: system; Owner: postgres
+-- Data for Name: report; Type: TABLE DATA; Schema: system; Owner: postgres
 --
 
-ALTER TABLE setting DISABLE TRIGGER ALL;
+ALTER TABLE report DISABLE TRIGGER ALL;
 
-INSERT INTO setting (name, vl, active, description) VALUES ('system-id', '', true, 'A unique number that identifies the installed SOLA system. This unique number is used in the br that generate unique identifiers.');
-INSERT INTO setting (name, vl, active, description) VALUES ('max-file-size', '10000', true, 'Maximum file size in KB for uploading.');
-INSERT INTO setting (name, vl, active, description) VALUES ('max-uploading-daily-limit', '100000', true, 'Maximum size of files uploaded daily.');
-INSERT INTO setting (name, vl, active, description) VALUES ('moderation-days', '30', true, 'Duration of moderation time in days');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-admin-address', '', true, 'Email address of server administrator. If empty, no notifications will be sent');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-admin-name', '', true, 'Name of server administrator');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-body-format', 'html', true, 'Message body format. text - for simple text format, html - for html format');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-interval1', '1', true, 'Time interval in minutes for the first attempt to send email message.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-attempts1', '2', true, 'Number of attempts to send email with first interval');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-interval2', '120', true, 'Time interval in minutes for the second attempt to send email message.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-attempts2', '2', true, 'Number of attempts to send email with second interval');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-interval3', '1440', true, 'Time interval in minutes for the third attempt to send email message.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-send-attempts3', '1', true, 'Number of attempts to send email with third interval');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-registration-subject', 'New user registration', true, 'Subject text for new user registration on OpenTenure Web-site. Sent to administrator.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-registration-body', 'New user "#{userName}" has been registered registered on SOLA OpenTenure Web-site.', true, 'Message text for new user registration on OpenTenure Web-site');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-failed-send-subject', 'Delivery failure', true, 'Subject text for delivery failure of message');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-failed-send-body', 'Message send to the user #{userName} has been failed to deliver after number of attempts with the following error: <br/>#{error}', true, 'Message text for delivery failure');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-subject', 'SOLA OpenTenure - registration', true, 'Subject text for new user registration on OpenTenure Web-site. Sent to user.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-pswd-restore-subject', 'SOLA OpenTenure - password restore', true, 'Password restore subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-submit-subject', 'SOLA OpenTenure - new claim submitted', true, 'New claim subject text');
-INSERT INTO setting (name, vl, active, description) VALUES ('account-activation-timeout', '70', true, 'Account activation timeout in hours. After this time, activation should expire.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-service-interval', '10', true, 'Time interval in seconds for email service to check and process scheduled messages.');
-INSERT INTO setting (name, vl, active, description) VALUES ('pword-expiry-days', '90', false, 'The number of days a users password remains valid');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-pswd-restore-body', 'Dear #{userFullName},<br /><br />You have requested to restore the password. If you didn''t ask for this action, just ignore this message. Otherwise, follow <a href="#{passwordRestoreLink}">this link</a> to reset your password.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Message text for password restore');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-withdraw-body', 'Dear #{userFirstName},<br /><br />
-Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been withdrawn by community recorder.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim withdrawal notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-withdraw-subject', 'SOLA OpenTenure - claim withdrawal', true, 'Claim withdrawal notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-submit-body', 'Dear #{userFullName},<br /><br />
-New claim <b>##{claimNumber}</b> has been submitted. 
-You can follow its status by <a href="#{claimLink}">this address</a>.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'New claim body text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-reject-subject', 'SOLA OpenTenure - claim rejection', true, 'Claim rejection notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-approve-review-body', 'Dear #{userFirstName},<br /><br />
-Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has passed review stage with success.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim review approval notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-approve-review-subject', 'SOLA OpenTenure - claim review approval', true, 'Claim review approval notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-approve-moderation-body', 'Dear #{userFirstName},<br /><br />
-Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been approved.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim moderation approval notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-approve-moderation-subject', 'SOLA OpenTenure - claim moderation approval', true, 'Claim moderation approval notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-updated-body', 'Dear #{userFullName},<br /><br />Claim <b>##{claimNumber}</b> has been updated. Follow <a href="#{claimLink}">this link</a> to check claim status and updated information.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Claim update body text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-submitted-body', 'Dear #{userFullName},<br /><br />
-New claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been submitted 
-to challenge the claim <a href="#{claimLink}"><b>##{claimNumber}</b></a>.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'New claim challenge body text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-updated-body', 'Dear #{userFullName},<br /><br />
-Claim challenge <b>##{challengeNumber}</b> has been updated. 
-Follow <a href="#{challengeLink}">this link</a> to check updated information.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge update body text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-submitted-subject', 'SOLA OpenTenure - new claim challenge to the claim ##{claimNumber}', true, 'New claim challenge subject text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-updated-subject', 'SOLA OpenTenure - claim challenge ##{challengeNumber} update', true, 'Claim challenge update subject text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-updated-subject', 'SOLA OpenTenure - claim ##{claimNumber} update', true, 'Claim update subject text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-approve-review-body', 'Dear #{userFirstName},<br /><br />
-Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has passed review stage.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge review approval notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-approve-review-subject', 'SOLA OpenTenure - claim challenge review', true, 'Claim challenge review approval notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-approve-moderation-body', 'Dear #{userFirstName},<br /><br />
-Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been moderated.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge moderation approval notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-approve-moderation-subj', 'SOLA OpenTenure - claim challenge moderation', true, 'Claim challenge moderation approval notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-reject-body', 'Dear #{userFirstName},<br /><br />
-Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been rejected with the following reason:<br /><br />
-<i>"#{claimRejectionReason}"</i><br /> <br /> 
-The following comments were recorded on the claim:<br />#{claimComments}<br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim rejection notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-reject-body', 'Dear #{userFirstName},<br /><br />
-Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been rejected with the following reason:<br /><br />
-<i>"#{challengeRejectionReason}"</i><br /> <br />
-Claim challenge comments:<br />#{challengeComments}<br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge rejection notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-reject-subject', 'SOLA OpenTenure - claim challenge rejection', true, 'Claim challenge rejection notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-withdraw-body', 'Dear #{userFirstName},<br /><br />
-Claim challenge <a href="#{challengeLink}"><b>##{challengeNumber}</b></a> has been withdrawn by community recorder.<br /><br />
-<i>You are receiving this notification as the #{partyRole}</i><br /><br />
-Regards,<br />SOLA OpenTenure Team', true, 'Claim challenge withdrawal notice body');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-challenge-withdraw-subject', 'SOLA OpenTenure - claim challenge withdrawal', true, 'Claim withdrawal notice subject');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-notifiable-submit-body', 'Dear #{notifiablePartyName},<p></p> this is to inform you that one <b>#{actionToNotify}</b> action has been requested 
-				<br>by <b>#{targetPartyName}</b> 
-				<br>on the following property: <b>#{baUnitName}</b>. <p></p><p></p>Regards,<br />#{sendingOffice}', true, 'Action on Interest body text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-notifiable-subject', 'SOLA REGISTRY - #{actionToNotify} action on property #{baUnitName}', true, 'Action on Interest subject text');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-activation-body', 'Dear #{userFullName},<p></p>Your account has been activated. 
-<p></p>Please use <b>#{userName}</b> to login.<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text to notify Community member account activation on the Community Server Web-site');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-activation-subject', 'SOLA OpenTenure account activation', true, 'Subject text to notify Community member account activation on the Community Server Web-site');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-body', 'Dear #{userFullName},<p></p>You have registered on SOLA OpenTenure Web-site. Before you can use your account, it will be reviewed and approved by Community Technologist. 
-Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-mailer-jndi-name', 'mail/sola', true, 'Configured mailer service JNDI name');
-INSERT INTO setting (name, vl, active, description) VALUES ('product-name', 'SOLA Community Server', true, 'SOLA product name');
-INSERT INTO setting (name, vl, active, description) VALUES ('product-code', 'scs', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server');
-INSERT INTO setting (name, vl, active, description) VALUES ('moderation_date', '2015-01-01', true, 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.');
-INSERT INTO setting (name, vl, active, description) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.');
-INSERT INTO setting (name, vl, active, description) VALUES ('report_server_user', 'jasperadmin', true, 'Reporting server user name.');
-INSERT INTO setting (name, vl, active, description) VALUES ('report_server_pass', 'jasperadmin', true, 'Reporting server user password.');
-INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url', 'http://localhost:8080/jasperserver', true, 'Reports server URL.');
-INSERT INTO setting (name, vl, active, description) VALUES ('cs_server_url', '', true, 'This setting is used for Docker or similar environments where Community Server sometimes cannot be located by the Reports Server 
-for generating parcel map, used in Claims certificate. The URL should be without ending "/", e.g. http://server:8080. If this setting is empty, Community Server address will be defined automatically.');
-INSERT INTO setting (name, vl, active, description) VALUES ('community-name', 'Open Community', true, 'Community name');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-wkt', '', true, 'Custom Coordinate Reference System in WKT format of the map image, generated for claim certificate in OpenTenure');
-INSERT INTO setting (name, vl, active, description) VALUES ('offline-mode', '0', true, 'Indicates whether Community Server is connected to the Internet or not. 0 - connected, 1 - not connected');
-INSERT INTO setting (name, vl, active, description) VALUES ('docs_for_issuing_cert', 'signed_cert', true, 'List of document type codes, required to set certificate issued status');
-INSERT INTO setting (name, vl, active, description) VALUES ('reports_folder_url', '/reports/community_server', true, 'Folder URL on the reporting server containing reports to display on the menu.');
-INSERT INTO setting (name, vl, active, description) VALUES ('email-enable-email-service', '0', true, 'Enables or disables email service. 1 - enable, 0 - disable');
-INSERT INTO setting (name, vl, active, description) VALUES ('claim_certificate_report_url', '/cert/Claim_certificate', true, '	URL to the claim certificate report, hosted on the reporting server');
-INSERT INTO setting (name, vl, active, description) VALUES ('enable-reports', '0', true, 'Indicates whether reports are enbled or disabled. 1 - enabled, 0 - disabled');
-INSERT INTO setting (name, vl, active, description) VALUES ('db-utilities-folder', 'C:\Program Files\PostgreSQL\9.5\bin', true, 'Full path to PostgreSQL utilities (bin) folder (e.g. C:\Program Files\PostgreSQL\9.1\bin). Used for backup/restore implementation of SOLA Web admin application');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-community-area', 'POLYGON((-12.209399245759217 8.646044458409799,-11.991389297028434 8.647741560571333,-11.99310591079809 8.499725679896729,-12.211802505036012 8.49938612785351,-12.209399245759217 8.646044458409799))', true, 'Open Tenure community area where parcels can be claimed');
-INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-crs-description', 'Unit: degree<br>Geodetic CRS: WGS 84<br>Datum: World Geodetic System 1984<br>Ellipsoid: WGS 84<br>Prime meridian: Greenwich', true, 'Description of Coordinate Reference System, which will be listed in the legend area.');
-INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-produced-by', 'Community Server of OpenTenure solution', true, 'Name of report producer. In real environment can be Ministry''s name.');
-INSERT INTO setting (name, vl, active, description) VALUES ('boundary-print-country-name', '', true, 'Country name for adding at the end of the boundary location description');
-INSERT INTO setting (name, vl, active, description) VALUES ('ot-title-plan-crs-proj4', '', true, 'Custom Coordinate Reference System in Proj4 format, used for generating map image for claim certificate or boundary in OpenTenure. It should match to ot-title-plan-crs-wkt setting. If not provided, WGS84 will be used as default.');
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimCertificate', 'Claim Certificate', 'ClaimCertificate.jasper', NULL, 'Claim certificate report', false);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimLandUse', 'Claims by land use', 'ClaimsByLanduse.jasper', 'claims', 'Summary of claims by land use', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimsByGender', 'Claims by gender', 'ClaimsByGender.jasper', 'claims', 'Claims by gender', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimsSummary', 'Claims summary', 'ClaimsSummary.jasper', 'claims', 'Summary of claims', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimStatus', 'Claims by status', 'ClaimsByStatus.jasper', 'claims', 'Summary of claims and challenges by status', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('ClaimTypes', 'Claims by type', 'ClaimsByType.jasper', 'claims', 'Summary of claims by claim type', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('PublicDisplayClaimsListByName', 'Claims by claimant name', 'PublicDisplayClaimsListByName.jasper', 'public-display', 'Claim listing by claimant name', true);
+INSERT INTO report (id, display_name, file_name, group_code, description, display_in_menu) VALUES ('PublicDisplayClaimsListByNumber', 'Claims by number', 'PublicDisplayClaimsListByNumber.jasper', 'public-display', 'Claim listing by number', true);
 
 
-ALTER TABLE setting ENABLE TRIGGER ALL;
+ALTER TABLE report ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: version; Type: TABLE DATA; Schema: system; Owner: postgres
@@ -455,6 +521,7 @@ INSERT INTO version (version_num) VALUES ('1709a');
 INSERT INTO version (version_num) VALUES ('1708a');
 INSERT INTO version (version_num) VALUES ('1805a');
 INSERT INTO version (version_num) VALUES ('2008a');
+INSERT INTO version (version_num) VALUES ('2403a');
 
 
 ALTER TABLE version ENABLE TRIGGER ALL;

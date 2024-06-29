@@ -3673,6 +3673,36 @@ ALTER FUNCTION opentenure.generate_form_name() OWNER TO postgres;
 COMMENT ON FUNCTION generate_form_name() IS 'Generates dynamic form name.';
 
 
+--
+-- Name: get_full_admin_boundary_name(character varying); Type: FUNCTION; Schema: opentenure; Owner: postgres
+--
+
+CREATE FUNCTION get_full_admin_boundary_name(admin_id character varying) RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$
+begin
+  return (WITH RECURSIVE administrative_boundaries AS (
+ SELECT a.id, a.name::varchar(1000), 1 as level
+   FROM opentenure.administrative_boundary a
+   WHERE a.parent_id is null
+ UNION 
+ SELECT b.id, (b.name::varchar || ', ' || ab.name)::varchar(1000) as name, ab.level + 1 as level
+   FROM opentenure.administrative_boundary b inner join administrative_boundaries ab on b.parent_id = ab.id 
+ )
+ SELECT name as full_location FROM administrative_boundaries where id= admin_id);
+end;
+$$;
+
+
+ALTER FUNCTION opentenure.get_full_admin_boundary_name(admin_id character varying) OWNER TO postgres;
+
+--
+-- Name: FUNCTION get_full_admin_boundary_name(admin_id character varying); Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON FUNCTION get_full_admin_boundary_name(admin_id character varying) IS 'Returns fulladministrative boundary name.';
+
+
 SET search_path = party, pg_catalog;
 
 --
@@ -4874,7 +4904,7 @@ COMMENT ON SEQUENCE ba_unit_last_name_part_seq IS 'Sequence number used as the b
 CREATE TABLE ba_unit_rel_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(10000),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -5016,7 +5046,7 @@ ALTER TABLE ba_unit_target_historic OWNER TO postgres;
 CREATE TABLE ba_unit_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -5194,7 +5224,7 @@ ALTER TABLE condition_for_rrr_historic OWNER TO postgres;
 CREATE TABLE condition_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(10000) NOT NULL,
+    description character varying(10485760) NOT NULL,
     status character(1) NOT NULL
 );
 
@@ -5336,7 +5366,7 @@ ALTER TABLE mortgage_isbased_in_rrr_historic OWNER TO postgres;
 CREATE TABLE mortgage_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -6020,7 +6050,7 @@ COMMENT ON COLUMN rrr.redact_code IS 'FROM  SOLA State Land Extension: The redac
 CREATE TABLE rrr_group_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -6239,7 +6269,7 @@ CREATE TABLE rrr_type (
     is_primary boolean DEFAULT false NOT NULL,
     share_check boolean NOT NULL,
     party_required boolean NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL,
     rrr_panel_code character varying(20)
 );
@@ -7029,7 +7059,7 @@ COMMENT ON COLUMN cadastre_object.redact_code IS 'FROM  SOLA State Land Extensio
 CREATE TABLE land_use_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -7677,7 +7707,7 @@ CREATE TABLE application_action_type (
     display_value character varying(500) NOT NULL,
     status_to_set character varying(20),
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -8045,7 +8075,7 @@ CREATE TABLE application_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -8379,7 +8409,7 @@ ALTER TABLE cancel_notification OWNER TO postgres;
 CREATE TABLE request_category_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -8430,7 +8460,7 @@ CREATE TABLE request_type (
     code character varying(20) NOT NULL,
     request_category_code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL,
     nr_days_to_complete integer DEFAULT 0 NOT NULL,
     base_fee numeric(20,2) DEFAULT 0 NOT NULL,
@@ -8603,7 +8633,7 @@ CREATE TABLE service_action_type (
     display_value character varying(500) NOT NULL,
     status_to_set character varying(20),
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -8688,7 +8718,7 @@ CREATE TABLE service_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -8766,7 +8796,7 @@ COMMENT ON VIEW systematic_registration_certificates IS 'Used by systematic regi
 CREATE TABLE type_action (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -8918,7 +8948,7 @@ SET search_path = cadastre, pg_catalog;
 CREATE TABLE area_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 'c'::bpchar NOT NULL
 );
 
@@ -8968,7 +8998,7 @@ COMMENT ON COLUMN area_type.status IS 'SOLA Extension: Status of the area type';
 CREATE TABLE building_unit_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -9270,7 +9300,7 @@ ALTER TABLE cadastre_object_target_historic OWNER TO postgres;
 CREATE TABLE cadastre_object_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL,
     in_topology boolean DEFAULT false NOT NULL
 );
@@ -9328,7 +9358,7 @@ COMMENT ON COLUMN cadastre_object_type.in_topology IS 'Flag to indicate that all
 CREATE TABLE dimension_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -9530,7 +9560,7 @@ COMMENT ON VIEW hierarchy IS 'First (highest) level of the hierarchical spatial 
 CREATE TABLE hierarchy_level (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -9835,7 +9865,7 @@ COMMENT ON TABLE level_config_map_layer IS 'It provides for each level which lay
 CREATE TABLE level_content_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -10074,7 +10104,7 @@ COMMENT ON VIEW place_name IS 'View for retrieving place name features for displ
 CREATE TABLE register_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -10414,7 +10444,7 @@ ALTER TABLE spatial_value_area_historic OWNER TO postgres;
 CREATE TABLE structure_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -10464,7 +10494,7 @@ COMMENT ON COLUMN structure_type.status IS 'SOLA Extension: Status of the struct
 CREATE TABLE surface_relation_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -10680,7 +10710,7 @@ ALTER TABLE survey_point_historic OWNER TO postgres;
 CREATE TABLE utility_network_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -10731,7 +10761,7 @@ COMMENT ON COLUMN utility_network_status_type.status IS 'SOLA Extension: Status 
 CREATE TABLE utility_network_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -11036,6 +11066,7 @@ CREATE TABLE administrative_boundary (
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
     recorder_name character varying(50) NOT NULL,
+    project_id character varying(40) NOT NULL,
     CONSTRAINT enforce_geom_geometry CHECK (((public.geometrytype(geom) = 'POLYGON'::text) OR (geom IS NULL))),
     CONSTRAINT enforce_valid_geom CHECK (public.st_isvalid(geom))
 );
@@ -11142,6 +11173,13 @@ COMMENT ON COLUMN administrative_boundary.recorder_name IS 'Boundary recorder na
 
 
 --
+-- Name: COLUMN administrative_boundary.project_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN administrative_boundary.project_id IS 'Project ID';
+
+
+--
 -- Name: administrative_boundary_historic; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11159,7 +11197,8 @@ CREATE TABLE administrative_boundary_historic (
     change_user character varying(50),
     change_time timestamp without time zone,
     change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
-    recorder_name character varying(50)
+    recorder_name character varying(50),
+    project_id character varying(40)
 );
 
 
@@ -11180,7 +11219,7 @@ CREATE TABLE administrative_boundary_status (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -11230,7 +11269,7 @@ CREATE TABLE administrative_boundary_type (
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
     level smallint DEFAULT 1 NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -11585,6 +11624,7 @@ CREATE TABLE claim (
     termination_reason_code character varying(20),
     create_transaction character varying(40),
     terminate_transaction character varying(40),
+    project_id character varying(40) NOT NULL,
     CONSTRAINT enforce_geotype_mapped_geometry CHECK (((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text) OR (public.geometrytype(mapped_geometry) = 'LINESTRING'::text) OR (mapped_geometry IS NULL))),
     CONSTRAINT enforce_valid_mapped_geometry CHECK (public.st_isvalid(mapped_geometry))
 );
@@ -11838,6 +11878,13 @@ COMMENT ON COLUMN claim.terminate_transaction IS 'Transaction code, used to term
 
 
 --
+-- Name: COLUMN claim.project_id; Type: COMMENT; Schema: opentenure; Owner: postgres
+--
+
+COMMENT ON COLUMN claim.project_id IS 'Project ID';
+
+
+--
 -- Name: claim_comment; Type: TABLE; Schema: opentenure; Owner: postgres
 --
 
@@ -11987,7 +12034,8 @@ CREATE TABLE claim_historic (
     termination_date date,
     termination_reason_code character varying(20),
     create_transaction character varying(40),
-    terminate_transaction character varying(40)
+    terminate_transaction character varying(40),
+    project_id character varying(40)
 );
 
 
@@ -12288,7 +12336,7 @@ CREATE TABLE claim_status (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -12672,7 +12720,7 @@ CREATE TABLE field_constraint_type (
     code character varying(255) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 'c'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -13013,7 +13061,7 @@ CREATE TABLE field_type (
     code character varying(255) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 'c'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -13062,7 +13110,7 @@ CREATE TABLE field_value_type (
     code character varying(255) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 'c'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -13705,7 +13753,7 @@ CREATE TABLE rejection_reason (
     code character varying(20) NOT NULL,
     display_value character varying(2000) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14362,7 +14410,7 @@ CREATE TABLE communication_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14412,7 +14460,7 @@ CREATE TABLE gender_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14480,7 +14528,7 @@ CREATE TABLE group_party_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14530,7 +14578,7 @@ CREATE TABLE id_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14727,7 +14775,7 @@ CREATE TABLE party_role_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14777,7 +14825,7 @@ CREATE TABLE party_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -14876,7 +14924,7 @@ CREATE TABLE administrative_source_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     is_for_registration boolean DEFAULT false
 );
 
@@ -15027,7 +15075,7 @@ CREATE TABLE availability_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 'c'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -15178,7 +15226,7 @@ CREATE TABLE presentation_form_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -15699,7 +15747,7 @@ CREATE TABLE spatial_source_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) DEFAULT 't'::bpchar NOT NULL,
-    description character varying(1500)
+    description character varying(10485760)
 );
 
 
@@ -15995,7 +16043,8 @@ CREATE TABLE setting (
     name character varying(50) NOT NULL,
     vl character varying(1000000) NOT NULL,
     active boolean DEFAULT true NOT NULL,
-    description character varying(555) NOT NULL
+    description character varying(555) NOT NULL,
+    read_only boolean DEFAULT false NOT NULL
 );
 
 
@@ -16035,6 +16084,13 @@ COMMENT ON COLUMN setting.active IS 'Indicates if the setting is active or not. 
 --
 
 COMMENT ON COLUMN setting.description IS 'Description of the setting. ';
+
+
+--
+-- Name: COLUMN setting.read_only; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN setting.read_only IS 'Indicates whether the setting is editable by the user.';
 
 
 --
@@ -16187,7 +16243,7 @@ CREATE TABLE approle (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(5000)
+    description character varying(10485760)
 );
 
 
@@ -16601,7 +16657,7 @@ CREATE TABLE br_severity_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(1000)
+    description character varying(10485760)
 );
 
 
@@ -16651,7 +16707,7 @@ CREATE TABLE br_technical_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(1000)
+    description character varying(10485760)
 );
 
 
@@ -16701,7 +16757,7 @@ CREATE TABLE br_validation_target_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(5000)
+    description character varying(10485760)
 );
 
 
@@ -16965,7 +17021,7 @@ CREATE TABLE config_map_layer_type (
     code character varying(20) NOT NULL,
     display_value character varying(250) NOT NULL,
     status character(1) NOT NULL,
-    description character varying(555)
+    description character varying(10485760)
 );
 
 
@@ -17014,7 +17070,7 @@ COMMENT ON COLUMN config_map_layer_type.description IS 'A description of the map
 CREATE TABLE config_panel_launcher (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1000),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL,
     launch_group character varying(20) NOT NULL,
     panel_class character varying(100),
@@ -17514,7 +17570,7 @@ COMMENT ON COLUMN map_search_option.description IS 'A description for the search
 CREATE TABLE panel_launcher_group (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1000),
+    description character varying(10485760),
     status character(1) DEFAULT 't'::bpchar NOT NULL
 );
 
@@ -17584,6 +17640,340 @@ CREATE SEQUENCE process_extract
 
 
 ALTER TABLE process_extract OWNER TO postgres;
+
+--
+-- Name: project; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project (
+    id character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    display_name character varying NOT NULL,
+    boundary public.geometry,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT project_enforce_boundary_geotype CHECK (((public.geometrytype(boundary) = 'POLYGON'::text) OR (public.geometrytype(boundary) = 'MULTIPOLYGON'::text) OR (boundary IS NULL))),
+    CONSTRAINT project_enforce_valid_boundary CHECK (public.st_isvalid(boundary))
+);
+
+
+ALTER TABLE project OWNER TO postgres;
+
+--
+-- Name: TABLE project; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE project IS 'Adjudication projects.';
+
+
+--
+-- Name: COLUMN project.id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.id IS 'Primary key.';
+
+
+--
+-- Name: COLUMN project.display_name; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.display_name IS 'Displayed name of the project.';
+
+
+--
+-- Name: COLUMN project.boundary; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.boundary IS 'Project boundary.';
+
+
+--
+-- Name: COLUMN project.rowidentifier; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.rowidentifier IS 'Identifies the all change records for the row in the form historic table.';
+
+
+--
+-- Name: COLUMN project.rowversion; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN project.change_action; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN project.change_user; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN project.change_time; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: project_appuser; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_appuser (
+    project_id character varying(40) NOT NULL,
+    appuser_id character varying(40) NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE project_appuser OWNER TO postgres;
+
+--
+-- Name: TABLE project_appuser; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE project_appuser IS 'Users who can access adjudication projects.';
+
+
+--
+-- Name: COLUMN project_appuser.project_id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.project_id IS 'Project id.';
+
+
+--
+-- Name: COLUMN project_appuser.appuser_id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.appuser_id IS 'User id.';
+
+
+--
+-- Name: COLUMN project_appuser.rowidentifier; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.rowidentifier IS 'Identifies the all change records for the row in the form historic table.';
+
+
+--
+-- Name: COLUMN project_appuser.rowversion; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN project_appuser.change_action; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN project_appuser.change_user; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN project_appuser.change_time; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_appuser.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: project_appuser_historic; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_appuser_historic (
+    project_id character varying(40),
+    appuser_id character varying(40),
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE project_appuser_historic OWNER TO postgres;
+
+--
+-- Name: project_historic; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_historic (
+    id character varying(40),
+    display_name character varying,
+    boundary public.geometry,
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE project_historic OWNER TO postgres;
+
+--
+-- Name: project_map_layer; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_map_layer (
+    project_id character varying(40) NOT NULL,
+    layer_id character varying(50) NOT NULL,
+    layer_order integer DEFAULT 0 NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE project_map_layer OWNER TO postgres;
+
+--
+-- Name: TABLE project_map_layer; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE project_map_layer IS 'Map layers, accessible for adjudication projects.';
+
+
+--
+-- Name: COLUMN project_map_layer.project_id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.project_id IS 'Project id.';
+
+
+--
+-- Name: COLUMN project_map_layer.layer_id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.layer_id IS 'Map layer id.';
+
+
+--
+-- Name: COLUMN project_map_layer.layer_order; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.layer_order IS 'Map layer order.';
+
+
+--
+-- Name: COLUMN project_map_layer.rowidentifier; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.rowidentifier IS 'Identifies the all change records for the row in the form historic table.';
+
+
+--
+-- Name: COLUMN project_map_layer.rowversion; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN project_map_layer.change_action; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN project_map_layer.change_user; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN project_map_layer.change_time; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_map_layer.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: project_map_layer_historic; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_map_layer_historic (
+    project_id character varying(40),
+    layer_id character varying(40),
+    layer_order integer,
+    rowidentifier character varying(40),
+    rowversion integer,
+    change_action character(1),
+    change_user character varying(50),
+    change_time timestamp without time zone,
+    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE project_map_layer_historic OWNER TO postgres;
+
+--
+-- Name: project_setting; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE project_setting (
+    project_id character varying(40) NOT NULL,
+    name character varying(50) NOT NULL,
+    vl character varying(1000000) NOT NULL
+);
+
+
+ALTER TABLE project_setting OWNER TO postgres;
+
+--
+-- Name: TABLE project_setting; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE project_setting IS 'Contains project specific settings, which will override global system settings.';
+
+
+--
+-- Name: COLUMN project_setting.project_id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_setting.project_id IS 'Project ID';
+
+
+--
+-- Name: COLUMN project_setting.name; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_setting.name IS 'Identifier/name for the setting';
+
+
+--
+-- Name: COLUMN project_setting.vl; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN project_setting.vl IS 'The value for the setting.';
+
 
 --
 -- Name: query; Type: TABLE; Schema: system; Owner: postgres
@@ -17678,6 +18068,120 @@ COMMENT ON COLUMN query_field.display_value IS 'The title to display for the que
 
 
 --
+-- Name: report; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE report (
+    id character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    display_name character varying(5000) NOT NULL,
+    file_name character varying(250) NOT NULL,
+    group_code character varying(20),
+    description character varying(10000),
+    display_in_menu boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE report OWNER TO postgres;
+
+--
+-- Name: TABLE report; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE report IS 'Contains a list of reports, avaialble to the users.';
+
+
+--
+-- Name: COLUMN report.id; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.id IS 'Unique identifier of the record.';
+
+
+--
+-- Name: COLUMN report.display_name; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.display_name IS 'The display name of the report.';
+
+
+--
+-- Name: COLUMN report.file_name; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.file_name IS 'File name of the report. The system will search for this name and execute a report.';
+
+
+--
+-- Name: COLUMN report.group_code; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.group_code IS 'The report group code, used for grouping report. If the value is empty, the report will appear immediately under the Reports menu.';
+
+
+--
+-- Name: COLUMN report.description; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.description IS 'Short report description.';
+
+
+--
+-- Name: COLUMN report.display_in_menu; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report.display_in_menu IS 'A flag indicating whether to display this report item under the menu or not. It is used for the certificate report, to hide it from the menu.';
+
+
+--
+-- Name: report_group; Type: TABLE; Schema: system; Owner: postgres
+--
+
+CREATE TABLE report_group (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    status character(1) DEFAULT 'c'::bpchar NOT NULL,
+    description character varying(5000)
+);
+
+
+ALTER TABLE report_group OWNER TO postgres;
+
+--
+-- Name: TABLE report_group; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON TABLE report_group IS 'Contains a list of groups for grouping reports under the the main menu.';
+
+
+--
+-- Name: COLUMN report_group.code; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report_group.code IS 'Code for the report group.';
+
+
+--
+-- Name: COLUMN report_group.display_value; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report_group.display_value IS 'The text value that will be displayed as a menu item under the main Reports menu.';
+
+
+--
+-- Name: COLUMN report_group.status; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report_group.status IS 'The status of the group.';
+
+
+--
+-- Name: COLUMN report_group.description; Type: COMMENT; Schema: system; Owner: postgres
+--
+
+COMMENT ON COLUMN report_group.description IS 'A description of the report group.';
+
+
+--
 -- Name: version; Type: TABLE; Schema: system; Owner: postgres
 --
 
@@ -17712,7 +18216,7 @@ SET search_path = transaction, pg_catalog;
 CREATE TABLE reg_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -17876,7 +18380,7 @@ ALTER TABLE transaction_source_historic OWNER TO postgres;
 CREATE TABLE transaction_status_type (
     code character varying(20) NOT NULL,
     display_value character varying(500) NOT NULL,
-    description character varying(1500),
+    description character varying(10485760),
     status character(1) NOT NULL
 );
 
@@ -19548,6 +20052,46 @@ ALTER TABLE ONLY config_map_layer_metadata
 
 
 --
+-- Name: project_appuser_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_appuser
+    ADD CONSTRAINT project_appuser_pkey PRIMARY KEY (project_id, appuser_id);
+
+
+--
+-- Name: project_display_name_unique; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project
+    ADD CONSTRAINT project_display_name_unique UNIQUE (display_name);
+
+
+--
+-- Name: project_map_layer_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_map_layer
+    ADD CONSTRAINT project_map_layer_pkey PRIMARY KEY (project_id, layer_id);
+
+
+--
+-- Name: project_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project
+    ADD CONSTRAINT project_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: project_setting_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_setting
+    ADD CONSTRAINT project_setting_pkey PRIMARY KEY (project_id, name);
+
+
+--
 -- Name: query_field_display_value; Type: CONSTRAINT; Schema: system; Owner: postgres
 --
 
@@ -19577,6 +20121,38 @@ ALTER TABLE ONLY query_field
 
 ALTER TABLE ONLY query
     ADD CONSTRAINT query_pkey PRIMARY KEY (name);
+
+
+--
+-- Name: report_display_value_unique; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY report
+    ADD CONSTRAINT report_display_value_unique UNIQUE (display_name);
+
+
+--
+-- Name: report_group_display_value_unique; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY report_group
+    ADD CONSTRAINT report_group_display_value_unique UNIQUE (display_value);
+
+
+--
+-- Name: report_groupe_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY report_group
+    ADD CONSTRAINT report_groupe_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: report_pkey; Type: CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY report
+    ADD CONSTRAINT report_pkey PRIMARY KEY (id);
 
 
 --
@@ -22496,6 +23072,20 @@ CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON appuser_appgroup FOR E
 
 
 --
+-- Name: __track_changes; Type: TRIGGER; Schema: system; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON project FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
+-- Name: __track_changes; Type: TRIGGER; Schema: system; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON project_map_layer FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
 -- Name: __track_history; Type: TRIGGER; Schema: system; Owner: postgres
 --
 
@@ -22514,6 +23104,20 @@ CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON approle_appgroup FOR EA
 --
 
 CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON appuser_appgroup FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
+
+
+--
+-- Name: __track_history; Type: TRIGGER; Schema: system; Owner: postgres
+--
+
+CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON project FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
+
+
+--
+-- Name: __track_history; Type: TRIGGER; Schema: system; Owner: postgres
+--
+
+CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON project_map_layer FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
 
 
 SET search_path = transaction, pg_catalog;
@@ -23445,6 +24049,14 @@ ALTER TABLE ONLY field_template
 
 
 --
+-- Name: fk_admin_boundary_project; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY administrative_boundary
+    ADD CONSTRAINT fk_admin_boundary_project FOREIGN KEY (project_id) REFERENCES system.project(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
 -- Name: fk_challenged_claim; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
 --
 
@@ -23466,6 +24078,14 @@ ALTER TABLE ONLY claim
 
 ALTER TABLE ONLY claim
     ADD CONSTRAINT fk_claim_land_use_type FOREIGN KEY (land_use_code) REFERENCES cadastre.land_use_type(code) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_claim_project; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY claim
+    ADD CONSTRAINT fk_claim_project FOREIGN KEY (project_id) REFERENCES system.project(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -23947,6 +24567,62 @@ ALTER TABLE ONLY config_panel_launcher
 
 
 --
+-- Name: fk_project_appuser_appuser_id; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_appuser
+    ADD CONSTRAINT fk_project_appuser_appuser_id FOREIGN KEY (appuser_id) REFERENCES appuser(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_project_appuser_project_id; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_appuser
+    ADD CONSTRAINT fk_project_appuser_project_id FOREIGN KEY (project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_project_map_layer_layer_id; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_map_layer
+    ADD CONSTRAINT fk_project_map_layer_layer_id FOREIGN KEY (layer_id) REFERENCES config_map_layer(name) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_project_map_layer_project_id; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_map_layer
+    ADD CONSTRAINT fk_project_map_layer_project_id FOREIGN KEY (project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_project_setting_project; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_setting
+    ADD CONSTRAINT fk_project_setting_project FOREIGN KEY (project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_project_setting_setting; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY project_setting
+    ADD CONSTRAINT fk_project_setting_setting FOREIGN KEY (name) REFERENCES setting(name) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: group_code_fk107; Type: FK CONSTRAINT; Schema: system; Owner: postgres
+--
+
+ALTER TABLE ONLY report
+    ADD CONSTRAINT group_code_fk107 FOREIGN KEY (group_code) REFERENCES report_group(code) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
 -- Name: map_search_option_query_name_fk122; Type: FK CONSTRAINT; Schema: system; Owner: postgres
 --
 
@@ -24008,3 +24684,4 @@ GRANT ALL ON SCHEMA system TO postgres;
 --
 -- PostgreSQL database dump complete
 --
+
