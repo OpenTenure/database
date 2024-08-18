@@ -85,22 +85,6 @@ do
    PGPASSWORD=$pword $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
 done
 
-# Extract the test data from the 7z archive and load it into the database.
-echo
-echo "Extracting data files..."
-echo "### Extracting data files..." >> $BUILD_LOG 2>&1
-$zip_exe e -y -o"$data_path" "$data_path/waiheke.7z" >> $BUILD_LOG 2>&1
-# Use -p option if the archive is password protected as follows
-# $zip_exe e -y -p$archive_password -o"$data_path" "$data_path/waiheke.7z" >> $BUILD_LOG 2>&1
-
-# Load the SQL files containing the test data
-for sqlfile in data/*.sql
-do
-   echo "Loading $sqlfile..."
-   echo "### Loading $sqlfile" >> $BUILD_LOG 2>&1
-   PGPASSWORD=$pword $psql --host=$host --port=$port --dbname=$dbname --username=$username --file="$sqlfile" > /dev/null 2>> $BUILD_LOG
-done
-
 #Clear the pg password from the shell
 unset PGPASSWORD
 
